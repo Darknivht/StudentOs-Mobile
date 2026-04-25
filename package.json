@@ -26,6 +26,12 @@
     "react-native-reanimated": "^4.0.0",
     "react-native-worklets": "latest",
     "react-native-svg": "latest",
+    "react-native-mmkv": "^4.0.0",
+    "react-native-nitro-modules": "latest",
+    "zustand": "^5.0.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.6.0",
+    "date-fns": "^3.6.0",
     "typescript": "~5.7.0"
   },
   "devDependencies": {
