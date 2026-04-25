@@ -1,0 +1,39 @@
+{
+  "name": "studentos-mobile",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "lint": "eslint . --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "expo": "~54.0.0",
+    "expo-dev-client": "~1.14.0",
+    "expo-status-bar": "~2.0.0",
+    "expo-constants": "~17.0.0",
+    "expo-linking": "~7.0.0",
+    "expo-router": "~4.0.0",
+    "react": "19.1.0",
+    "react-native": "0.81.0",
+    "@react-navigation/native": "^7.0.0",
+    "@react-navigation/native-stack": "^7.0.0",
+    "@react-navigation/bottom-tabs": "^7.0.0",
+    "react-native-screens": "~4.0.0",
+    "react-native-safe-area-context": "^5.0.0",
+    "react-native-gesture-handler": "~2.20.0",
+    "react-native-reanimated": "^4.0.0",
+    "react-native-worklets": "latest",
+    "react-native-svg": "latest",
+    "typescript": "~5.7.0"
+  },
+  "devDependencies": {
+    "@types/react": "~19.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-universe": "^13.0.0",
+    "prettier": "^3.0.0"
+  }
+}
