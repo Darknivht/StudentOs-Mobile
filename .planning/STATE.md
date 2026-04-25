@@ -40,7 +40,7 @@ See: `.planning/PROJECT.md` (updated 2026-04-25)
 
 | # | Phase | Status | Plans | Progress |
 |---|-------|--------|-------|----------|
-| 0 | Foundation | ○ Pending | 0 | 0% |
+| 0 | Foundation | ● Active | 3 | 0% |
 | 1 | Auth & Security | ○ Pending | 0 | 0% |
 | 2 | Onboarding & Dashboard | ○ Pending | 0 | 0% |
 | 3 | Smart Notes | ○ Pending | 0 | 0% |
