@@ -23,8 +23,6 @@
       },
       "package": "com.studentoss.app"
     },
-    "plugins": [
-      "expo-dev-client"
-    ]
+    "plugins": ["expo-dev-client", "@morrowdigital/watermelondb-expo-plugin"]
   }
 }
