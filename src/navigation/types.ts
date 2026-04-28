@@ -1,8 +1,15 @@
-import type { NavigatorScreenParams } from '@react-navigation/native';
+import type { NavigatorScreenParams } from "@react-navigation/native";
 
 export type AuthStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
+  ForgotPassword: undefined;
+  PINSetup: undefined;
+};
+
+export type LockStackParamList = {
+  BiometricLock: undefined;
+  PINLock: undefined;
 };
 
 export type MainTabParamList = {

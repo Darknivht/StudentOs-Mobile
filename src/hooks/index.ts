@@ -1,2 +1,2 @@
-// Placeholder — hooks will be added in subsequent phases
-export {};
+export { useAuth } from "./useAuth";
+export { useSubscription } from "./useSubscription";

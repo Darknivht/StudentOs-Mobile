@@ -1,8 +1,8 @@
-import { create } from 'zustand';
-import { createMMKV } from 'react-native-mmkv';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { create } from "zustand";
+import { createMMKV } from "react-native-mmkv";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-type ThemeMode = 'dark' | 'light' | 'system';
+type ThemeMode = "dark" | "light" | "system";
 
 interface AppState {
   theme: ThemeMode;
@@ -15,18 +15,20 @@ interface AppState {
 }
 
 const mmkvStorage = createJSONStorage(() => {
-  const mmkv = createMMKV({ id: 'app-settings' });
+  const mmkv = createMMKV({ id: "app-settings" });
   return {
     getItem: (key: string) => mmkv.getString(key) ?? null,
     setItem: (key: string, value: string) => mmkv.set(key, value),
-    removeItem: (key: string) => mmkv.delete(key),
+    removeItem: (key: string) => {
+      mmkv.remove(key);
+    },
   };
 });
 
 export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
-      theme: 'dark',
+      theme: "dark",
       onboardingSeen: false,
       dailyStudyTarget: 60,
 
@@ -35,8 +37,8 @@ export const useAppStore = create<AppState>()(
       setDailyStudyTarget: (minutes) => set({ dailyStudyTarget: minutes }),
     }),
     {
-      name: 'app-settings',
+      name: "app-settings",
       storage: mmkvStorage,
-    }
-  )
+    },
+  ),
 );

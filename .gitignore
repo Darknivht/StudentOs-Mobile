@@ -67,3 +67,6 @@ ios/
 
 # OS
 Thumbs.db
+
+# Windows device files
+nul

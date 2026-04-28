@@ -14,7 +14,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.studentoss.app"
+      "bundleIdentifier": "com.studentoss.app",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "StudentOS uses Face ID to unlock the app securely."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -23,6 +26,6 @@
       },
       "package": "com.studentoss.app"
     },
-    "plugins": ["expo-dev-client", "@morrowdigital/watermelondb-expo-plugin"]
+    "plugins": ["expo-local-authentication"]
   }
 }

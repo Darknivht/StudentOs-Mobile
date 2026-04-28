@@ -1,5 +1,11 @@
-export { AuthScreen } from './AuthScreen';
-export { HomeScreen } from './HomeScreen';
-export { StudyScreen } from './StudyScreen';
-export { FocusScreen } from './FocusScreen';
-export { ProfileScreen } from './ProfileScreen';
+export { HomeScreen } from "./HomeScreen";
+export { StudyScreen } from "./StudyScreen";
+export { FocusScreen } from "./FocusScreen";
+export { ProfileScreen } from "./ProfileScreen";
+export { SignInScreen } from "./auth/SignInScreen";
+export { SignUpScreen } from "./auth/SignUpScreen";
+export { ForgotPasswordScreen } from "./auth/ForgotPasswordScreen";
+export { BiometricLockScreen } from "./auth/BiometricLockScreen";
+export { PINLockScreen } from "./auth/PINLockScreen";
+export { PINSetupScreen } from "./auth/PINSetupScreen";
+export { BlockedScreen } from "./auth/BlockedScreen";
