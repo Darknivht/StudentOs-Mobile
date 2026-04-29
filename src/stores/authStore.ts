@@ -1,6 +1,4 @@
 import { create } from "zustand";
-import { createMMKV } from "react-native-mmkv";
-import { persist, createJSONStorage } from "zustand/middleware";
 import type { AuthUser, SubscriptionTier } from "../types";
 
 interface AuthState {
@@ -25,66 +23,38 @@ interface AuthState {
   signOut: () => void;
 }
 
-const mmkvStorage = createJSONStorage(() => {
-  const mmkv = createMMKV({ id: "auth-storage" });
-  return {
-    getItem: (key: string) => mmkv.getString(key) ?? null,
-    setItem: (key: string, value: string) => mmkv.set(key, value),
-    removeItem: (key: string) => {
-      mmkv.remove(key);
-    },
-  };
-});
+export const useAuthStore = create<AuthState>()((set) => ({
+  user: null,
+  session: null,
+  isAuthenticated: false,
+  isLoading: false,
+  subscription: "free",
+  isBlocked: false,
+  isLocked: false,
+  biometricEnabled: false,
+  pinSet: false,
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
+  setUser: (user) =>
+    set({
+      user,
+      isAuthenticated: !!user,
+      subscription: user?.subscription || "free",
+      isBlocked: user?.isBlocked || false,
+    }),
+  setSession: (session) => set({ session }),
+  setLoading: (isLoading) => set({ isLoading }),
+  setBlocked: (isBlocked) => set({ isBlocked }),
+  setLocked: (isLocked) => set({ isLocked }),
+  setBiometricEnabled: (biometricEnabled) => set({ biometricEnabled }),
+  setPinSet: (pinSet) => set({ pinSet }),
+  setSubscription: (subscription) => set({ subscription }),
+  signOut: () =>
+    set({
       user: null,
       session: null,
       isAuthenticated: false,
-      isLoading: true,
-      subscription: "free",
       isBlocked: false,
-      isLocked: true,
-      biometricEnabled: false,
-      pinSet: false,
-
-      setUser: (user) =>
-        set({
-          user,
-          isAuthenticated: !!user,
-          subscription: user?.subscription || "free",
-          isBlocked: user?.isBlocked || false,
-        }),
-      setSession: (session) => set({ session }),
-      setLoading: (isLoading) => set({ isLoading }),
-      setBlocked: (isBlocked) => set({ isBlocked }),
-      setLocked: (isLocked) => set({ isLocked }),
-      setBiometricEnabled: (biometricEnabled) => set({ biometricEnabled }),
-      setPinSet: (pinSet) => set({ pinSet }),
-      setSubscription: (subscription) => set({ subscription }),
-      signOut: () =>
-        set({
-          user: null,
-          session: null,
-          isAuthenticated: false,
-          isBlocked: false,
-          isLocked: true,
-          subscription: "free",
-        }),
+      isLocked: false,
+      subscription: "free",
     }),
-    {
-      name: "auth-storage",
-      storage: mmkvStorage,
-      partialize: (state) => ({
-        user: state.user,
-        session: state.session,
-        isAuthenticated: state.isAuthenticated,
-        subscription: state.subscription,
-        isBlocked: state.isBlocked,
-        biometricEnabled: state.biometricEnabled,
-        pinSet: state.pinSet,
-      }),
-    },
-  ),
-);
+}));
