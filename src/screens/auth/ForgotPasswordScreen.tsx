@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { colors, spacing, typography } from "../../lib/theme";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuthContext } from "../../providers/AuthProvider";
 import type { AuthStackParamList } from "../../navigation/types";
 
 type Props = NativeStackScreenProps<AuthStackParamList, "ForgotPassword">;
@@ -20,7 +20,7 @@ export function ForgotPasswordScreen({ navigation }: Props) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [sent, setSent] = useState(false);
-  const { resetPassword, isLoading } = useAuth();
+  const { resetPassword, isLoading } = useAuthContext();
 
   async function handleReset() {
     if (!email.trim()) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { colors, spacing, typography } from "../../lib/theme";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuthContext } from "../../providers/AuthProvider";
 import { getPinLockoutRemaining, getFailedPinAttempts } from "../../services";
 
 interface Props {
@@ -13,7 +13,7 @@ export function PINLockScreen({
   onFallbackBiometric,
   biometricEnabled,
 }: Props) {
-  const { unlockWithPin } = useAuth();
+  const { unlockWithPin } = useAuthContext();
   const [pin, setPin] = useState("");
   const [error, setError] = useState("");
   const [lockoutMs, setLockoutMs] = useState(0);

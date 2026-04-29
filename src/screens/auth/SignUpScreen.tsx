@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { colors, spacing, typography } from "../../lib/theme";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuthContext } from "../../providers/AuthProvider";
 import type { AuthStackParamList } from "../../navigation/types";
 
 type Props = NativeStackScreenProps<AuthStackParamList, "SignUp">;
@@ -21,7 +21,7 @@ export function SignUpScreen({ navigation }: Props) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const { signUp, isLoading } = useAuth();
+  const { signUp, isLoading } = useAuthContext();
 
   async function handleSignUp() {
     if (!email.trim() || !password || !confirmPassword) {

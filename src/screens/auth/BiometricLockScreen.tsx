@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { colors, spacing, typography } from "../../lib/theme";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuthContext } from "../../providers/AuthProvider";
 import {
   isBiometricAvailable,
   isBiometricEnrolled,
@@ -19,7 +19,7 @@ interface Props {
 }
 
 export function BiometricLockScreen({ onFallbackPin }: Props) {
-  const { unlockWithBiometrics, pinSet } = useAuth();
+  const { unlockWithBiometrics, pinSet } = useAuthContext();
   const [biometricLabel, setBiometricLabel] = useState("Biometrics");
   const [loading, setLoading] = useState(true);
 
