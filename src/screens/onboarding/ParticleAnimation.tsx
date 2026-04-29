@@ -135,21 +135,23 @@ function Particle({ color, data }: { color: string; data: ParticleData }) {
     );
   }, [data.delay, data.driftX, data.duration]);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    position: "absolute" as const,
-    left: data.startX,
-    top: data.startY,
-    width: data.size,
-    height: data.size,
-    borderRadius: data.size / 2,
-    backgroundColor: color,
-    opacity: opacity.value,
-    transform: [
-      { translateY: translateY.value },
-      { translateX: translateX.value },
-      { scale: scale.value },
-    ],
-  }));
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      position: "absolute" as const,
+      left: data.startX,
+      top: data.startY,
+      width: data.size,
+      height: data.size,
+      borderRadius: data.size / 2,
+      backgroundColor: color,
+      opacity: opacity.value,
+      transform: [
+        { translateY: translateY.value },
+        { translateX: translateX.value },
+        { scale: scale.value },
+      ] as any,
+    };
+  });
 
   return <Animated.View style={animatedStyle} />;
 }
