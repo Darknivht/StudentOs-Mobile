@@ -8,34 +8,34 @@
 
 ## Phase Overview
 
-| # | Phase | Goal | Reqs | Success Criteria |
-|---|-------|------|------|-----------------|
-| 0 | Foundation | Project setup, WatermelonDB, Zustand, Navigation, API layer, Theme | 8 | Project builds, navigation works, offline DB operational |
-| 1 | Auth & Security | Supabase Auth, Biometric, PIN, Session, Subscription | 11 | User can sign up/sign in, biometric works, PIN protected |
-| 2 | Onboarding & Dashboard | 7-step onboarding, Dashboard, Courses grid | 12 | User completes onboarding, dashboard shows streak/XP/progress |
-| 3 | Smart Notes | Note CRUD, PDF/DOCX upload, OCR, AI summary, Socratic mode | 14 | User can create, upload, summarize, and manage notes |
-| 4 | AI Tutor | Chat, personas, streaming, math, voice, configurable provider | 14 | User can chat with AI, streaming works, math renders |
-| 5 | Flashcards & SM-2 | Create, SM-2 review, list, filters, AI generation | 11 | User can create cards, review with SM-2 algorithm |
-| 6 | Quizzes | AI generation, timer, feedback, history, challenges | 10 | User can take AI-generated quizzes with scoring |
-| 7 | ExamPrep CBT Engine | Exam selector, 8 practice modes, analytics, weakness report | 27 | User can practice WAEC/NECO/JAMB/IELTS/TOEFL/SAT/GRE exams |
-| 8 | Study Suite | Pomodoro, AI tools (cheat sheet, mnemonic, cram, etc.) | 12 | User has complete study toolkit |
-| 9 | AI Tools Lab | Math solver, code debugger, translator, OCR, lecture recorder | 12 | User has specialized AI utilities |
-| 10 | Career Module | Resume builder, job search, internship matcher | 14 | User can build resume, search jobs |
-| 11 | Plan & Focus | Timetable, smart scheduler, weakness detector, lo-fi radio | 11 | User can plan and track study schedule |
-| 12 | Focus Mode & App Blocker | Native app blocker, overlay, emergency exit, boot persistence | 10 | App blocker works on Android, overlay enforced |
-| 13 | Social Hub | Leaderboard, challenges, friends, groups | 12 | User can compete, connect, collaborate |
-| 14 | Chat System | DMs, group chats, real-time, media | 10 | User can message friends and groups |
-| 15 | Store | Resource marketplace, search, filter, tier gating | 8 | User can browse and download resources |
-| 16 | Gamification | XP, streaks, achievements, daily challenges | 13 | User earns XP, streaks, and achievements |
-| 17 | Safety & Parental Controls | PIN protection, time limits, parent dashboard | 9 | Parents can control and monitor usage |
-| 18 | Profile & Settings | Avatar, stats, preferences, account actions | 12 | User can manage profile and settings |
-| 19 | Payments & Subscriptions | Upgrade page, payment checkout, tier management | 14 | User can upgrade, pay, manage subscription |
-| 20 | Offline Mode | Background sync, queue, offline viewing | 10 | App works offline with sync on reconnect |
-| 21 | PDF Export & Documents | PDF generation, document viewer | 5 | User can export and view documents |
-| 22 | Notifications & Background | Push, local notifications, background fetch | 5 | User receives notifications |
-| 23 | Admin Panel | Admin dashboard, resource upload, question bank | 4 | Admins can manage content |
-| 24 | Advanced Features & Polish | Voice input, TTS, animations, haptics, deep linking | 7 | Premium polish features |
-| 25 | Continuous Improvement | Performance, accessibility, tablet layouts | 7 | Optimization and enhancement |
+| #   | Phase                      | Goal                                                               | Reqs | Success Criteria                                              |
+| --- | -------------------------- | ------------------------------------------------------------------ | ---- | ------------------------------------------------------------- |
+| 0   | Foundation                 | Project setup, WatermelonDB, Zustand, Navigation, API layer, Theme | 8    | Project builds, navigation works, offline DB operational      |
+| 1   | Auth & Security            | Supabase Auth, Biometric, PIN, Session, Subscription               | 11   | User can sign up/sign in, biometric works, PIN protected      |
+| 2   | Onboarding & Dashboard     | 7-step onboarding, Dashboard, Courses grid                         | 12   | User completes onboarding, dashboard shows streak/XP/progress |
+| 3   | Smart Notes                | Note CRUD, PDF/DOCX upload, OCR, AI summary, Socratic mode         | 14   | User can create, upload, summarize, and manage notes          |
+| 4   | AI Tutor                   | Chat, personas, streaming, math, voice, configurable provider      | 14   | User can chat with AI, streaming works, math renders          |
+| 5   | Flashcards & SM-2          | Create, SM-2 review, list, filters, AI generation                  | 11   | User can create cards, review with SM-2 algorithm             |
+| 6   | Quizzes                    | AI generation, timer, feedback, history, challenges                | 10   | User can take AI-generated quizzes with scoring               |
+| 7   | ExamPrep CBT Engine        | Exam selector, 8 practice modes, analytics, weakness report        | 27   | User can practice WAEC/NECO/JAMB/IELTS/TOEFL/SAT/GRE exams    |
+| 8   | Study Suite                | Pomodoro, AI tools (cheat sheet, mnemonic, cram, etc.)             | 12   | User has complete study toolkit                               |
+| 9   | AI Tools Lab               | Math solver, code debugger, translator, OCR, lecture recorder      | 12   | User has specialized AI utilities                             |
+| 10  | Career Module              | Resume builder, job search, internship matcher                     | 14   | User can build resume, search jobs                            |
+| 11  | Plan & Focus               | Timetable, smart scheduler, weakness detector, lo-fi radio         | 11   | User can plan and track study schedule                        |
+| 12  | Focus Mode & App Blocker   | Native app blocker, overlay, emergency exit, boot persistence      | 10   | App blocker works on Android, overlay enforced                |
+| 13  | Social Hub                 | Leaderboard, challenges, friends, groups                           | 12   | User can compete, connect, collaborate                        |
+| 14  | Chat System                | DMs, group chats, real-time, media                                 | 10   | User can message friends and groups                           |
+| 15  | Store                      | Resource marketplace, search, filter, tier gating                  | 8    | User can browse and download resources                        |
+| 16  | Gamification               | XP, streaks, achievements, daily challenges                        | 13   | User earns XP, streaks, and achievements                      |
+| 17  | Safety & Parental Controls | PIN protection, time limits, parent dashboard                      | 9    | Parents can control and monitor usage                         |
+| 18  | Profile & Settings         | Avatar, stats, preferences, account actions                        | 12   | User can manage profile and settings                          |
+| 19  | Payments & Subscriptions   | Upgrade page, payment checkout, tier management                    | 14   | User can upgrade, pay, manage subscription                    |
+| 20  | Offline Mode               | Background sync, queue, offline viewing                            | 10   | App works offline with sync on reconnect                      |
+| 21  | PDF Export & Documents     | PDF generation, document viewer                                    | 5    | User can export and view documents                            |
+| 22  | Notifications & Background | Push, local notifications, background fetch                        | 5    | User receives notifications                                   |
+| 23  | Admin Panel                | Admin dashboard, resource upload, question bank                    | 4    | Admins can manage content                                     |
+| 24  | Advanced Features & Polish | Voice input, TTS, animations, haptics, deep linking                | 7    | Premium polish features                                       |
+| 25  | Continuous Improvement     | Performance, accessibility, tablet layouts                         | 7    | Optimization and enhancement                                  |
 
 **Total:** 25 phases, 210 requirements, 100% coverage ✓
 
@@ -50,6 +50,7 @@
 **Requirements:** FOUND-01, FOUND-02, FOUND-03, FOUND-04, FOUND-05, FOUND-06, FOUND-07, FOUND-08
 
 **Success Criteria:**
+
 1. Expo SDK 54 + Dev Client project initializes and builds successfully on Android and iOS
 2. React Navigation v7 with bottom tabs + stack navigator renders all placeholder screens
 3. Zustand stores for auth, subscription, and UI state are initialized and functional
@@ -74,6 +75,7 @@
 **Requirements:** AUTH-01 through AUTH-11
 
 **Success Criteria:**
+
 1. User can sign up with email/password and is immediately signed in
 2. User can sign in with email/password and session persists across app restarts
 3. Biometric authentication (Face ID / fingerprint) unlocks the app on subsequent opens
@@ -98,6 +100,7 @@
 **Requirements:** ONBOARD-01 through ONBOARD-03, DASH-01 through DASH-09
 
 **Success Criteria:**
+
 1. 7-step onboarding flow displays with gradient backgrounds and animations per step
 2. Onboarding state persists (returning users skip to auth)
 3. Dashboard shows time-aware greeting with display name
@@ -114,6 +117,14 @@
 
 **UI hint:** yes
 
+**Plans:** 3 plans
+
+Plans:
+
+- [ ] 02-01-PLAN.md — Onboarding flow with 7 animated steps + RootNavigator wiring
+- [ ] 02-02-PLAN.md — Dashboard screen with greeting, streak, study widgets, banners
+- [ ] 02-03-PLAN.md — Daily Brain Boost + Courses grid with progress cards
+
 ---
 
 ### Phase 3: Smart Notes
@@ -123,6 +134,7 @@
 **Requirements:** NOTES-01 through NOTES-14
 
 **Success Criteria:**
+
 1. Rich text note creation with markdown support and auto-save (3-second debounce)
 2. PDF upload with text extraction via extract-pdf-text edge function
 3. DOCX upload with text extraction
@@ -150,6 +162,7 @@
 **Requirements:** AI-01 through AI-14
 
 **Success Criteria:**
+
 1. Chat interface with message history (user/assistant roles)
 2. 4 persona selection (Chill/Strict/Fun/Motivator) persisted to profile
 3. Course-aware context — when opened from course, full course notes injected as system context
@@ -177,6 +190,7 @@
 **Requirements:** FLASHC-01 through FLASHC-11
 
 **Success Criteria:**
+
 1. Manual flashcard creation (front + back text fields)
 2. AI flashcard generation from notes (10-20 cards, JSON format, user reviews before save)
 3. SM-2 review session — cards due (next_review <= NOW()) shown one at a time
@@ -204,6 +218,7 @@
 **Requirements:** QUIZ-01 through QUIZ-10
 
 **Success Criteria:**
+
 1. AI quiz generation from notes or course content (configurable: 5/10/20 questions, easy/medium/hard)
 2. One question at a time with 4 multiple-choice options
 3. Optional timer (per-question or total)
@@ -230,6 +245,7 @@
 **Requirements:** EXAM-01 through EXAM-27
 
 **Success Criteria:**
+
 1. Exam selector: WAEC, NECO, JAMB, IELTS, TOEFL, SAT, GRE
 2. Subject selector per exam type
 3. Practice mode selector with 8 modes:
@@ -267,6 +283,7 @@
 **Requirements:** STUDY-01 through STUDY-12
 
 **Success Criteria:**
+
 1. Pomodoro timer with 25/5 default cycle and configurable durations
 2. Pomodoro session logging to pomodoro_sessions table
 3. Cheat sheet creator (AI generates one-page summary from notes, PDF export)
@@ -295,6 +312,7 @@
 **Requirements:** AITOOLS-01 through AITOOLS-12
 
 **Success Criteria:**
+
 1. Math solver (step-by-step working, KaTeX rendering, "Explain like I'm 5" mode)
 2. Code debugger (paste code, identify bugs, explain fix, corrected code output)
 3. Language translator (50+ languages with grammar explanations)
@@ -323,6 +341,7 @@
 **Requirements:** CAREER-01 through CAREER-14
 
 **Success Criteria:**
+
 1. Resume builder with 10 templates (Free: 3, Plus: 7, Pro: 10)
 2. Live preview (real-time as user types)
 3. All sections: contact, summary, education, experience, skills, projects, certifications
@@ -353,6 +372,7 @@
 **Requirements:** PLAN-01 through PLAN-11
 
 **Success Criteria:**
+
 1. Study timetable (weekly calendar, Mon-Sun, hourly slots)
 2. Smart scheduler (AI-powered: subjects + exam date + hours/day → optimal schedule)
 3. Weakness detector (AI analyzes quiz/exam history, identifies topics below 60% accuracy)
@@ -380,6 +400,7 @@
 **Requirements:** FOCUS-01 through FOCUS-10
 
 **Success Criteria:**
+
 1. Native Android app blocker via AccessibilityService (Expo Dev Client)
 2. BootReceiver to restore blocking state after device restart
 3. App selector (list all installed apps, user checks which to block)
@@ -406,6 +427,7 @@
 **Requirements:** SOCIAL-01 through SOCIAL-12
 
 **Success Criteria:**
+
 1. Leaderboard (global XP, all-time and weekly, top 100 with avatars)
 2. School filter for leaderboard (if school name set in profile)
 3. Study challenges (community time-limited challenges with progress bars)
@@ -434,6 +456,7 @@
 **Requirements:** CHAT-01 through CHAT-10
 
 **Success Criteria:**
+
 1. Direct messages with friends (1-on-1 chat, Free tier included)
 2. Group chats for study groups (Plus/Pro only for creation and access)
 3. Real-time updates via Supabase Realtime WebSocket subscription
@@ -460,6 +483,7 @@
 **Requirements:** STORE-01 through STORE-08
 
 **Success Criteria:**
+
 1. Resource marketplace (textbooks, past papers, notes, videos)
 2. Resource cards (thumbnail, title, author, subject, grade, download count, tier badge)
 3. Download button or "Upgrade to access" CTA for locked resources
@@ -484,6 +508,7 @@
 **Requirements:** GAM-01 through GAM-13
 
 **Success Criteria:**
+
 1. XP system (quiz: 5 XP/correct, flashcards: 1 XP/card, Pomodoro: 10 XP/session)
 2. Streak tracking (consecutive days with study activity, reset if day missed)
 3. Streak milestones (50 XP at 7 days, 200 XP at 30 days, 1000 XP at 100 days)
@@ -511,6 +536,7 @@
 **Requirements:** SAFETY-01 through SAFETY-09
 
 **Success Criteria:**
+
 1. 4-digit parental PIN (hashed, stored in profiles.parental_pin)
 2. Daily time limit (block app after X minutes, full-screen blocking overlay)
 3. Override requires parental PIN
@@ -536,6 +562,7 @@
 **Requirements:** PROFILE-01 through PROFILE-12
 
 **Success Criteria:**
+
 1. Avatar upload to Supabase Storage
 2. Display name, username (unique, for friend requests), full name
 3. School name, grade level (JSS1-SS3 / Year 1-4 / Postgrad)
@@ -564,6 +591,7 @@
 **Requirements:** PAY-01 through PAY-14
 
 **Success Criteria:**
+
 1. Upgrade page with plan comparison (Free/Plus ₦2,000/mo/Pro ₦5,000/mo)
 2. Yearly plans (Plus ₦20,000, Pro ₦50,000 — save 17%)
 3. Configurable payment provider via env vars (PAYMENT_PROVIDER, PAYMENT_PUBLIC_KEY, etc.)
@@ -594,6 +622,7 @@
 **Requirements:** OFFLINE-01 through OFFLINE-10
 
 **Success Criteria:**
+
 1. WatermelonDB offline-first local storage operational
 2. Background sync to Supabase when online (two-phase: pull then push)
 3. Sync queue for queued mutations
@@ -620,6 +649,7 @@
 **Requirements:** PDF-01 through PDF-05
 
 **Success Criteria:**
+
 1. PDF export for notes (Fast: instant, HD: pixel-perfect)
 2. PDF export for flashcards
 3. PDF export for cheat sheets
@@ -641,6 +671,7 @@
 **Requirements:** NOTIF-01 through NOTIF-05
 
 **Success Criteria:**
+
 1. Push notifications (focus reminders, streak alerts, daily challenge)
 2. Local notifications (Pomodoro timer complete, daily challenge available)
 3. Notification preferences per feature
@@ -662,6 +693,7 @@
 **Requirements:** ADMIN-01 through ADMIN-04
 
 **Success Criteria:**
+
 1. Admin dashboard (announcements, resources, user activity stats)
 2. Upload educational resources (textbooks, past papers) to store
 3. Manage exam question bank (add/edit/disable questions)
@@ -682,6 +714,7 @@
 **Requirements:** V2-01 through V2-07
 
 **Success Criteria:**
+
 1. Voice input for AI tutor (hands-free Q&A)
 2. Text-to-speech for notes and flashcards (listen while commuting)
 3. Advanced animations with react-native-reanimated v4
@@ -705,6 +738,7 @@
 **Requirements:** V2-08 through V2-15
 
 **Success Criteria:**
+
 1. Performance optimization (FlatList with getItemLayout for 10k+ items, PITFALL-08)
 2. Accessibility audit (ARIA labels, screen reader support, color contrast)
 3. Battery optimization (reduce background processes, optimize sync intervals)
@@ -756,15 +790,15 @@ Phase 0 (Foundation)
 
 ## Research Flags by Phase
 
-| Phase | Flag | Status |
-|-------|------|--------|
-| Phase 0 | WatermelonDB expo plugin SDK 54 compatibility | Verify during native build |
-| Phase 4 | SSE streaming reliability on React Native | Test with expo-dev-client |
-| Phase 7 | Question bank sourcing strategy | Plan during planning |
-| Phase 7 | WatermelonDB sync for exam answers (client-wins) | Configure during Phase 20 |
-| Phase 12 | iOS Screen Time API approval process | Research before Phase 12 |
-| Phase 19 | Flutterwave USSD implementation | Research before Phase 19 |
-| Phase 24 | Widget support (Android/iOS) | Research before Phase 24 |
+| Phase    | Flag                                             | Status                     |
+| -------- | ------------------------------------------------ | -------------------------- |
+| Phase 0  | WatermelonDB expo plugin SDK 54 compatibility    | Verify during native build |
+| Phase 4  | SSE streaming reliability on React Native        | Test with expo-dev-client  |
+| Phase 7  | Question bank sourcing strategy                  | Plan during planning       |
+| Phase 7  | WatermelonDB sync for exam answers (client-wins) | Configure during Phase 20  |
+| Phase 12 | iOS Screen Time API approval process             | Research before Phase 12   |
+| Phase 19 | Flutterwave USSD implementation                  | Research before Phase 19   |
+| Phase 24 | Widget support (Android/iOS)                     | Research before Phase 24   |
 
 ---
 
@@ -781,5 +815,6 @@ Phase 0 (Foundation)
 - **Estimated sequence:** Sequential, ~25 sessions
 
 ---
-*Roadmap created: 2026-04-25*
-*All 210 v1 requirements mapped to 25 phases ✓*
+
+_Roadmap created: 2026-04-25_
+_All 210 v1 requirements mapped to 25 phases ✓_
