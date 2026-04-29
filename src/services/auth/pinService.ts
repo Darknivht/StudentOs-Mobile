@@ -4,16 +4,28 @@ const PIN_KEY = "app_pin_hash";
 const PIN_FAILED_KEY = "pin_failed_attempts";
 const PIN_LOCKOUT_KEY = "pin_lockout_until";
 
-async function hashPin(pin: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(pin + "studentos_salt_2026");
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+const SALT = "studentos_salt_2026";
+
+/**
+ * Simple deterministic hash for PIN storage.
+ * crypto.subtle is not available in Hermes (React Native JS engine).
+ * SecureStore provides the actual security boundary — this hash just
+ * prevents storing the raw PIN in plaintext.
+ */
+function hashPin(pin: string): string {
+  const input = pin + SALT;
+  let hash = 5381;
+  for (let i = 0; i < input.length; i++) {
+    hash = ((hash << 5) + hash) ^ input.charCodeAt(i);
+    hash = hash & hash; // Force 32-bit integer
+  }
+  // Produce a fixed-length hex string
+  return (hash >>> 0).toString(16).padStart(8, "0") +
+    Math.abs(input.length * 0x9e3779b9 | 0).toString(16).padStart(8, "0");
 }
 
 export async function setPin(pin: string): Promise<void> {
-  const hash = await hashPin(pin);
+  const hash = hashPin(pin);
   await SecureStore.setItemAsync(PIN_KEY, hash);
   await SecureStore.setItemAsync(PIN_FAILED_KEY, "0");
 }
@@ -32,7 +44,7 @@ export async function verifyPin(pin: string): Promise<boolean> {
   const storedHash = await SecureStore.getItemAsync(PIN_KEY);
   if (!storedHash) return false;
 
-  const inputHash = await hashPin(pin);
+  const inputHash = hashPin(pin);
   if (inputHash === storedHash) {
     await SecureStore.setItemAsync(PIN_FAILED_KEY, "0");
     return true;
