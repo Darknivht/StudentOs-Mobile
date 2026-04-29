@@ -17,6 +17,8 @@ import {
   verifyPin as verifyPinService,
 } from "../services";
 
+let globalInitialized = false;
+
 export function useAuth() {
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -31,45 +33,69 @@ export function useAuth() {
   const initializedRef = useRef(false);
 
   const initialize = useCallback(async () => {
-    if (initializedRef.current) return;
+    if (initializedRef.current || globalInitialized) return;
     initializedRef.current = true;
+    globalInitialized = true;
+
+    store.setLoading(true);
+
+    const hardTimeout = setTimeout(() => {
+      console.warn("Auth init: hard timeout — forcing loading=false");
+      store.setUser(null);
+      store.setLocked(false);
+      store.setLoading(false);
+    }, 8000);
 
     try {
-      store.setLoading(true);
+      const session = await Promise.race([
+        getSession(),
+        new Promise<null>((_, reject) =>
+          setTimeout(() => reject(new Error("getSession timeout")), 5000),
+        ),
+      ]).catch(() => null);
 
-      const session = await getSession();
       if (session?.user) {
-        const profile = await fetchUserProfile(session.user.id);
-        if (profile) {
-          store.setUser(profile);
-          if (profile.isBlocked) {
-            await signOutService();
-            store.signOut();
-            return;
+        try {
+          const profile = await fetchUserProfile(session.user.id);
+          if (profile) {
+            store.setUser(profile);
+            if (profile.isBlocked) {
+              await signOutService();
+              store.signOut();
+              return;
+            }
           }
+        } catch {
+          store.setUser(null);
         }
 
-        const biometricAvail = await isBiometricAvailable();
-        const biometricEnrolled = await isBiometricEnrolled();
-        const biometricEnabled = await isBiometricLockEnabled();
-        const pinIsSet = await checkPinSet();
+        try {
+          const biometricAvail = await isBiometricAvailable();
+          const biometricEnrolled = await isBiometricEnrolled();
+          const biometricEnabled = await isBiometricLockEnabled();
+          const pinIsSet = await checkPinSet();
 
-        store.setBiometricEnabled(
-          biometricAvail && biometricEnrolled && biometricEnabled,
-        );
-        store.setPinSet(pinIsSet);
+          store.setBiometricEnabled(
+            biometricAvail && biometricEnrolled && biometricEnabled,
+          );
+          store.setPinSet(pinIsSet);
 
-        const needsLock =
-          (biometricAvail && biometricEnrolled && biometricEnabled) || pinIsSet;
-        store.setLocked(needsLock);
+          const needsLock =
+            (biometricAvail && biometricEnrolled && biometricEnabled) ||
+            pinIsSet;
+          store.setLocked(needsLock);
+        } catch {
+          store.setLocked(false);
+        }
       } else {
         store.setUser(null);
         store.setLocked(false);
       }
-    } catch (error) {
-      console.error("Auth initialization failed:", error);
+    } catch {
       store.setUser(null);
+      store.setLocked(false);
     } finally {
+      clearTimeout(hardTimeout);
       store.setLoading(false);
     }
   }, []);
