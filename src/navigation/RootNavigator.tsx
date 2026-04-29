@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { AuthNavigator } from "./AuthNavigator";
 import { MainNavigator } from "./MainNavigator";
-import { useAuth } from "../hooks/useAuth";
+import { useAuthContext } from "../providers/AuthProvider";
 import {
   BiometricLockScreen,
   PINLockScreen,
@@ -10,7 +10,7 @@ import {
 } from "../screens";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { colors } from "../lib/theme";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 type LockMode = "biometric" | "pin" | "none";
 
@@ -23,7 +23,22 @@ export function RootNavigator() {
     biometricEnabled,
     pinSet,
     signOut,
-  } = useAuth();
+  } = useAuthContext();
+
+  const [forceLoaded, setForceLoaded] = useState(false);
+
+  useEffect(() => {
+    if (isLoading && !forceLoaded) {
+      const t = setTimeout(() => {
+        console.warn("RootNavigator: force-bypassing loading after 4s");
+        setForceLoaded(true);
+      }, 4000);
+      return () => clearTimeout(t);
+    }
+  }, [isLoading, forceLoaded]);
+
+  const showLoading = isLoading && !forceLoaded;
+
   const [lockMode, setLockMode] = useState<LockMode>("none");
   const [needsPinSetup, setNeedsPinSetup] = useState(false);
 
@@ -32,11 +47,19 @@ export function RootNavigator() {
     setLockMode("pin");
   }, []);
 
-  if (isLoading) {
+  if (showLoading) {
     return (
       <View style={styles.loading}>
         <ActivityIndicator size="large" color={colors.primary} />
       </View>
+    );
+  }
+
+  if (forceLoaded && !isAuthenticated) {
+    return (
+      <NavigationContainer>
+        <AuthNavigator />
+      </NavigationContainer>
     );
   }
 
