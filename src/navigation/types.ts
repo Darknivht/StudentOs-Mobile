@@ -12,6 +12,10 @@ export type LockStackParamList = {
   PINLock: undefined;
 };
 
+export type OnboardingParamList = {
+  Onboarding: undefined;
+};
+
 export type MainTabParamList = {
   Home: NavigatorScreenParams<HomeStackParamList>;
   Study: NavigatorScreenParams<StudyStackParamList>;

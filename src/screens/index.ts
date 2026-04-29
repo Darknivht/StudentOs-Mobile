@@ -9,3 +9,4 @@ export { BiometricLockScreen } from "./auth/BiometricLockScreen";
 export { PINLockScreen } from "./auth/PINLockScreen";
 export { PINSetupScreen } from "./auth/PINSetupScreen";
 export { BlockedScreen } from "./auth/BlockedScreen";
+export { OnboardingScreen } from "./onboarding/OnboardingScreen";

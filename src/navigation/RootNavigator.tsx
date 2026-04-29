@@ -2,12 +2,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { AuthNavigator } from "./AuthNavigator";
 import { MainNavigator } from "./MainNavigator";
 import { useAuthContext } from "../providers/AuthProvider";
+import { useAppStore } from "../stores/appStore";
 import {
   BiometricLockScreen,
   PINLockScreen,
   PINSetupScreen,
   BlockedScreen,
 } from "../screens";
+import { OnboardingScreen } from "../screens/onboarding";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { colors } from "../lib/theme";
 import { useState, useCallback, useEffect } from "react";
@@ -73,6 +75,11 @@ export function RootNavigator() {
         <AuthNavigator />
       </NavigationContainer>
     );
+  }
+
+  const onboardingSeen = useAppStore.getState().onboardingSeen;
+  if (!onboardingSeen) {
+    return <OnboardingScreen />;
   }
 
   if (needsPinSetup && !pinSet) {
