@@ -2,6 +2,7 @@ export { HomeScreen } from "./HomeScreen";
 export { StudyScreen } from "./StudyScreen";
 export { FocusScreen } from "./FocusScreen";
 export { ProfileScreen } from "./ProfileScreen";
+export { DashboardScreen } from "./dashboard/DashboardScreen";
 export { SignInScreen } from "./auth/SignInScreen";
 export { SignUpScreen } from "./auth/SignUpScreen";
 export { ForgotPasswordScreen } from "./auth/ForgotPasswordScreen";
