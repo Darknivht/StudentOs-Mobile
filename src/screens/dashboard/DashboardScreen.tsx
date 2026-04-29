@@ -6,6 +6,8 @@ import { AnnouncementBanner } from "./AnnouncementBanner";
 import { StreakCard } from "./StreakCard";
 import { StudyTimeWidget } from "./StudyTimeWidget";
 import { StudyProgressWidget } from "./StudyProgressWidget";
+import { BrainBoostCard } from "./BrainBoostCard";
+import { CoursesSection } from "./CoursesSection";
 import { colors, spacing } from "../../lib/theme";
 
 export function DashboardScreen() {
@@ -23,8 +25,10 @@ export function DashboardScreen() {
           <StudyTimeWidget />
           <StudyProgressWidget />
         </View>
-        {/* BrainBoostCard — added in Plan 03 */}
-        {/* CoursesSection — added in Plan 03 */}
+        <View style={styles.brainBoostContainer}>
+          <BrainBoostCard />
+        </View>
+        <CoursesSection />
       </ScrollView>
     </SafeAreaView>
   );
@@ -41,6 +45,10 @@ const styles = StyleSheet.create({
   studyRow: {
     flexDirection: "row",
     gap: spacing.sm,
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.md,
+  },
+  brainBoostContainer: {
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.md,
   },

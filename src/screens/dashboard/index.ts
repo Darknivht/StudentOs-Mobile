@@ -5,3 +5,6 @@ export { StudyTimeWidget } from "./StudyTimeWidget";
 export { StudyProgressWidget } from "./StudyProgressWidget";
 export { AnnouncementBanner } from "./AnnouncementBanner";
 export { OfflineBanner } from "./OfflineBanner";
+export { BrainBoostCard } from "./BrainBoostCard";
+export { CoursesSection } from "./CoursesSection";
+export { CourseCard } from "./CourseCard";
