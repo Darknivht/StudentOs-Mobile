@@ -27,7 +27,11 @@ export function RootNavigator() {
     signOut,
   } = useAuthContext();
 
+  const onboardingSeen = useAppStore((s) => s.onboardingSeen);
+
   const [forceLoaded, setForceLoaded] = useState(false);
+  const [lockMode, setLockMode] = useState<LockMode>("none");
+  const [needsPinSetup, setNeedsPinSetup] = useState(false);
 
   useEffect(() => {
     if (isLoading && !forceLoaded) {
@@ -39,29 +43,18 @@ export function RootNavigator() {
     }
   }, [isLoading, forceLoaded]);
 
-  const showLoading = isLoading && !forceLoaded;
-
-  const [lockMode, setLockMode] = useState<LockMode>("none");
-  const [needsPinSetup, setNeedsPinSetup] = useState(false);
-
   const handlePinSetupComplete = useCallback(() => {
     setNeedsPinSetup(false);
     setLockMode("pin");
   }, []);
+
+  const showLoading = isLoading && !forceLoaded;
 
   if (showLoading) {
     return (
       <View style={styles.loading}>
         <ActivityIndicator size="large" color={colors.primary} />
       </View>
-    );
-  }
-
-  if (forceLoaded && !isAuthenticated) {
-    return (
-      <NavigationContainer>
-        <AuthNavigator />
-      </NavigationContainer>
     );
   }
 
@@ -77,7 +70,6 @@ export function RootNavigator() {
     );
   }
 
-  const onboardingSeen = useAppStore.getState().onboardingSeen;
   if (!onboardingSeen) {
     return <OnboardingScreen />;
   }

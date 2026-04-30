@@ -1,7 +1,9 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ParticleAnimation } from "./ParticleAnimation";
 import { typography, spacing } from "../../lib/theme";
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface OnboardingStepProps {
   title: string;
@@ -37,7 +39,7 @@ export function OnboardingStep({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: SCREEN_WIDTH,
     justifyContent: "center",
     alignItems: "center",
   },

@@ -16,7 +16,11 @@ export async function signIn(email: string, password: string) {
     email,
     password,
   });
-  if (error) throw error;
+  if (error) {
+    console.error("signIn error:", error.message);
+    throw error;
+  }
+  console.log("signIn success, user:", data.user?.id);
   return data;
 }
 
@@ -36,10 +40,21 @@ export async function resetPassword(email: string) {
 }
 
 export async function getSession() {
-  if (!supabase) return null;
+  if (!supabase) {
+    console.warn("getSession: supabase client is null");
+    return null;
+  }
 
   const { data, error } = await supabase.auth.getSession();
-  if (error) throw error;
+  if (error) {
+    console.error("getSession error:", error.message);
+    throw error;
+  }
+  if (!data.session) {
+    console.log("getSession: no active session");
+  } else {
+    console.log("getSession: session found for user", data.session.user?.id);
+  }
   return data.session;
 }
 
@@ -57,11 +72,14 @@ export async function fetchUserProfile(
     .single();
 
   if (error) {
-    console.error("Failed to fetch user profile:", error.message);
+    console.error("Failed to fetch user profile:", error.message, error.code);
     return null;
   }
 
-  if (!data) return null;
+  if (!data) {
+    console.warn("No profile row found for user:", userId);
+    return null;
+  }
 
   return {
     id: data.id,

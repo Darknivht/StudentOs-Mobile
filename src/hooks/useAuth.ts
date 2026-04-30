@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useRef } from "react";
 import { AppState } from "react-native";
 import { useAuthStore } from "../stores/authStore";
+import type { AuthUser } from "../types";
 import {
   signUp as signUpService,
   signIn as signInService,
@@ -18,6 +19,43 @@ import {
 } from "../services";
 
 let globalInitialized = false;
+let lastSignInTime = 0;
+
+async function loadSecuritySettings(store: {
+  setBiometricEnabled: (v: boolean) => void;
+  setPinSet: (v: boolean) => void;
+  setLocked: (v: boolean) => void;
+}): Promise<void> {
+  try {
+    const biometricAvail = await isBiometricAvailable();
+    const biometricEnrolled = await isBiometricEnrolled();
+    const biometricEnabled = await isBiometricLockEnabled();
+    const pinIsSet = await checkPinSet();
+
+    store.setBiometricEnabled(
+      biometricAvail && biometricEnrolled && biometricEnabled,
+    );
+    store.setPinSet(pinIsSet);
+
+    const needsLock =
+      (biometricAvail && biometricEnrolled && biometricEnabled) || pinIsSet;
+    store.setLocked(needsLock);
+  } catch (e) {
+    console.warn("Auth: security settings check failed", e);
+    store.setLocked(false);
+  }
+}
+
+function makeFallbackUser(userId: string, email?: string): AuthUser {
+  return {
+    id: userId,
+    email: email || "",
+    displayName: "",
+    subscription: "free",
+    isBlocked: false,
+    createdAt: new Date().toISOString(),
+  };
+}
 
 export function useAuth() {
   const user = useAuthStore((s) => s.user);
@@ -55,43 +93,37 @@ export function useAuth() {
       ]).catch(() => null);
 
       if (session?.user) {
+        let profileSet = false;
         try {
           const profile = await fetchUserProfile(session.user.id);
           if (profile) {
-            store.setUser(profile);
             if (profile.isBlocked) {
               await signOutService();
               store.signOut();
               return;
             }
+            store.setUser(profile);
+            profileSet = true;
           }
-        } catch {
-          store.setUser(null);
+        } catch (e) {
+          console.warn("Auth init: fetchUserProfile failed", e);
         }
 
-        try {
-          const biometricAvail = await isBiometricAvailable();
-          const biometricEnrolled = await isBiometricEnrolled();
-          const biometricEnabled = await isBiometricLockEnabled();
-          const pinIsSet = await checkPinSet();
-
-          store.setBiometricEnabled(
-            biometricAvail && biometricEnrolled && biometricEnabled,
+        if (!profileSet) {
+          console.warn(
+            "Auth init: no profile row, using fallback user for",
+            session.user.id,
           );
-          store.setPinSet(pinIsSet);
-
-          const needsLock =
-            (biometricAvail && biometricEnrolled && biometricEnabled) ||
-            pinIsSet;
-          store.setLocked(needsLock);
-        } catch {
-          store.setLocked(false);
+          store.setUser(makeFallbackUser(session.user.id, session.user.email));
         }
+
+        await loadSecuritySettings(store);
       } else {
         store.setUser(null);
         store.setLocked(false);
       }
-    } catch {
+    } catch (e) {
+      console.warn("Auth init: unexpected error", e);
       store.setUser(null);
       store.setLocked(false);
     } finally {
@@ -105,32 +137,40 @@ export function useAuth() {
 
     const { data } = onAuthStateChange(async (event, userId) => {
       if (event === "SIGNED_IN" && userId) {
-        const profile = await fetchUserProfile(userId);
-        if (profile) {
-          if (profile.isBlocked) {
-            await signOutService();
-            store.signOut();
-            return;
-          }
-          store.setUser(profile);
-
-          const biometricAvail = await isBiometricAvailable();
-          const biometricEnrolled = await isBiometricEnrolled();
-          const biometricEnabled = await isBiometricLockEnabled();
-          const pinIsSet = await checkPinSet();
-
-          store.setBiometricEnabled(
-            biometricAvail && biometricEnrolled && biometricEnabled,
-          );
-          store.setPinSet(pinIsSet);
-
-          const needsLock =
-            (biometricAvail && biometricEnrolled && biometricEnabled) ||
-            pinIsSet;
-          store.setLocked(needsLock);
+        if (Date.now() - lastSignInTime < 3000) {
+          console.warn("Auth: skipping duplicate SIGNED_IN event");
+          return;
         }
+        lastSignInTime = Date.now();
+
+        let profileSet = false;
+        try {
+          const profile = await fetchUserProfile(userId);
+          if (profile) {
+            if (profile.isBlocked) {
+              await signOutService();
+              store.signOut();
+              return;
+            }
+            store.setUser(profile);
+            profileSet = true;
+          }
+        } catch (e) {
+          console.warn("Auth onAuthStateChange: fetchUserProfile failed", e);
+        }
+
+        if (!profileSet) {
+          const session = await getSession().catch(() => null);
+          store.setUser(
+            makeFallbackUser(userId, session?.user?.email || undefined),
+          );
+        }
+
+        await loadSecuritySettings(store);
       } else if (event === "SIGNED_OUT") {
         store.signOut();
+      } else if (event === "TOKEN_REFRESHED") {
+        // no-op, session persists
       }
     });
 
@@ -162,8 +202,35 @@ export function useAuth() {
 
   const signIn = useCallback(async (email: string, password: string) => {
     store.setLoading(true);
+    lastSignInTime = Date.now();
     try {
-      await signInService(email, password);
+      const result = await signInService(email, password);
+      if (result?.user) {
+        let profileSet = false;
+        try {
+          const profile = await fetchUserProfile(result.user.id);
+          if (profile) {
+            if (profile.isBlocked) {
+              await signOutService();
+              store.signOut();
+              return;
+            }
+            store.setUser(profile);
+            profileSet = true;
+          }
+        } catch (e) {
+          console.warn("signIn: fetchUserProfile failed, using fallback", e);
+        }
+
+        if (!profileSet) {
+          store.setUser(makeFallbackUser(result.user.id, result.user.email));
+        }
+
+        await loadSecuritySettings(store);
+      }
+    } catch (err) {
+      console.error("signIn: failed", err);
+      throw err;
     } finally {
       store.setLoading(false);
     }
