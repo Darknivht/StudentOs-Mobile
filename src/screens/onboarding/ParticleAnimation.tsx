@@ -7,6 +7,7 @@ import Animated, {
   withTiming,
   withDelay,
   withSequence,
+  cancelAnimation,
   Easing,
 } from "react-native-reanimated";
 
@@ -110,12 +111,8 @@ function Particle({ color, data }: { color: string; data: ParticleData }) {
       data.delay,
       withRepeat(
         withSequence(
-          withTiming(data.opacityMax, {
-            duration: data.duration / 2,
-          }),
-          withTiming(data.opacityMin, {
-            duration: data.duration / 2,
-          }),
+          withTiming(data.opacityMax, { duration: data.duration / 2 }),
+          withTiming(data.opacityMin, { duration: data.duration / 2 }),
         ),
         -1,
         true,
@@ -133,6 +130,13 @@ function Particle({ color, data }: { color: string; data: ParticleData }) {
         true,
       ),
     );
+
+    return () => {
+      cancelAnimation(translateY);
+      cancelAnimation(translateX);
+      cancelAnimation(opacity);
+      cancelAnimation(scale);
+    };
   }, [data.delay, data.driftX, data.duration]);
 
   const animatedStyle = useAnimatedStyle(() => {

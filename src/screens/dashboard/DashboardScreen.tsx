@@ -9,6 +9,31 @@ import { StudyProgressWidget } from "./StudyProgressWidget";
 import { BrainBoostCard } from "./BrainBoostCard";
 import { CoursesSection } from "./CoursesSection";
 import { colors, spacing } from "../../lib/theme";
+import { Component, type ReactNode, type ErrorInfo } from "react";
+
+class WidgetBoundary extends Component<
+  { children: ReactNode; name: string },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error(
+      `WidgetBoundary[${this.props.name}]:`,
+      error.message,
+      info.componentStack,
+    );
+  }
+
+  render() {
+    if (this.state.hasError) return null;
+    return this.props.children;
+  }
+}
 
 export function DashboardScreen() {
   return (
@@ -17,18 +42,34 @@ export function DashboardScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        <GreetingSection />
-        <OfflineBanner />
-        <AnnouncementBanner />
-        <StreakCard />
+        <WidgetBoundary name="GreetingSection">
+          <GreetingSection />
+        </WidgetBoundary>
+        <WidgetBoundary name="OfflineBanner">
+          <OfflineBanner />
+        </WidgetBoundary>
+        <WidgetBoundary name="AnnouncementBanner">
+          <AnnouncementBanner />
+        </WidgetBoundary>
+        <WidgetBoundary name="StreakCard">
+          <StreakCard />
+        </WidgetBoundary>
         <View style={styles.studyRow}>
-          <StudyTimeWidget />
-          <StudyProgressWidget />
+          <WidgetBoundary name="StudyTimeWidget">
+            <StudyTimeWidget />
+          </WidgetBoundary>
+          <WidgetBoundary name="StudyProgressWidget">
+            <StudyProgressWidget />
+          </WidgetBoundary>
         </View>
         <View style={styles.brainBoostContainer}>
-          <BrainBoostCard />
+          <WidgetBoundary name="BrainBoostCard">
+            <BrainBoostCard />
+          </WidgetBoundary>
         </View>
-        <CoursesSection />
+        <WidgetBoundary name="CoursesSection">
+          <CoursesSection />
+        </WidgetBoundary>
       </ScrollView>
     </SafeAreaView>
   );

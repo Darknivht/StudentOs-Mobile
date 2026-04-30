@@ -5,6 +5,7 @@ import Animated, {
   withRepeat,
   withSequence,
   withTiming,
+  cancelAnimation,
 } from "react-native-reanimated";
 import { useEffect } from "react";
 import { useStreak } from "../../hooks/useStreak";
@@ -23,6 +24,10 @@ export function StreakCard() {
       -1,
       true,
     );
+
+    return () => {
+      cancelAnimation(flameScale);
+    };
   }, []);
 
   const flameStyle = useAnimatedStyle(() => ({

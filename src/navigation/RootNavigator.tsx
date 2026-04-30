@@ -1,21 +1,14 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthNavigator } from "./AuthNavigator";
 import { MainNavigator } from "./MainNavigator";
 import { useAuthContext } from "../providers/AuthProvider";
 import { useAppStore } from "../stores/appStore";
-import {
-  BiometricLockScreen,
-  PINLockScreen,
-  PINSetupScreen,
-  BlockedScreen,
-} from "../screens";
+import { BiometricLockScreen, PINLockScreen, BlockedScreen } from "../screens";
 import { OnboardingScreen } from "../screens/onboarding";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { colors } from "../lib/theme";
 import {
   useState,
-  useCallback,
   useEffect,
   Component,
   type ReactNode,
@@ -58,9 +51,7 @@ class ErrorBoundary extends Component<
   }
 }
 
-const RootStack = createNativeStackNavigator();
-
-function RootStackScreen() {
+export function AppContent() {
   const {
     isAuthenticated,
     isLoading,
@@ -87,10 +78,6 @@ function RootStackScreen() {
 
   const showLoading = isLoading && !forceLoaded;
 
-  if (isBlocked) {
-    return <BlockedScreen onSignOut={signOut} />;
-  }
-
   if (showLoading) {
     return (
       <View style={styles.loading}>
@@ -99,12 +86,24 @@ function RootStackScreen() {
     );
   }
 
+  if (isBlocked) {
+    return <BlockedScreen onSignOut={signOut} />;
+  }
+
   if (!isAuthenticated) {
-    return <AuthNavigator />;
+    return (
+      <ErrorBoundary label="Auth">
+        <AuthNavigator />
+      </ErrorBoundary>
+    );
   }
 
   if (!onboardingSeen) {
-    return <OnboardingScreen />;
+    return (
+      <ErrorBoundary label="Onboarding">
+        <OnboardingScreen />
+      </ErrorBoundary>
+    );
   }
 
   if (isLocked) {
@@ -120,25 +119,17 @@ function RootStackScreen() {
   }
 
   return (
-    <RootStack.Navigator id="RootStack" screenOptions={{ headerShown: false }}>
-      <RootStack.Screen
-        name="MainApp"
-        children={() => (
-          <ErrorBoundary label="MainNavigator">
-            <MainNavigator />
-          </ErrorBoundary>
-        )}
-        options={{ headerShown: false }}
-      />
-    </RootStack.Navigator>
+    <ErrorBoundary label="Main">
+      <MainNavigator />
+    </ErrorBoundary>
   );
 }
 
 export function RootNavigator() {
   return (
     <NavigationContainer>
-      <ErrorBoundary label="RootStack">
-        <RootStackScreen />
+      <ErrorBoundary label="Root">
+        <AppContent />
       </ErrorBoundary>
     </NavigationContainer>
   );
