@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { ParticleAnimation } from "./ParticleAnimation";
 import { typography, spacing } from "../../lib/theme";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -18,7 +17,6 @@ export function OnboardingStep({
   description,
   icon,
   gradientColors,
-  particleColor,
 }: OnboardingStepProps) {
   return (
     <LinearGradient
@@ -27,7 +25,6 @@ export function OnboardingStep({
       end={{ x: 1, y: 1 }}
       style={styles.container}
     >
-      <ParticleAnimation color={particleColor} />
       <View style={styles.content}>
         <Text style={styles.icon}>{icon}</Text>
         <Text style={styles.title}>{title}</Text>
