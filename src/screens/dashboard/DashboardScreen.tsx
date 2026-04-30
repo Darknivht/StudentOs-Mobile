@@ -1,14 +1,52 @@
-import { View, Text, StyleSheet } from "react-native";
+import { ScrollView, View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { colors } from "../../lib/theme";
+import { GreetingSection } from "./GreetingSection";
+import { OfflineBanner } from "./OfflineBanner";
+import { AnnouncementBanner } from "./AnnouncementBanner";
+import { StreakCard } from "./StreakCard";
+import { StudyTimeWidget } from "./StudyTimeWidget";
+import { StudyProgressWidget } from "./StudyProgressWidget";
+import { BrainBoostCard } from "./BrainBoostCard";
+import { CoursesSection } from "./CoursesSection";
+import { WidgetBoundary } from "./WidgetBoundary";
+import { colors, spacing } from "../../lib/theme";
 
 export function DashboardScreen() {
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      <View style={styles.inner}>
-        <Text style={styles.title}>Dashboard</Text>
-        <Text style={styles.subtitle}>Welcome! App loaded successfully.</Text>
-      </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        <WidgetBoundary label="Greeting">
+          <GreetingSection />
+        </WidgetBoundary>
+        <WidgetBoundary label="Offline">
+          <OfflineBanner />
+        </WidgetBoundary>
+        <WidgetBoundary label="Announcements">
+          <AnnouncementBanner />
+        </WidgetBoundary>
+        <WidgetBoundary label="Streak">
+          <StreakCard />
+        </WidgetBoundary>
+        <View style={styles.studyRow}>
+          <WidgetBoundary label="StudyTime">
+            <StudyTimeWidget />
+          </WidgetBoundary>
+          <WidgetBoundary label="StudyProgress">
+            <StudyProgressWidget />
+          </WidgetBoundary>
+        </View>
+        <View style={styles.brainBoostContainer}>
+          <WidgetBoundary label="BrainBoost">
+            <BrainBoostCard />
+          </WidgetBoundary>
+        </View>
+        <WidgetBoundary label="Courses">
+          <CoursesSection />
+        </WidgetBoundary>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -18,19 +56,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  inner: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  scrollContent: {
+    paddingBottom: spacing.xl,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#ffffff",
-    marginBottom: 8,
+  studyRow: {
+    flexDirection: "row",
+    gap: spacing.sm,
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.md,
   },
-  subtitle: {
-    fontSize: 16,
-    color: "rgba(255,255,255,0.6)",
+  brainBoostContainer: {
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.md,
   },
 });
