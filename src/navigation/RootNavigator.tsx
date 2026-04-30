@@ -1,4 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthNavigator } from "./AuthNavigator";
 import { MainNavigator } from "./MainNavigator";
 import { useAuthContext } from "../providers/AuthProvider";
@@ -10,20 +11,62 @@ import {
   BlockedScreen,
 } from "../screens";
 import { OnboardingScreen } from "../screens/onboarding";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { colors } from "../lib/theme";
-import { useState, useCallback, useEffect } from "react";
+import {
+  useState,
+  useCallback,
+  useEffect,
+  Component,
+  type ReactNode,
+  type ErrorInfo,
+} from "react";
 
 type LockMode = "biometric" | "pin" | "none";
 
-export function RootNavigator() {
+class ErrorBoundary extends Component<
+  { children: ReactNode; label?: string },
+  { hasError: boolean; error: Error | null }
+> {
+  state = { hasError: false, error: null as Error | null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error(
+      `ErrorBoundary[${this.props.label || "root"}]:`,
+      error.message,
+      info.componentStack,
+    );
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorTitle}>Something went wrong</Text>
+          <Text style={styles.errorMessage}>
+            {this.props.label ? `[${this.props.label}] ` : ""}
+            {this.state.error?.message}
+          </Text>
+        </View>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+const RootStack = createNativeStackNavigator();
+
+function RootStackScreen() {
   const {
     isAuthenticated,
     isLoading,
     isBlocked,
     isLocked,
     biometricEnabled,
-    pinSet,
     signOut,
   } = useAuthContext();
 
@@ -31,7 +74,6 @@ export function RootNavigator() {
 
   const [forceLoaded, setForceLoaded] = useState(false);
   const [lockMode, setLockMode] = useState<LockMode>("none");
-  const [needsPinSetup, setNeedsPinSetup] = useState(false);
 
   useEffect(() => {
     if (isLoading && !forceLoaded) {
@@ -43,12 +85,11 @@ export function RootNavigator() {
     }
   }, [isLoading, forceLoaded]);
 
-  const handlePinSetupComplete = useCallback(() => {
-    setNeedsPinSetup(false);
-    setLockMode("pin");
-  }, []);
-
   const showLoading = isLoading && !forceLoaded;
+
+  if (isBlocked) {
+    return <BlockedScreen onSignOut={signOut} />;
+  }
 
   if (showLoading) {
     return (
@@ -58,28 +99,12 @@ export function RootNavigator() {
     );
   }
 
-  if (isBlocked) {
-    return <BlockedScreen onSignOut={signOut} />;
-  }
-
   if (!isAuthenticated) {
-    return (
-      <NavigationContainer>
-        <AuthNavigator />
-      </NavigationContainer>
-    );
+    return <AuthNavigator />;
   }
 
   if (!onboardingSeen) {
     return <OnboardingScreen />;
-  }
-
-  if (needsPinSetup && !pinSet) {
-    return (
-      <NavigationContainer>
-        <PINSetupScreen onComplete={handlePinSetupComplete} />
-      </NavigationContainer>
-    );
   }
 
   if (isLocked) {
@@ -95,8 +120,26 @@ export function RootNavigator() {
   }
 
   return (
+    <RootStack.Navigator id="RootStack" screenOptions={{ headerShown: false }}>
+      <RootStack.Screen
+        name="MainApp"
+        children={() => (
+          <ErrorBoundary label="MainNavigator">
+            <MainNavigator />
+          </ErrorBoundary>
+        )}
+        options={{ headerShown: false }}
+      />
+    </RootStack.Navigator>
+  );
+}
+
+export function RootNavigator() {
+  return (
     <NavigationContainer>
-      <MainNavigator />
+      <ErrorBoundary label="RootStack">
+        <RootStackScreen />
+      </ErrorBoundary>
     </NavigationContainer>
   );
 }
@@ -107,5 +150,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: colors.background,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.background,
+    padding: 20,
+  },
+  errorTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: colors.destructive,
+    marginBottom: 8,
+  },
+  errorMessage: {
+    fontSize: 14,
+    color: colors.mutedForeground,
+    textAlign: "center",
   },
 });
