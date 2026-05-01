@@ -1,5 +1,5 @@
 import { ScrollView, View, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { GreetingSection } from "./GreetingSection";
 import { OfflineBanner } from "./OfflineBanner";
 import { AnnouncementBanner } from "./AnnouncementBanner";
@@ -12,8 +12,10 @@ import { WidgetBoundary } from "./WidgetBoundary";
 import { colors, spacing } from "../../lib/theme";
 
 export function DashboardScreen() {
+  const insets = useSafeAreaInsets();
+
   return (
-    <SafeAreaView style={styles.container} edges={["top"]}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -47,7 +49,7 @@ export function DashboardScreen() {
           <CoursesSection />
         </WidgetBoundary>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
