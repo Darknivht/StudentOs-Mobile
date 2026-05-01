@@ -22,53 +22,41 @@ let adapter: StorageAdapter = memoryAdapter;
 
 if (Platform.OS !== "web") {
   try {
-    const MMKV = require("react-native-mmkv").MMKV;
-    const mmkv = new MMKV({ id: "supabase-auth" });
+    const SecureStore = require("expo-secure-store");
     adapter = {
-      getItem: async (key) => mmkv.getString(key) ?? null,
-      setItem: async (key, value) => mmkv.set(key, value),
+      getItem: async (key) => {
+        try {
+          return await SecureStore.getItemAsync(key);
+        } catch {
+          return null;
+        }
+      },
+      setItem: async (key, value) => {
+        try {
+          await SecureStore.setItemAsync(key, value);
+        } catch (e) {
+          console.warn("SecureStore.setItem failed, caching in memory", e);
+          memoryStore.set(key, value);
+        }
+      },
       removeItem: async (key) => {
-        mmkv.remove(key);
+        try {
+          await SecureStore.deleteItemAsync(key);
+        } catch (e) {
+          console.warn(
+            "SecureStore.removeItem failed, removing from memory",
+            e,
+          );
+          memoryStore.delete(key);
+        }
       },
     };
+    console.log("SecureStoreAdapter: using expo-secure-store");
   } catch (e) {
     console.warn(
-      "SecureStoreAdapter: MMKV not available, using memory fallback",
+      "SecureStoreAdapter: expo-secure-store not available, using memory fallback",
       e,
     );
-    try {
-      const SecureStore = require("expo-secure-store");
-      adapter = {
-        getItem: async (key) => {
-          try {
-            return await SecureStore.getItemAsync(key);
-          } catch {
-            return null;
-          }
-        },
-        setItem: async (key, value) => {
-          try {
-            await SecureStore.setItemAsync(key, value);
-          } catch (e2) {
-            console.warn("SecureStore.setItem failed", e2);
-            memoryStore.set(key, value);
-          }
-        },
-        removeItem: async (key) => {
-          try {
-            await SecureStore.deleteItemAsync(key);
-          } catch (e2) {
-            console.warn("SecureStore.removeItem failed", e2);
-            memoryStore.delete(key);
-          }
-        },
-      };
-    } catch (e3) {
-      console.warn(
-        "SecureStoreAdapter: expo-secure-store also not available",
-        e3,
-      );
-    }
   }
 }
 
