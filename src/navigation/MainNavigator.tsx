@@ -1,17 +1,32 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   HomeScreen,
   StudyScreen,
   NotesListScreen,
+  NoteEditorScreen,
   FocusScreen,
   ProfileScreen,
 } from "../screens";
 import { colors, spacing, typography } from "../lib/theme";
-import type { MainTabParamList } from "./types";
+import type { MainTabParamList, NotesStackParamList } from "./types";
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
+const NotesStack = createNativeStackNavigator<NotesStackParamList>();
+
+function NotesNavigator() {
+  return (
+    <NotesStack.Navigator
+      id="NotesStack"
+      screenOptions={{ headerShown: false }}
+    >
+      <NotesStack.Screen name="NotesMain" component={NotesListScreen} />
+      <NotesStack.Screen name="NoteEditor" component={NoteEditorScreen} />
+    </NotesStack.Navigator>
+  );
+}
 
 function TabIcon({ name, focused }: { name: string; focused: boolean }) {
   const icons: Record<string, string> = {
@@ -60,7 +75,7 @@ export function MainNavigator() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Study" component={StudyScreen} />
-      <Tab.Screen name="Notes" component={NotesListScreen} />
+      <Tab.Screen name="Notes" component={NotesNavigator} />
       <Tab.Screen name="Focus" component={FocusScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>

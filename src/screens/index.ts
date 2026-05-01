@@ -12,3 +12,4 @@ export { PINSetupScreen } from "./auth/PINSetupScreen";
 export { BlockedScreen } from "./auth/BlockedScreen";
 export { OnboardingScreen } from "./onboarding/OnboardingScreen";
 export { NotesListScreen } from "./notes/NotesListScreen";
+export { NoteEditorScreen } from "./notes/NoteEditorScreen";

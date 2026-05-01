@@ -24,7 +24,7 @@ interface SectionData {
   notes: NoteWithCourse[];
 }
 
-export function NotesListScreen() {
+export function NotesListScreen({ navigation }: { navigation: any }) {
   const insets = useSafeAreaInsets();
   const { notes, isLoading, deleteNote, togglePin } = useNotes();
   const { courses } = useCourses();
@@ -78,9 +78,12 @@ export function NotesListScreen() {
     return result;
   }, [filteredNotes, courses]);
 
-  const handleNotePress = useCallback((id: string) => {
-    // TODO: Navigate to NoteViewer when screen is built (Plan 03-03)
-  }, []);
+  const handleNotePress = useCallback(
+    (id: string) => {
+      navigation.navigate("NoteEditor", { noteId: id });
+    },
+    [navigation],
+  );
 
   const handleSwipeDelete = useCallback(
     async (id: string) => {
@@ -97,8 +100,8 @@ export function NotesListScreen() {
   );
 
   const handleNewNote = useCallback(() => {
-    // TODO: Navigate to NoteEditor when screen is built (Plan 03-01 Task 3)
-  }, []);
+    navigation.navigate("NoteEditor", {});
+  }, [navigation]);
 
   if (isLoading) {
     return (

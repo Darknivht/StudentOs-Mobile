@@ -1,4 +1,5 @@
 export { NotesListScreen } from "./NotesListScreen";
+export { NoteEditorScreen } from "./NoteEditorScreen";
 export { NoteCard } from "./NoteCard";
 export { NotesSection } from "./NotesSection";
 export { SearchBar } from "./SearchBar";
