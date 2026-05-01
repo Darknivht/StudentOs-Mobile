@@ -151,6 +151,13 @@ Plans:
 **Avoids:** None specific
 **Research Flag:** PDF text extraction edge function needs mobile-friendly API (may need new endpoint)
 
+**Plans:** 4 plans
+
+- [ ] 03-01-PLAN.md — Schema migration, Note types, CRUD hooks, Notes list, Note editor
+- [ ] 03-02-PLAN.md — File upload (PDF, DOCX, image/camera OCR) with text extraction
+- [ ] 03-03-PLAN.md — Note viewer screen + Quick actions bottom sheet
+- [ ] 03-04-PLAN.md — AI actions (summary streaming, Socratic mode, Ask AI Tutor bridge)
+
 **UI hint:** yes
 
 ---
