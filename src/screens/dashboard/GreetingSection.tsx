@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, Pressable, StyleSheet } from "react-native";
 import { useAuthStore } from "../../stores/authStore";
 import { getGreeting } from "../../lib/utils";
 import { colors, spacing, typography } from "../../lib/theme";
@@ -26,9 +26,12 @@ export function GreetingSection() {
           </Text>
         </View>
       </View>
-      <View style={styles.bellPlaceholder}>
+      <Pressable
+        style={styles.bellButton}
+        android_ripple={{ color: colors.muted, radius: 18 }}
+      >
         <Text style={styles.bellIcon}>🔔</Text>
-      </View>
+      </Pressable>
     </View>
   );
 }
@@ -39,27 +42,27 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.sm,
   },
   left: {
     flexDirection: "row",
     alignItems: "center",
     flex: 1,
+    gap: spacing.md,
   },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: spacing.md,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
   },
   avatarPlaceholder: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: spacing.md,
   },
   avatarText: {
     fontSize: typography.lg,
@@ -68,21 +71,26 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
+    gap: 2,
   },
   greeting: {
-    fontSize: typography.lg,
-    color: colors.secondaryForeground,
+    fontSize: typography.sm,
+    color: colors.mutedForeground,
   },
   name: {
     fontSize: typography.xl,
     fontWeight: "700",
     color: colors.foreground,
   },
-  bellPlaceholder: {
-    padding: spacing.sm,
+  bellButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.card,
+    justifyContent: "center",
+    alignItems: "center",
   },
   bellIcon: {
-    fontSize: 20,
-    opacity: 0.6,
+    fontSize: 18,
   },
 });

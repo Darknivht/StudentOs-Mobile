@@ -32,7 +32,7 @@ export function DashboardScreen() {
         <WidgetBoundary label="Streak">
           <StreakCard />
         </WidgetBoundary>
-        <View style={styles.studyRow}>
+        <View style={styles.widgetRow}>
           <WidgetBoundary label="StudyTime">
             <StudyTimeWidget />
           </WidgetBoundary>
@@ -40,11 +40,9 @@ export function DashboardScreen() {
             <StudyProgressWidget />
           </WidgetBoundary>
         </View>
-        <View style={styles.brainBoostContainer}>
-          <WidgetBoundary label="BrainBoost">
-            <BrainBoostCard />
-          </WidgetBoundary>
-        </View>
+        <WidgetBoundary label="BrainBoost">
+          <BrainBoostCard />
+        </WidgetBoundary>
         <WidgetBoundary label="Courses">
           <CoursesSection />
         </WidgetBoundary>
@@ -59,16 +57,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   scrollContent: {
-    paddingBottom: spacing.xl,
+    paddingBottom: spacing["2xl"],
   },
-  studyRow: {
+  widgetRow: {
     flexDirection: "row",
+    paddingHorizontal: spacing.lg,
     gap: spacing.sm,
-    paddingHorizontal: spacing.lg,
-    marginBottom: spacing.md,
-  },
-  brainBoostContainer: {
-    paddingHorizontal: spacing.lg,
     marginBottom: spacing.md,
   },
 });
