@@ -1,15 +1,20 @@
-import { Model } from '@nozbe/watermelondb';
-import { field, text, date, readonly } from '@nozbe/watermelondb/decorators';
+import { Model } from "@nozbe/watermelondb";
+import { field, text, date, readonly } from "@nozbe/watermelondb/decorators";
 
 export class Note extends Model {
-  static table = 'notes';
+  static table = "notes";
 
-  @text('user_id') userId!: string;
-  @text('course_id') courseId?: string;
-  @text('title') title!: string;
-  @text('content') content!: string;
-  @text('source') source?: string;
-  @readonly @date('created_at') createdAt!: Date;
-  @date('updated_at') updatedAt!: Date;
-  @field('synced_at') syncedAt?: number;
+  @text("user_id") userId!: string;
+  @text("course_id") courseId?: string;
+  @text("title") title!: string;
+  @text("content") content!: string;
+  @text("source") source?: string;
+  @text("summary") summary?: string;
+  @text("source_type") sourceType!: string;
+  @text("file_url") fileUrl?: string;
+  @text("original_filename") originalFilename?: string;
+  @field("is_pinned") isPinned!: boolean;
+  @readonly @date("created_at") createdAt!: Date;
+  @date("updated_at") updatedAt!: Date;
+  @field("synced_at") syncedAt?: number;
 }

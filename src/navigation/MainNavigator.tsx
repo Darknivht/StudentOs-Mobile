@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   HomeScreen,
   StudyScreen,
+  NotesListScreen,
   FocusScreen,
   ProfileScreen,
 } from "../screens";
@@ -16,6 +17,7 @@ function TabIcon({ name, focused }: { name: string; focused: boolean }) {
   const icons: Record<string, string> = {
     Home: "🏠",
     Study: "📚",
+    Notes: "📝",
     Focus: "🎯",
     Profile: "👤",
   };
@@ -35,7 +37,6 @@ export function MainNavigator() {
   return (
     <Tab.Navigator
       id="MainTabs"
-      sceneContainerStyle={{ backgroundColor: colors.background }}
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
@@ -59,6 +60,7 @@ export function MainNavigator() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Study" component={StudyScreen} />
+      <Tab.Screen name="Notes" component={NotesListScreen} />
       <Tab.Screen name="Focus" component={FocusScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>

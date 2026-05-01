@@ -16,9 +16,16 @@ export type OnboardingParamList = {
   Onboarding: undefined;
 };
 
+export type NotesStackParamList = {
+  NotesMain: undefined;
+  NoteEditor: { noteId?: string; courseId?: string };
+  NoteViewer: { noteId: string };
+};
+
 export type MainTabParamList = {
   Home: NavigatorScreenParams<HomeStackParamList>;
   Study: NavigatorScreenParams<StudyStackParamList>;
+  Notes: NavigatorScreenParams<NotesStackParamList>;
   Focus: NavigatorScreenParams<FocusStackParamList>;
   Profile: NavigatorScreenParams<ProfileStackParamList>;
 };
