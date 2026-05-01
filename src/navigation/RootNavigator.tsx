@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { AuthNavigator } from "./AuthNavigator";
 import { MainNavigator } from "./MainNavigator";
 import { useAuthContext } from "../providers/AuthProvider";
-import { useAppStore } from "../stores/appStore";
+import { useAppStore, onAppStoreHydrated } from "../stores/appStore";
 import { BiometricLockScreen, PINLockScreen, BlockedScreen } from "../screens";
 import { OnboardingScreen } from "../screens/onboarding";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
@@ -64,7 +64,12 @@ export function AppContent() {
   const onboardingSeen = useAppStore((s) => s.onboardingSeen);
 
   const [forceLoaded, setForceLoaded] = useState(false);
+  const [storeHydrated, setStoreHydrated] = useState(false);
   const [lockMode, setLockMode] = useState<LockMode>("none");
+
+  useEffect(() => {
+    onAppStoreHydrated().then(() => setStoreHydrated(true));
+  }, []);
 
   useEffect(() => {
     if (isLoading && !forceLoaded) {
@@ -76,7 +81,7 @@ export function AppContent() {
     }
   }, [isLoading, forceLoaded]);
 
-  const showLoading = isLoading && !forceLoaded;
+  const showLoading = (isLoading && !forceLoaded) || !storeHydrated;
 
   if (showLoading) {
     return (
