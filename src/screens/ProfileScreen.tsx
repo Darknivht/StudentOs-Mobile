@@ -1,9 +1,12 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from "react-native";
+import { colors, spacing, typography } from "../lib/theme";
 
 export function ProfileScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Profile</Text>
+      <Text style={styles.emoji}>👤</Text>
+      <Text style={styles.title}>Profile</Text>
+      <Text style={styles.subtitle}>Coming soon</Text>
     </View>
   );
 }
@@ -11,13 +14,21 @@ export function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#0f0f23',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.background,
+    gap: spacing.sm,
   },
-  text: {
-    fontSize: 24,
-    color: '#ffffff',
-    fontWeight: '600',
+  emoji: {
+    fontSize: 48,
+  },
+  title: {
+    fontSize: typography["2xl"],
+    fontWeight: "700",
+    color: colors.foreground,
+  },
+  subtitle: {
+    fontSize: typography.base,
+    color: colors.mutedForeground,
   },
 });

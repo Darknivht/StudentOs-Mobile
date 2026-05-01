@@ -27,10 +27,9 @@ export function StudyProgressWidget() {
       <View style={styles.grid}>
         {items.map((item) => (
           <View key={item.label} style={styles.gridItem}>
-            <Text style={styles.itemLabel}>
-              {item.emoji} {item.label}
-            </Text>
+            <Text style={styles.itemEmoji}>{item.emoji}</Text>
             <Text style={styles.itemValue}>{item.value}</Text>
+            <Text style={styles.itemLabel}>{item.label}</Text>
           </View>
         ))}
       </View>
@@ -42,32 +41,40 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.card,
     borderRadius: 16,
-    padding: spacing.lg,
+    padding: spacing.md,
     flex: 1,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   title: {
-    fontSize: typography.base,
+    fontSize: typography.sm,
     fontWeight: "600",
-    color: colors.foreground,
+    color: colors.mutedForeground,
     marginBottom: spacing.sm,
   },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
+    gap: spacing.xs,
   },
   gridItem: {
-    width: "50%",
-    marginBottom: spacing.sm,
+    width: "46%",
+    backgroundColor: colors.muted,
+    borderRadius: 10,
+    padding: spacing.sm,
   },
-  itemLabel: {
-    fontSize: typography.xs,
-    color: colors.mutedForeground,
+  itemEmoji: {
+    fontSize: 16,
     marginBottom: 2,
   },
   itemValue: {
     fontSize: typography.lg,
-    fontWeight: "600",
+    fontWeight: "700",
     color: colors.foreground,
+  },
+  itemLabel: {
+    fontSize: typography.xs,
+    color: colors.mutedForeground,
   },
   skeleton: {
     height: 20,

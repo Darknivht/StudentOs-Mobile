@@ -45,7 +45,11 @@ export function StreakCard() {
   if (data.currentStreak === 0) {
     return (
       <View style={styles.card}>
-        <Text style={styles.emptyText}>Start your streak today! 🔥</Text>
+        <Animated.Text style={[styles.flameEmpty, flameStyle]}>
+          🔥
+        </Animated.Text>
+        <Text style={styles.emptyTitle}>Start your streak today!</Text>
+        <Text style={styles.emptySub}>Complete one activity to begin</Text>
       </View>
     );
   }
@@ -53,12 +57,17 @@ export function StreakCard() {
   return (
     <View style={styles.card}>
       <View style={styles.row}>
-        <Animated.Text style={[styles.flame, flameStyle]}>🔥</Animated.Text>
+        <View style={styles.flameContainer}>
+          <Animated.Text style={[styles.flame, flameStyle]}>🔥</Animated.Text>
+        </View>
         <View style={styles.info}>
           <Text style={styles.label}>Current Streak</Text>
           <Text style={styles.value}>{data.currentStreak} days</Text>
         </View>
-        <Text style={styles.best}>Best: {data.longestStreak} days</Text>
+        <View style={styles.bestContainer}>
+          <Text style={styles.bestLabel}>Best</Text>
+          <Text style={styles.bestValue}>{data.longestStreak}d</Text>
+        </View>
       </View>
     </View>
   );
@@ -71,14 +80,28 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     marginHorizontal: spacing.lg,
     marginBottom: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
+    gap: spacing.md,
+  },
+  flameContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "rgba(245, 158, 11, 0.15)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   flame: {
+    fontSize: 24,
+  },
+  flameEmpty: {
     fontSize: 32,
-    marginRight: spacing.md,
+    textAlign: "center",
   },
   info: {
     flex: 1,
@@ -88,24 +111,44 @@ const styles = StyleSheet.create({
     color: colors.mutedForeground,
   },
   value: {
-    fontSize: typography.xl,
+    fontSize: typography["2xl"],
     fontWeight: "700",
     color: colors.foreground,
   },
-  best: {
-    fontSize: typography.sm,
+  bestContainer: {
+    alignItems: "center",
+    backgroundColor: colors.muted,
+    borderRadius: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  bestLabel: {
+    fontSize: typography.xs,
+    color: colors.mutedForeground,
+  },
+  bestValue: {
+    fontSize: typography.base,
+    fontWeight: "600",
     color: colors.secondaryForeground,
   },
-  emptyText: {
+  emptyTitle: {
     fontSize: typography.base,
-    color: colors.secondaryForeground,
+    fontWeight: "600",
+    color: colors.foreground,
     textAlign: "center",
+    marginTop: spacing.sm,
+  },
+  emptySub: {
+    fontSize: typography.sm,
+    color: colors.mutedForeground,
+    textAlign: "center",
+    marginTop: spacing.xs,
   },
   skeleton: {
-    height: 20,
-    width: 120,
+    height: 48,
+    width: "60%",
     backgroundColor: colors.muted,
-    borderRadius: 4,
+    borderRadius: 8,
     opacity: 0.3,
   },
 });

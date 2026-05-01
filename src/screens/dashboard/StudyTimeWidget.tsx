@@ -23,10 +23,8 @@ export function StudyTimeWidget() {
 
   return (
     <View style={styles.card}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Study Time</Text>
-        <Text style={styles.timeValue}>{formatTime(todayMinutes)}</Text>
-      </View>
+      <Text style={styles.title}>Study Time</Text>
+      <Text style={styles.timeValue}>{formatTime(todayMinutes)}</Text>
 
       <View style={styles.progressBarBg}>
         <View
@@ -68,7 +66,7 @@ export function StudyTimeWidget() {
 
       {todayMinutes === 0 && weeklyData.length === 0 && (
         <Text style={styles.emptyText}>
-          No study time today — start a session!
+          No study time yet — start a session!
         </Text>
       )}
     </View>
@@ -79,64 +77,63 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.card,
     borderRadius: 16,
-    padding: spacing.lg,
+    padding: spacing.md,
     flex: 1,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   title: {
-    fontSize: typography.base,
+    fontSize: typography.sm,
     fontWeight: "600",
-    color: colors.foreground,
+    color: colors.mutedForeground,
+    marginBottom: spacing.xs,
   },
   timeValue: {
-    fontSize: typography.base,
+    fontSize: typography.xl,
+    fontWeight: "700",
     color: colors.primary,
-    fontWeight: "600",
+    marginBottom: spacing.sm,
   },
   progressBarBg: {
-    height: 8,
-    borderRadius: 4,
+    height: 6,
+    borderRadius: 3,
     backgroundColor: colors.muted,
     marginBottom: spacing.xs,
     overflow: "hidden",
   },
   progressBarFill: {
-    height: 8,
-    borderRadius: 4,
+    height: 6,
+    borderRadius: 3,
     backgroundColor: colors.primary,
   },
   progressLabel: {
-    fontSize: typography.sm,
+    fontSize: typography.xs,
     color: colors.mutedForeground,
-    marginBottom: spacing.md,
+    marginBottom: spacing.sm,
   },
   weeklyContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
-    height: 56,
+    height: 52,
+    paddingTop: spacing.xs,
   },
   weeklyBarContainer: {
     alignItems: "center",
     flex: 1,
   },
   weeklyBar: {
-    width: 12,
+    width: 10,
     borderRadius: 3,
     minHeight: 4,
   },
   weeklyLabel: {
-    fontSize: 10,
+    fontSize: 9,
     color: colors.mutedForeground,
     marginTop: 2,
   },
   emptyText: {
-    fontSize: typography.sm,
+    fontSize: typography.xs,
     color: colors.mutedForeground,
     marginTop: spacing.sm,
   },

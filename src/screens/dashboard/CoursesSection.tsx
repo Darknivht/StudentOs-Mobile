@@ -40,6 +40,7 @@ export function CoursesSection() {
           <Text style={styles.headerTitle}>My Courses</Text>
         </View>
         <View style={styles.emptyState}>
+          <Text style={styles.emptyEmoji}>📚</Text>
           <Text style={styles.emptyText}>
             No courses yet — add your first course!
           </Text>
@@ -88,14 +89,14 @@ export function CoursesSection() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: spacing.lg,
-    marginBottom: spacing.md,
+    marginBottom: spacing.sm,
   },
   headerTitle: {
     fontSize: typography.lg,
@@ -104,6 +105,7 @@ const styles = StyleSheet.create({
   },
   seeAll: {
     fontSize: typography.sm,
+    fontWeight: "600",
     color: colors.primary,
   },
   row: {
@@ -117,11 +119,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     borderStyle: "dashed",
-    minHeight: 80,
+    minHeight: 90,
     justifyContent: "center",
     alignItems: "center",
     padding: spacing.md,
-    opacity: 0.6,
+    opacity: 0.7,
   },
   addIcon: {
     fontSize: typography["2xl"],
@@ -137,6 +139,10 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xl,
     paddingHorizontal: spacing.lg,
   },
+  emptyEmoji: {
+    fontSize: 40,
+    marginBottom: spacing.md,
+  },
   emptyText: {
     fontSize: typography.sm,
     color: colors.mutedForeground,
@@ -145,7 +151,7 @@ const styles = StyleSheet.create({
   },
   addBtn: {
     backgroundColor: colors.primary,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.sm + 2,
     paddingHorizontal: spacing.lg,
     borderRadius: 12,
   },
@@ -161,7 +167,7 @@ const styles = StyleSheet.create({
   },
   skeletonCard: {
     flex: 1,
-    height: 80,
+    height: 90,
     backgroundColor: colors.muted,
     borderRadius: 16,
     opacity: 0.3,

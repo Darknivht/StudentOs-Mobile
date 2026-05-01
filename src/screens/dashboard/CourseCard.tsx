@@ -16,31 +16,39 @@ export function CourseCard({ course, onPress }: CourseCardProps) {
       onPress={() => onPress(course.id)}
       android_ripple={{ color: colors.muted }}
     >
-      <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
-      <View style={styles.content}>
-        <View style={styles.topRow}>
-          {course.emoji ? (
-            <Text style={styles.emoji}>{course.emoji}</Text>
-          ) : null}
-          <Text style={styles.title} numberOfLines={1}>
-            {course.title}
-          </Text>
-        </View>
-        <View style={styles.progressBarBg}>
+      <View style={styles.topRow}>
+        {course.emoji ? (
+          <Text style={styles.emoji}>{course.emoji}</Text>
+        ) : (
           <View
             style={[
-              styles.progressBarFill,
-              {
-                width: `${course.overallProgress}%`,
-                backgroundColor: accentColor,
-              },
+              styles.emojiFallback,
+              { backgroundColor: `${accentColor}33` },
             ]}
-          />
-        </View>
-        <Text style={styles.progressLabel}>
-          {course.overallProgress}% complete
+          >
+            <Text style={[styles.emojiFallbackText, { color: accentColor }]}>
+              {course.title.charAt(0).toUpperCase()}
+            </Text>
+          </View>
+        )}
+        <Text style={styles.title} numberOfLines={1}>
+          {course.title}
         </Text>
       </View>
+      <View style={styles.progressBarBg}>
+        <View
+          style={[
+            styles.progressBarFill,
+            {
+              width: `${course.overallProgress}%`,
+              backgroundColor: accentColor,
+            },
+          ]}
+        />
+      </View>
+      <Text style={styles.progressLabel}>
+        {course.overallProgress}% complete
+      </Text>
     </Pressable>
   );
 }
@@ -51,24 +59,29 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: "hidden",
     flex: 1,
-    flexDirection: "row",
-  },
-  accentBar: {
-    width: 4,
-    minHeight: 80,
-  },
-  content: {
-    flex: 1,
     padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   topRow: {
     flexDirection: "row",
     alignItems: "center",
+    gap: spacing.sm,
     marginBottom: spacing.sm,
   },
   emoji: {
-    fontSize: 24,
-    marginRight: spacing.sm,
+    fontSize: 22,
+  },
+  emojiFallback: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emojiFallbackText: {
+    fontSize: typography.sm,
+    fontWeight: "700",
   },
   title: {
     fontSize: typography.base,
@@ -77,14 +90,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   progressBarBg: {
-    height: 6,
+    height: 5,
     borderRadius: 3,
     backgroundColor: colors.muted,
     marginBottom: spacing.xs,
     overflow: "hidden",
   },
   progressBarFill: {
-    height: 6,
+    height: 5,
     borderRadius: 3,
   },
   progressLabel: {

@@ -63,8 +63,10 @@ export function BrainBoostCard() {
     return (
       <View style={styles.card}>
         <View style={styles.accentBar} />
-        <Text style={styles.emoji}>🧠</Text>
-        <Text style={styles.title}>Loading questions...</Text>
+        <View style={styles.cardContent}>
+          <Text style={styles.emoji}>🧠</Text>
+          <Text style={styles.title}>Loading questions...</Text>
+        </View>
       </View>
     );
   }
@@ -73,14 +75,16 @@ export function BrainBoostCard() {
     return (
       <View style={styles.card}>
         <View style={styles.accentBar} />
-        <Text style={styles.emoji}>🏆</Text>
-        <Text style={styles.title}>Brain Boost Complete!</Text>
-        <Text style={styles.scoreText}>
-          {score}/5 correct • {xpEarned} XP earned
-        </Text>
-        {countdown ? (
-          <Text style={styles.countdown}>Next challenge in {countdown}</Text>
-        ) : null}
+        <View style={styles.cardContent}>
+          <Text style={styles.emoji}>🏆</Text>
+          <Text style={styles.title}>Brain Boost Complete!</Text>
+          <Text style={styles.scoreText}>
+            {score}/5 correct • {xpEarned} XP earned
+          </Text>
+          {countdown ? (
+            <Text style={styles.countdown}>Next challenge in {countdown}</Text>
+          ) : null}
+        </View>
       </View>
     );
   }
@@ -95,33 +99,35 @@ export function BrainBoostCard() {
     return (
       <View style={styles.card}>
         <View style={styles.accentBar} />
-        <Text style={styles.counter}>
-          Question {currentQuestionIndex + 1}/{questions.length}
-        </Text>
-        <Text style={styles.questionText}>{currentQ.question}</Text>
-        {currentQ.options.map((option: string, idx: number) => {
-          let optionStyle = styles.optionBtn;
-          let optionTextStyle = styles.optionText;
-          if (showResult) {
-            if (idx === currentQ.correct_index) {
-              optionStyle = styles.optionCorrect;
-              optionTextStyle = styles.optionCorrectText;
-            } else if (idx === userAnswer && idx !== currentQ.correct_index) {
-              optionStyle = styles.optionWrong;
-              optionTextStyle = styles.optionWrongText;
+        <View style={styles.cardContent}>
+          <Text style={styles.counter}>
+            Question {currentQuestionIndex + 1}/{questions.length}
+          </Text>
+          <Text style={styles.questionText}>{currentQ.question}</Text>
+          {currentQ.options.map((option: string, idx: number) => {
+            let optionStyle = styles.optionBtn;
+            let optionTextStyle = styles.optionText;
+            if (showResult) {
+              if (idx === currentQ.correct_index) {
+                optionStyle = styles.optionCorrect;
+                optionTextStyle = styles.optionCorrectText;
+              } else if (idx === userAnswer && idx !== currentQ.correct_index) {
+                optionStyle = styles.optionWrong;
+                optionTextStyle = styles.optionWrongText;
+              }
             }
-          }
-          return (
-            <Pressable
-              key={idx}
-              style={optionStyle}
-              onPress={() => handleAnswer(idx)}
-              disabled={showResult}
-            >
-              <Text style={optionTextStyle}>{option}</Text>
-            </Pressable>
-          );
-        })}
+            return (
+              <Pressable
+                key={idx}
+                style={optionStyle}
+                onPress={() => handleAnswer(idx)}
+                disabled={showResult}
+              >
+                <Text style={optionTextStyle}>{option}</Text>
+              </Pressable>
+            );
+          })}
+        </View>
       </View>
     );
   }
@@ -130,11 +136,13 @@ export function BrainBoostCard() {
     return (
       <View style={styles.card}>
         <View style={styles.accentBar} />
-        <Text style={styles.emoji}>🧠</Text>
-        <Text style={styles.title}>Daily Brain Boost</Text>
-        <Text style={styles.subtitle}>
-          {error || "No questions available right now"}
-        </Text>
+        <View style={styles.cardContent}>
+          <Text style={styles.emoji}>🧠</Text>
+          <Text style={styles.title}>Daily Brain Boost</Text>
+          <Text style={styles.subtitle}>
+            {error || "No questions available right now"}
+          </Text>
+        </View>
       </View>
     );
   }
@@ -142,12 +150,14 @@ export function BrainBoostCard() {
   return (
     <View style={styles.card}>
       <View style={styles.accentBar} />
-      <Text style={styles.emoji}>🧠</Text>
-      <Text style={styles.title}>Daily Brain Boost</Text>
-      <Text style={styles.subtitle}>5 questions • 10 XP each</Text>
-      <Pressable style={styles.startBtn} onPress={handleStart}>
-        <Text style={styles.startBtnText}>Start Challenge</Text>
-      </Pressable>
+      <View style={styles.cardContent}>
+        <Text style={styles.emoji}>🧠</Text>
+        <Text style={styles.title}>Daily Brain Boost</Text>
+        <Text style={styles.subtitle}>5 questions • 10 XP each</Text>
+        <Pressable style={styles.startBtn} onPress={handleStart}>
+          <Text style={styles.startBtnText}>Start Challenge</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -156,16 +166,18 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.card,
     borderRadius: 16,
-    padding: spacing.lg,
+    marginHorizontal: spacing.lg,
+    marginBottom: spacing.md,
     overflow: "hidden",
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  cardContent: {
+    padding: spacing.lg,
   },
   accentBar: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
     height: 3,
-    backgroundColor: "#7c3aed",
+    backgroundColor: colors.primary,
   },
   emoji: {
     fontSize: 28,
@@ -193,7 +205,7 @@ const styles = StyleSheet.create({
   },
   startBtn: {
     backgroundColor: colors.primary,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.sm + 2,
     paddingHorizontal: spacing.lg,
     borderRadius: 12,
     alignSelf: "flex-start",
