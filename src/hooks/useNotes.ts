@@ -37,7 +37,7 @@ export function useNotes() {
       const { data, error } = await supabase
         .from("notes")
         .select(
-          "id, user_id, course_id, title, content, summary, source_type, file_url, original_filename, is_pinned, created_at, updated_at, courses:title (id, title, emoji, color)",
+          "id, user_id, course_id, title, content, summary, source_type, file_url, original_filename, is_pinned, created_at, updated_at, courses (id, title, emoji, color)",
         )
         .eq("user_id", user.id)
         .order("is_pinned", { ascending: false })

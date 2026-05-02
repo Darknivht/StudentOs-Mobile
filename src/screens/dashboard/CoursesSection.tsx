@@ -51,6 +51,11 @@ export function CoursesSection() {
             <Text style={styles.addBtnText}>+ Add Course</Text>
           </Pressable>
         </View>
+        <AddCourseModal
+          visible={showAddCourse}
+          onClose={() => setShowAddCourse(false)}
+          onCreateCourse={createCourse}
+        />
       </View>
     );
   }

@@ -22,7 +22,11 @@ import {
 import { useNotes } from "../../hooks/useNotes";
 import { useNoteQuota } from "../../hooks/useNoteQuota";
 import { useCourses } from "../../hooks/useCourses";
+import { useFileUpload } from "../../hooks/useFileUpload";
 import { useNotesEditorStore } from "../../stores/notesStore";
+import { FileUploadProgress } from "./FileUploadProgress";
+import { CameraOCRButton } from "./CameraOCRButton";
+import { AttachFileButton } from "./AttachFileButton";
 import { colors, spacing, typography } from "../../lib/theme";
 
 interface NoteEditorScreenProps {
@@ -43,6 +47,7 @@ export function NoteEditorScreen({ navigation, route }: NoteEditorScreenProps) {
   const { notes, createNote, updateNote } = useNotes();
   const { isQuotaExceeded, quotaLimit, notesCreatedToday } = useNoteQuota();
   const { courses } = useCourses();
+  const fileUpload = useFileUpload();
   const {
     isDirty,
     isSaving,
@@ -201,6 +206,18 @@ export function NoteEditorScreen({ navigation, route }: NoteEditorScreenProps) {
     };
   }, []);
 
+  useEffect(() => {
+    if (
+      !fileUpload.isUploading &&
+      fileUpload.progress >= 100 &&
+      fileUpload.extractedText
+    ) {
+      const html = `<p>${fileUpload.extractedText.replace(/\n/g, "</p><p>")}</p>`;
+      richTextRef.current?.insertHTML?.(html);
+      fileUpload.reset();
+    }
+  }, [fileUpload.isUploading, fileUpload.progress, fileUpload.extractedText]);
+
   function getSaveStatusText(): string {
     if (isSaving) return "Saving...";
     if (isDirty) return "Unsaved";
@@ -302,17 +319,21 @@ export function NoteEditorScreen({ navigation, route }: NoteEditorScreenProps) {
 
       <View style={[styles.bottomBar, { paddingBottom: insets.bottom + 8 }]}>
         <View style={styles.bottomActions}>
-          <Pressable style={styles.bottomIconButton} onPress={() => {}}>
-            <Text style={styles.bottomIcon}>📷</Text>
-          </Pressable>
-          <Pressable style={styles.bottomIconButton} onPress={() => {}}>
-            <Text style={styles.bottomIcon}>📎</Text>
-          </Pressable>
+          <CameraOCRButton
+            onCameraPress={fileUpload.handleCameraOCR}
+            onGalleryPress={fileUpload.handleGalleryOCR}
+            isUploading={fileUpload.isUploading}
+          />
+          <AttachFileButton
+            onPress={fileUpload.handleDocumentUpload}
+            isUploading={fileUpload.isUploading}
+          />
         </View>
         <Text style={[styles.saveStatus, { color: getSaveStatusColor() }]}>
           {getSaveStatusText()}
         </Text>
       </View>
+      <FileUploadProgress state={fileUpload} />
 
       <Modal
         visible={showCourseModal}
@@ -467,13 +488,9 @@ const styles = StyleSheet.create({
   },
   bottomActions: {
     flexDirection: "row",
+    alignItems: "center",
     gap: spacing.sm,
-  },
-  bottomIconButton: {
-    padding: spacing.xs,
-  },
-  bottomIcon: {
-    fontSize: typography.lg,
+    flexWrap: "wrap",
   },
   saveStatus: {
     fontSize: typography.xs,
