@@ -1,5 +1,5 @@
 import { supabase } from "../supabase/client";
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 
 interface ExtractionResult {
   text: string;
@@ -91,13 +91,10 @@ export function addToOfflineQueue(item: Omit<OfflineQueueItem, "id">): void {
     id: Date.now().toString(36) + Math.random().toString(36).slice(2),
   };
   queue.push(newItem);
-  FileSystem.readAsStringAsync(FileSystem.documentDirectory + OFFLINE_QUEUE_KEY)
-    .then(() => {})
-    .catch(() => {});
   try {
     const json = JSON.stringify(queue);
     FileSystem.writeAsStringAsync(
-      FileSystem.documentDirectory + OFFLINE_QUEUE_KEY,
+      (FileSystem.documentDirectory || "") + OFFLINE_QUEUE_KEY,
       json,
     ).catch(() => {});
   } catch {}
@@ -145,7 +142,7 @@ export async function processOfflineQueue(): Promise<void> {
 
   try {
     await FileSystem.writeAsStringAsync(
-      FileSystem.documentDirectory + OFFLINE_QUEUE_KEY,
+      (FileSystem.documentDirectory || "") + OFFLINE_QUEUE_KEY,
       JSON.stringify(remaining),
     );
   } catch {}

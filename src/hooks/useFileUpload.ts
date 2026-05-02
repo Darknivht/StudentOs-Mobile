@@ -115,7 +115,7 @@ export function useFileUpload() {
   const uploadAndExtract = useCallback(
     async (
       file: { uri: string; name: string; type: string },
-      sourceType: SourceType,
+      sourceType: "pdf" | "docx" | "image",
     ) => {
       if (!user) {
         setState((s) => ({ ...s, error: "Not authenticated" }));

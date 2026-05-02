@@ -98,13 +98,15 @@ export function useNoteAI() {
           setIsStreaming(false);
           recordAIUsage();
           if (supabase && user && !abortRef.current) {
-            supabase
-              .from("notes")
-              .update({ summary: fullText })
-              .eq("id", note.id)
-              .eq("user_id", user.id)
-              .then(() => {})
-              .catch(() => {});
+            (async () => {
+              try {
+                await supabase
+                  .from("notes")
+                  .update({ summary: fullText })
+                  .eq("id", note.id)
+                  .eq("user_id", user.id);
+              } catch {}
+            })();
           }
         },
       );
