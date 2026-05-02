@@ -1,17 +1,20 @@
+import { useState } from "react";
 import { View, Text, Pressable, FlatList, StyleSheet } from "react-native";
 import { useCourses, type CourseWithProgress } from "../../hooks/useCourses";
 import { CourseCard } from "./CourseCard";
+import { AddCourseModal } from "./AddCourseModal";
 import { colors, spacing, typography } from "../../lib/theme";
 
 export function CoursesSection() {
-  const { courses, isLoading } = useCourses();
+  const { courses, isLoading, createCourse } = useCourses();
+  const [showAddCourse, setShowAddCourse] = useState(false);
 
   const handleCoursePress = (_courseId: string) => {
     // Course detail navigation — Phase 3
   };
 
   const handleAddCourse = () => {
-    // Course creation — Phase 3
+    setShowAddCourse(true);
   };
 
   const data: (CourseWithProgress | { id: string; _isAdd: true })[] = [
@@ -82,6 +85,11 @@ export function CoursesSection() {
             />
           );
         }}
+      />
+      <AddCourseModal
+        visible={showAddCourse}
+        onClose={() => setShowAddCourse(false)}
+        onCreateCourse={createCourse}
       />
     </View>
   );

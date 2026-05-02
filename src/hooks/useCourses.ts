@@ -107,5 +107,74 @@ export function useCourses() {
     fetchCourses();
   }, [fetchCourses]);
 
-  return { courses, isLoading, refetch: fetchCourses };
+  const createCourse = useCallback(
+    async (params: {
+      title: string;
+      description?: string;
+      color?: string;
+      emoji?: string;
+    }): Promise<CourseWithProgress | null> => {
+      if (!supabase || !user) return null;
+
+      const { data, error } = await supabase
+        .from("courses")
+        .insert({
+          user_id: user.id,
+          title: params.title,
+          description: params.description ?? null,
+          color: params.color ?? null,
+          emoji: params.emoji ?? null,
+        })
+        .select("id, title, description, color, emoji")
+        .single();
+
+      if (error) {
+        console.error("Failed to create course:", error);
+        return null;
+      }
+
+      await fetchCourses();
+      return data
+        ? {
+            id: data.id,
+            title: data.title,
+            description: data.description ?? undefined,
+            color: data.color ?? undefined,
+            emoji: data.emoji ?? undefined,
+            notesProgress: 0,
+            quizzesProgress: 0,
+            flashcardsProgress: 0,
+            overallProgress: 0,
+          }
+        : null;
+    },
+    [user, fetchCourses],
+  );
+
+  const deleteCourse = useCallback(
+    async (id: string): Promise<void> => {
+      if (!supabase || !user) return;
+
+      const { error } = await supabase
+        .from("courses")
+        .delete()
+        .eq("id", id)
+        .eq("user_id", user.id);
+
+      if (error) {
+        console.error("Failed to delete course:", error);
+      } else {
+        await fetchCourses();
+      }
+    },
+    [user, fetchCourses],
+  );
+
+  return {
+    courses,
+    isLoading,
+    refetch: fetchCourses,
+    createCourse,
+    deleteCourse,
+  };
 }
