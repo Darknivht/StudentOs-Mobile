@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -8,8 +8,12 @@ import {
   StyleSheet,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useNotes } from "../../hooks/useNotes";
-import type { NoteWithCourse } from "../../types/note";
+import { useNoteAI } from "../../hooks/useNoteAI";
+import { SummaryResultSheet } from "./SummaryResultSheet";
+import { SocraticChatSheet } from "./SocraticChatSheet";
+import type { SummaryLength } from "../../services/notes/aiSummary";
 import { colors, spacing, typography } from "../../lib/theme";
 
 const SOURCE_LABELS: Record<string, string> = {
@@ -49,8 +53,24 @@ interface NoteViewerScreenProps {
 export function NoteViewerScreen({ navigation, route }: NoteViewerScreenProps) {
   const insets = useSafeAreaInsets();
   const { noteId } = route.params;
-  const { notes } = useNotes();
+  const { notes, refetch: refetchNotes } = useNotes();
   const note = notes.find((n) => n.id === noteId);
+
+  const {
+    isStreaming,
+    summaryText,
+    socraticMessages,
+    error: aiError,
+    generateSummary,
+    startSocratic,
+    sendSocratic,
+    resetSummary,
+    resetSocratic,
+  } = useNoteAI();
+
+  const summarySheetRef = useRef<any>(null);
+  const socraticSheetRef = useRef<any>(null);
+  const [summaryLength, setSummaryLength] = useState<SummaryLength>("medium");
 
   const handleEdit = useCallback(() => {
     navigation.navigate("NoteEditor", { noteId });
@@ -66,6 +86,36 @@ export function NoteViewerScreen({ navigation, route }: NoteViewerScreenProps) {
       });
     } catch {}
   }, [note]);
+
+  const handleGenerateSummary = useCallback(() => {
+    if (!note) return;
+    summarySheetRef.current?.present();
+    generateSummary(note, summaryLength);
+  }, [note, generateSummary, summaryLength]);
+
+  const handleSummaryLengthChange = useCallback(
+    (length: SummaryLength) => {
+      setSummaryLength(length);
+      if (note) {
+        generateSummary(note, length);
+      }
+    },
+    [note, generateSummary],
+  );
+
+  const handleStartSocratic = useCallback(() => {
+    if (!note) return;
+    socraticSheetRef.current?.present();
+    startSocratic(note);
+  }, [note, startSocratic]);
+
+  const handleSendSocraticMessage = useCallback(
+    (message: string) => {
+      if (!note) return;
+      sendSocratic(note, message);
+    },
+    [note, sendSocratic],
+  );
 
   if (!note) {
     return (
@@ -87,95 +137,142 @@ export function NoteViewerScreen({ navigation, route }: NoteViewerScreenProps) {
   const plainContent = stripHtml(note.content);
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      <View style={styles.topBar}>
-        <Pressable onPress={() => navigation.goBack()} hitSlop={12}>
-          <Text style={styles.topBackButton}>← Back</Text>
-        </Pressable>
-        <View style={styles.topActions}>
-          <Pressable style={styles.topAction} onPress={handleShare}>
-            <Text style={styles.topActionIcon}>🔗</Text>
+    <BottomSheetModalProvider>
+      <View style={[styles.container, { paddingTop: insets.top }]}>
+        <View style={styles.topBar}>
+          <Pressable onPress={() => navigation.goBack()} hitSlop={12}>
+            <Text style={styles.topBackButton}>← Back</Text>
           </Pressable>
-          <Pressable style={styles.topAction} onPress={handleEdit}>
-            <Text style={styles.topActionIcon}>✏️</Text>
-          </Pressable>
-        </View>
-      </View>
-
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text style={styles.title}>{note.title || "Untitled"}</Text>
-
-        <View style={styles.metaRow}>
-          <View style={styles.sourceBadge}>
-            <View
-              style={[
-                styles.sourceDot,
-                {
-                  backgroundColor:
-                    note.sourceType === "pdf"
-                      ? colors.warning
-                      : note.sourceType === "docx"
-                        ? "#3b82f6"
-                        : note.sourceType === "image"
-                          ? colors.success
-                          : colors.mutedForeground,
-                },
-              ]}
-            />
-            <Text style={styles.sourceLabel}>
-              {SOURCE_LABELS[note.sourceType] || "Manual"}
-            </Text>
+          <View style={styles.topActions}>
+            <Pressable style={styles.topAction} onPress={handleGenerateSummary}>
+              <Text style={styles.topActionIcon}>📝</Text>
+            </Pressable>
+            <Pressable style={styles.topAction} onPress={handleStartSocratic}>
+              <Text style={styles.topActionIcon}>🎓</Text>
+            </Pressable>
+            <Pressable style={styles.topAction} onPress={handleShare}>
+              <Text style={styles.topActionIcon}>🔗</Text>
+            </Pressable>
+            <Pressable style={styles.topAction} onPress={handleEdit}>
+              <Text style={styles.topActionIcon}>✏️</Text>
+            </Pressable>
           </View>
-          {note.courseName && (
-            <View
-              style={[
-                styles.courseTag,
-                note.courseColor
-                  ? { backgroundColor: `${note.courseColor}22` }
-                  : undefined,
-              ]}
-            >
-              {note.courseEmoji && (
-                <Text style={styles.courseEmoji}>{note.courseEmoji}</Text>
-              )}
-              <Text
+        </View>
+
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.title}>{note.title || "Untitled"}</Text>
+
+          <View style={styles.metaRow}>
+            <View style={styles.sourceBadge}>
+              <View
                 style={[
-                  styles.courseLabel,
-                  note.courseColor ? { color: note.courseColor } : undefined,
+                  styles.sourceDot,
+                  {
+                    backgroundColor:
+                      note.sourceType === "pdf"
+                        ? colors.warning
+                        : note.sourceType === "docx"
+                          ? "#3b82f6"
+                          : note.sourceType === "image"
+                            ? colors.success
+                            : colors.mutedForeground,
+                  },
+                ]}
+              />
+              <Text style={styles.sourceLabel}>
+                {SOURCE_LABELS[note.sourceType] || "Manual"}
+              </Text>
+            </View>
+            {note.courseName && (
+              <View
+                style={[
+                  styles.courseTag,
+                  note.courseColor
+                    ? { backgroundColor: `${note.courseColor}22` }
+                    : undefined,
                 ]}
               >
-                {note.courseName}
+                {note.courseEmoji && (
+                  <Text style={styles.courseEmoji}>{note.courseEmoji}</Text>
+                )}
+                <Text
+                  style={[
+                    styles.courseLabel,
+                    note.courseColor ? { color: note.courseColor } : undefined,
+                  ]}
+                >
+                  {note.courseName}
+                </Text>
+              </View>
+            )}
+            <Text style={styles.date}>{getRelativeDate(note.updatedAt)}</Text>
+          </View>
+
+          {note.originalFilename && (
+            <View style={styles.fileRow}>
+              <Text style={styles.fileIcon}>📎</Text>
+              <Text style={styles.fileName} numberOfLines={1}>
+                {note.originalFilename}
               </Text>
             </View>
           )}
-          <Text style={styles.date}>{getRelativeDate(note.updatedAt)}</Text>
-        </View>
 
-        {note.originalFilename && (
-          <View style={styles.fileRow}>
-            <Text style={styles.fileIcon}>📎</Text>
-            <Text style={styles.fileName} numberOfLines={1}>
-              {note.originalFilename}
-            </Text>
+          {note.summary && (
+            <View style={styles.summaryCard}>
+              <Text style={styles.summaryLabel}>AI Summary</Text>
+              <Text style={styles.summaryText}>{note.summary}</Text>
+            </View>
+          )}
+
+          <View style={styles.aiActionsRow}>
+            <Pressable
+              style={styles.aiAction}
+              onPress={handleGenerateSummary}
+              android_ripple={{ color: colors.muted }}
+            >
+              <Text style={styles.aiActionIcon}>📝</Text>
+              <Text style={styles.aiActionLabel}>Summary</Text>
+            </Pressable>
+            <Pressable
+              style={styles.aiAction}
+              onPress={handleStartSocratic}
+              android_ripple={{ color: colors.muted }}
+            >
+              <Text style={styles.aiActionIcon}>🎓</Text>
+              <Text style={styles.aiActionLabel}>Socratic Tutor</Text>
+            </Pressable>
           </View>
-        )}
 
-        {note.summary && (
-          <View style={styles.summaryCard}>
-            <Text style={styles.summaryLabel}>AI Summary</Text>
-            <Text style={styles.summaryText}>{note.summary}</Text>
+          <View style={styles.contentCard}>
+            <Text style={styles.contentText}>{plainContent}</Text>
           </View>
-        )}
+        </ScrollView>
 
-        <View style={styles.contentCard}>
-          <Text style={styles.contentText}>{plainContent}</Text>
-        </View>
-      </ScrollView>
-    </View>
+        <SummaryResultSheet
+          ref={summarySheetRef}
+          summaryText={summaryText}
+          isStreaming={isStreaming}
+          error={aiError}
+          onLengthChange={handleSummaryLengthChange}
+          currentLength={summaryLength}
+          onRetry={() => note && generateSummary(note, summaryLength)}
+          onDismiss={resetSummary}
+        />
+
+        <SocraticChatSheet
+          ref={socraticSheetRef}
+          messages={socraticMessages}
+          isStreaming={isStreaming}
+          error={aiError}
+          onSendMessage={handleSendSocraticMessage}
+          onDismiss={resetSocratic}
+        />
+      </View>
+    </BottomSheetModalProvider>
   );
 }
 
@@ -305,6 +402,30 @@ const styles = StyleSheet.create({
     fontSize: typography.sm,
     color: colors.foreground,
     lineHeight: 22,
+  },
+  aiActionsRow: {
+    flexDirection: "row",
+    gap: spacing.sm,
+    marginBottom: spacing.lg,
+  },
+  aiAction: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.muted,
+    borderRadius: 10,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    gap: spacing.xs,
+    flex: 1,
+    justifyContent: "center",
+  },
+  aiActionIcon: {
+    fontSize: typography.base,
+  },
+  aiActionLabel: {
+    fontSize: typography.sm,
+    color: colors.foreground,
+    fontWeight: "500",
   },
   contentCard: {
     backgroundColor: colors.card,

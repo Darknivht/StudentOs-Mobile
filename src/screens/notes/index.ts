@@ -9,3 +9,5 @@ export { FileUploadProgress } from "./FileUploadProgress";
 export { CameraOCRButton } from "./CameraOCRButton";
 export { AttachFileButton } from "./AttachFileButton";
 export { QuickActionsSheet } from "./QuickActionsSheet";
+export { SummaryResultSheet } from "./SummaryResultSheet";
+export { SocraticChatSheet } from "./SocraticChatSheet";

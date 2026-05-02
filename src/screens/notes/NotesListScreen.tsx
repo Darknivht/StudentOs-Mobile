@@ -84,7 +84,7 @@ export function NotesListScreen({ navigation }: { navigation: any }) {
 
   const handleNotePress = useCallback(
     (id: string) => {
-      navigation.navigate("NoteEditor", { noteId: id });
+      navigation.navigate("NoteViewer", { noteId: id });
     },
     [navigation],
   );
