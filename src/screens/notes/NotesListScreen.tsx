@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef } from "react";
 import {
   View,
   ScrollView,
@@ -8,11 +8,13 @@ import {
   StyleSheet,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useNotes } from "../../hooks/useNotes";
 import { useCourses } from "../../hooks/useCourses";
 import { SearchBar } from "./SearchBar";
 import { QuotaIndicator } from "./QuotaIndicator";
 import { NotesSection } from "./NotesSection";
+import { QuickActionsSheet } from "./QuickActionsSheet";
 import { colors, spacing, typography } from "../../lib/theme";
 import type { NoteWithCourse } from "../../types/note";
 
@@ -29,6 +31,8 @@ export function NotesListScreen({ navigation }: { navigation: any }) {
   const { notes, isLoading, deleteNote, togglePin } = useNotes();
   const { courses } = useCourses();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedNote, setSelectedNote] = useState<NoteWithCourse | null>(null);
+  const quickActionsRef = useRef<any>(null);
 
   const filteredNotes = useMemo(() => {
     if (!searchQuery.trim()) return notes;
@@ -103,6 +107,60 @@ export function NotesListScreen({ navigation }: { navigation: any }) {
     navigation.navigate("NoteEditor", {});
   }, [navigation]);
 
+  const handleNoteLongPress = useCallback(
+    (id: string) => {
+      const note = notes.find((n) => n.id === id);
+      if (note) {
+        setSelectedNote(note);
+        setTimeout(() => quickActionsRef.current?.present?.(), 50);
+      }
+    },
+    [notes],
+  );
+
+  const handleQuickActionEdit = useCallback(
+    (noteId: string) => {
+      navigation.navigate("NoteEditor", { noteId });
+    },
+    [navigation],
+  );
+
+  const handleQuickActionDelete = useCallback(
+    async (noteId: string) => {
+      await deleteNote(noteId);
+      setSelectedNote(null);
+    },
+    [deleteNote],
+  );
+
+  const handleQuickActionSummary = useCallback(
+    (noteId: string) => {
+      navigation.navigate("NoteViewer", { noteId });
+    },
+    [navigation],
+  );
+
+  const handleQuickActionFlashcards = useCallback(
+    (noteId: string) => {
+      navigation.navigate("NoteViewer", { noteId });
+    },
+    [navigation],
+  );
+
+  const handleQuickActionQuiz = useCallback(
+    (noteId: string) => {
+      navigation.navigate("NoteViewer", { noteId });
+    },
+    [navigation],
+  );
+
+  const handleQuickActionTutor = useCallback(
+    (noteId: string) => {
+      navigation.navigate("NoteViewer", { noteId });
+    },
+    [navigation],
+  );
+
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
@@ -112,49 +170,62 @@ export function NotesListScreen({ navigation }: { navigation: any }) {
   }
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      <View style={styles.header}>
-        <Text style={styles.screenTitle}>Notes</Text>
-      </View>
-      <View style={styles.searchContainer}>
-        <SearchBar value={searchQuery} onChangeText={setSearchQuery} />
-      </View>
-      <QuotaIndicator />
-      {sections.length === 0 ? (
-        <View style={styles.emptyState}>
-          <Text style={styles.emptyEmoji}>📝</Text>
-          <Text style={styles.emptyTitle}>No notes yet</Text>
-          <Text style={styles.emptySubtitle}>
-            Tap + to create your first note
-          </Text>
+    <BottomSheetModalProvider>
+      <View style={[styles.container, { paddingTop: insets.top }]}>
+        <View style={styles.header}>
+          <Text style={styles.screenTitle}>Notes</Text>
         </View>
-      ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
+        <View style={styles.searchContainer}>
+          <SearchBar value={searchQuery} onChangeText={setSearchQuery} />
+        </View>
+        <QuotaIndicator />
+        {sections.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyEmoji}>📝</Text>
+            <Text style={styles.emptyTitle}>No notes yet</Text>
+            <Text style={styles.emptySubtitle}>
+              Tap + to create your first note
+            </Text>
+          </View>
+        ) : (
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollContent}
+          >
+            {sections.map((section) => (
+              <NotesSection
+                key={section.courseId ?? "__uncategorized__"}
+                title={section.title}
+                emoji={section.emoji}
+                color={section.color}
+                notes={section.notes}
+                onNotePress={handleNotePress}
+                onSwipeDelete={handleSwipeDelete}
+                onSwipePin={handleSwipePin}
+                onNoteLongPress={handleNoteLongPress}
+              />
+            ))}
+          </ScrollView>
+        )}
+        <Pressable
+          style={[styles.fab, { bottom: insets.bottom + 20 }]}
+          onPress={handleNewNote}
+          android_ripple={{ color: colors.muted, borderless: true }}
         >
-          {sections.map((section) => (
-            <NotesSection
-              key={section.courseId ?? "__uncategorized__"}
-              title={section.title}
-              emoji={section.emoji}
-              color={section.color}
-              notes={section.notes}
-              onNotePress={handleNotePress}
-              onSwipeDelete={handleSwipeDelete}
-              onSwipePin={handleSwipePin}
-            />
-          ))}
-        </ScrollView>
-      )}
-      <Pressable
-        style={[styles.fab, { bottom: insets.bottom + 20 }]}
-        onPress={handleNewNote}
-        android_ripple={{ color: colors.muted, borderless: true }}
-      >
-        <Text style={styles.fabIcon}>+</Text>
-      </Pressable>
-    </View>
+          <Text style={styles.fabIcon}>+</Text>
+        </Pressable>
+        <QuickActionsSheet
+          ref={quickActionsRef}
+          note={selectedNote}
+          onEdit={handleQuickActionEdit}
+          onDelete={handleQuickActionDelete}
+          onGenerateSummary={handleQuickActionSummary}
+          onGenerateFlashcards={handleQuickActionFlashcards}
+          onGenerateQuiz={handleQuickActionQuiz}
+          onAskTutor={handleQuickActionTutor}
+        />
+      </View>
+    </BottomSheetModalProvider>
   );
 }
 

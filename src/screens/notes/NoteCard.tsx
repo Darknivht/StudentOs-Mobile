@@ -33,6 +33,7 @@ interface NoteCardProps {
   onPress: (id: string) => void;
   onSwipeDelete: (id: string) => void;
   onSwipePin: (id: string, isPinned: boolean) => void;
+  onLongPress?: (id: string) => void;
 }
 
 function stripHtml(html: string): string {
@@ -58,6 +59,7 @@ export function NoteCard({
   onPress,
   onSwipeDelete,
   onSwipePin,
+  onLongPress,
 }: NoteCardProps) {
   const swipeableRef = useRef<Swipeable>(null);
   const accentColor = SOURCE_COLORS[note.sourceType] || colors.mutedForeground;
@@ -113,6 +115,8 @@ export function NoteCard({
         <Pressable
           style={styles.card}
           onPress={() => onPress(note.id)}
+          onLongPress={() => onLongPress?.(note.id)}
+          delayLongPress={400}
           android_ripple={{ color: colors.muted }}
         >
           <View style={[styles.accentBar, { backgroundColor: accentColor }]} />

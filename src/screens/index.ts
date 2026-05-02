@@ -13,3 +13,4 @@ export { BlockedScreen } from "./auth/BlockedScreen";
 export { OnboardingScreen } from "./onboarding/OnboardingScreen";
 export { NotesListScreen } from "./notes/NotesListScreen";
 export { NoteEditorScreen } from "./notes/NoteEditorScreen";
+export { NoteViewerScreen } from "./notes/NoteViewerScreen";

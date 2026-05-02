@@ -7,6 +7,7 @@ import {
   StudyScreen,
   NotesListScreen,
   NoteEditorScreen,
+  NoteViewerScreen,
   FocusScreen,
   ProfileScreen,
 } from "../screens";
@@ -24,6 +25,7 @@ function NotesNavigator() {
     >
       <NotesStack.Screen name="NotesMain" component={NotesListScreen} />
       <NotesStack.Screen name="NoteEditor" component={NoteEditorScreen} />
+      <NotesStack.Screen name="NoteViewer" component={NoteViewerScreen} />
     </NotesStack.Navigator>
   );
 }

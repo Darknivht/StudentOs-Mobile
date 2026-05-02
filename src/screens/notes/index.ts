@@ -1,5 +1,6 @@
 export { NotesListScreen } from "./NotesListScreen";
 export { NoteEditorScreen } from "./NoteEditorScreen";
+export { NoteViewerScreen } from "./NoteViewerScreen";
 export { NoteCard } from "./NoteCard";
 export { NotesSection } from "./NotesSection";
 export { SearchBar } from "./SearchBar";
@@ -7,3 +8,4 @@ export { QuotaIndicator } from "./QuotaIndicator";
 export { FileUploadProgress } from "./FileUploadProgress";
 export { CameraOCRButton } from "./CameraOCRButton";
 export { AttachFileButton } from "./AttachFileButton";
+export { QuickActionsSheet } from "./QuickActionsSheet";
