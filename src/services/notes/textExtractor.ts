@@ -5,6 +5,7 @@ interface ExtractionResult {
   text: string;
   sourceType: string;
   pageCount?: number;
+  error?: string;
 }
 
 interface OfflineQueueItem {
@@ -16,19 +17,31 @@ interface OfflineQueueItem {
 }
 
 const OFFLINE_QUEUE_KEY = "offline_extraction_queue";
+const QUEUE_FILE = (FileSystem.documentDirectory || "") + OFFLINE_QUEUE_KEY;
 
 export async function extractTextFromFile(
   fileUri: string,
   fileName: string,
   sourceType: "pdf" | "docx",
 ): Promise<ExtractionResult> {
+  let base64: string;
   try {
-    const base64 = await FileSystem.readAsStringAsync(fileUri, {
+    base64 = await FileSystem.readAsStringAsync(fileUri, {
       encoding: FileSystem.EncodingType.Base64,
     });
+  } catch (err: any) {
+    return {
+      text: "",
+      sourceType,
+      error: `Failed to read file: ${err.message}`,
+    };
+  }
 
-    if (!supabase) return { text: "", sourceType };
+  if (!supabase) {
+    return { text: "", sourceType, error: "Supabase not configured" };
+  }
 
+  try {
     const { data, error } = await supabase.functions.invoke(
       "extract-pdf-text",
       {
@@ -37,8 +50,11 @@ export async function extractTextFromFile(
     );
 
     if (error) {
-      console.error("Text extraction error:", error);
-      return { text: "", sourceType };
+      return {
+        text: "",
+        sourceType,
+        error: error.message || `Edge function error: ${error}`,
+      };
     }
 
     return {
@@ -46,22 +62,36 @@ export async function extractTextFromFile(
       sourceType,
       pageCount: data?.pageCount,
     };
-  } catch (err) {
-    console.error("extractTextFromFile failed:", err);
-    return { text: "", sourceType };
+  } catch (err: any) {
+    return {
+      text: "",
+      sourceType,
+      error: err.message || "Text extraction network request failed",
+    };
   }
 }
 
 export async function extractTextFromImage(
   imageUri: string,
 ): Promise<ExtractionResult> {
+  let base64: string;
   try {
-    const base64 = await FileSystem.readAsStringAsync(imageUri, {
+    base64 = await FileSystem.readAsStringAsync(imageUri, {
       encoding: FileSystem.EncodingType.Base64,
     });
+  } catch (err: any) {
+    return {
+      text: "",
+      sourceType: "image",
+      error: `Failed to read image: ${err.message}`,
+    };
+  }
 
-    if (!supabase) return { text: "", sourceType: "image" };
+  if (!supabase) {
+    return { text: "", sourceType: "image", error: "Supabase not configured" };
+  }
 
+  try {
     const { data, error } = await supabase.functions.invoke(
       "extract-pdf-text-ocr",
       {
@@ -70,46 +100,49 @@ export async function extractTextFromImage(
     );
 
     if (error) {
-      console.error("OCR extraction error:", error);
-      return { text: "", sourceType: "image" };
+      return {
+        text: "",
+        sourceType: "image",
+        error: error.message || `Edge function error: ${error}`,
+      };
     }
 
     return {
       text: data?.text || data?.content || "",
       sourceType: "image",
     };
-  } catch (err) {
-    console.error("extractTextFromImage failed:", err);
-    return { text: "", sourceType: "image" };
+  } catch (err: any) {
+    return {
+      text: "",
+      sourceType: "image",
+      error: err.message || "OCR network request failed",
+    };
   }
 }
 
-export function addToOfflineQueue(item: Omit<OfflineQueueItem, "id">): void {
-  const queue = getOfflineQueue();
+export async function addToOfflineQueue(
+  item: Omit<OfflineQueueItem, "id">,
+): Promise<void> {
+  const queue = await getOfflineQueue();
   const newItem: OfflineQueueItem = {
     ...item,
     id: Date.now().toString(36) + Math.random().toString(36).slice(2),
   };
   queue.push(newItem);
-  try {
-    const json = JSON.stringify(queue);
-    FileSystem.writeAsStringAsync(
-      (FileSystem.documentDirectory || "") + OFFLINE_QUEUE_KEY,
-      json,
-    ).catch(() => {});
-  } catch {}
+  await FileSystem.writeAsStringAsync(QUEUE_FILE, JSON.stringify(queue));
 }
 
-export function getOfflineQueue(): OfflineQueueItem[] {
+export async function getOfflineQueue(): Promise<OfflineQueueItem[]> {
   try {
-    return [];
+    const content = await FileSystem.readAsStringAsync(QUEUE_FILE);
+    return JSON.parse(content) as OfflineQueueItem[];
   } catch {
     return [];
   }
 }
 
 export async function processOfflineQueue(): Promise<void> {
-  const queue = getOfflineQueue();
+  const queue = await getOfflineQueue();
   if (queue.length === 0) return;
 
   const remaining: OfflineQueueItem[] = [];
@@ -132,7 +165,7 @@ export async function processOfflineQueue(): Promise<void> {
           .from("notes")
           .update({ content: result.text })
           .eq("id", item.noteId);
-      } else {
+      } else if (result.error) {
         remaining.push(item);
       }
     } catch {
@@ -140,10 +173,5 @@ export async function processOfflineQueue(): Promise<void> {
     }
   }
 
-  try {
-    await FileSystem.writeAsStringAsync(
-      (FileSystem.documentDirectory || "") + OFFLINE_QUEUE_KEY,
-      JSON.stringify(remaining),
-    );
-  } catch {}
+  await FileSystem.writeAsStringAsync(QUEUE_FILE, JSON.stringify(remaining));
 }

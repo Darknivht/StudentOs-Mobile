@@ -19,6 +19,18 @@ export async function generateNoteSummary(
   onError?: (error: Error) => void,
   onComplete?: (fullResponse: string) => void,
 ): Promise<void> {
+  let provider;
+  try {
+    provider = AIProviderFactory.getInstance();
+  } catch {
+    onError?.(
+      new Error(
+        "AI provider not configured. Set EXPO_PUBLIC_AI_API_KEY in your .env file.",
+      ),
+    );
+    return;
+  }
+
   const systemPrompt = `You are an AI study assistant. ${SUMMARY_PROMPTS[length]}
 
 Note Title: ${noteTitle}
@@ -31,7 +43,6 @@ Summary:`;
   const messages: AIMessage[] = [{ role: "user", content: systemPrompt }];
 
   try {
-    const provider = AIProviderFactory.getInstance();
     await provider.streamChat(messages, {
       onChunk,
       onError: onError || (() => {}),

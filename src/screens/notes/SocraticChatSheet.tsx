@@ -2,6 +2,7 @@ import React, {
   useRef,
   useCallback,
   useState,
+  useEffect,
   useImperativeHandle,
   forwardRef,
 } from "react";
@@ -41,7 +42,16 @@ export const SocraticChatSheet = forwardRef(function SocraticChatSheet(
   ref,
 ) {
   const sheetRef = useRef<BottomSheetModal>(null);
+  const flatListRef = useRef<FlatList>(null);
   const [inputText, setInputText] = useState("");
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    }
+  }, [messages.length]);
 
   useImperativeHandle(ref, () => ({
     present: () => sheetRef.current?.present(),
@@ -108,6 +118,7 @@ export const SocraticChatSheet = forwardRef(function SocraticChatSheet(
         </View>
 
         <FlatList
+          ref={flatListRef}
           data={messages}
           keyExtractor={(_, i) => i.toString()}
           renderItem={renderMessage}

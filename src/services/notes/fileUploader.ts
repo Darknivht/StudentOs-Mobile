@@ -1,4 +1,5 @@
 import { supabase } from "../supabase/client";
+import * as FileSystem from "expo-file-system/legacy";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -12,10 +13,21 @@ export async function uploadFileToStorage(
 ): Promise<{ url: string; path: string }> {
   if (!supabase) throw new Error("Supabase not configured");
 
-  const response = await fetch(file.uri);
-  const blob = await response.blob();
+  if (!file.uri.startsWith("file://") && !file.uri.startsWith("content://")) {
+    throw new Error("Invalid file URI format");
+  }
 
-  if (blob.size > MAX_FILE_SIZE) {
+  const base64 = await FileSystem.readAsStringAsync(file.uri, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+
+  const binaryStr = atob(base64);
+  const bytes = new Uint8Array(binaryStr.length);
+  for (let i = 0; i < binaryStr.length; i++) {
+    bytes[i] = binaryStr.charCodeAt(i);
+  }
+
+  if (bytes.byteLength > MAX_FILE_SIZE) {
     throw new Error("File too large. Maximum size is 10MB.");
   }
 
@@ -24,7 +36,7 @@ export async function uploadFileToStorage(
 
   const { error: uploadError } = await supabase.storage
     .from("notes-uploads")
-    .upload(storagePath, blob, {
+    .upload(storagePath, bytes, {
       contentType: file.type,
       upsert: false,
     });

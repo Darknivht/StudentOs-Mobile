@@ -135,15 +135,29 @@ export function useFileUpload() {
       try {
         setState((s) => ({ ...s, progress: 30 }));
 
-        const { url, path } = await uploadFileToStorage(file, user.id);
+        let uploadUrl: string;
+        try {
+          const { url } = await uploadFileToStorage(file, user.id);
+          uploadUrl = url;
+        } catch (uploadErr: any) {
+          setState((s) => ({
+            ...s,
+            isUploading: false,
+            error:
+              uploadErr.message || "File upload failed. Check your connection.",
+          }));
+          return;
+        }
 
-        setState((s) => ({ ...s, progress: 60, fileUrl: url }));
+        setState((s) => ({ ...s, progress: 60, fileUrl: uploadUrl }));
 
         let extractedText = "";
+        let extractionError: string | null = null;
 
         if (sourceType === "image") {
           const result = await extractTextFromImage(file.uri);
           extractedText = result.text;
+          extractionError = result.error || null;
         } else {
           const result = await extractTextFromFile(
             file.uri,
@@ -151,6 +165,26 @@ export function useFileUpload() {
             sourceType,
           );
           extractedText = result.text;
+          extractionError = result.error || null;
+        }
+
+        if (extractionError) {
+          setState((s) => ({
+            ...s,
+            isUploading: false,
+            error: extractionError,
+          }));
+          return;
+        }
+
+        if (!extractedText.trim()) {
+          setState((s) => ({
+            ...s,
+            isUploading: false,
+            progress: 100,
+            extractedText: "",
+          }));
+          return;
         }
 
         setState((s) => ({
@@ -163,7 +197,7 @@ export function useFileUpload() {
         setState((s) => ({
           ...s,
           isUploading: false,
-          error: err.message || "Upload failed",
+          error: err.message || "Upload and extraction failed",
         }));
       }
     },

@@ -6,7 +6,7 @@ export interface SocraticMessage {
   content: string;
 }
 
-const SOCRATIC_SYSTEM_PROMPT = `You are a Socratic tutor. Your role is to help the student understand their note by asking leading questions rather than giving direct answers.
+const SOCRATIC_INSTRUCTIONS = `You are a Socratic tutor. Your role is to help the student understand their note by asking leading questions rather than giving direct answers.
 
 Guidelines:
 - Ask one question at a time
@@ -17,7 +17,7 @@ Guidelines:
 - Be encouraging but challenge their thinking
 - Keep responses concise (2-4 sentences max)
 
-The student is studying this note. Help them understand it through guided questioning.`;
+When the student shares their answer, ask a follow-up question that deepens their understanding.`;
 
 export async function sendSocraticMessage(
   noteContent: string,
@@ -27,13 +27,24 @@ export async function sendSocraticMessage(
   onError?: (error: Error) => void,
   onComplete?: (fullResponse: string) => void,
 ): Promise<void> {
+  let provider;
+  try {
+    provider = AIProviderFactory.getInstance();
+  } catch {
+    onError?.(
+      new Error(
+        "AI provider not configured. Set EXPO_PUBLIC_AI_API_KEY in your .env file.",
+      ),
+    );
+    return;
+  }
+
   const noteContext = `Note Title: ${noteTitle}\n\nNote Content:\n${noteContent.replace(/<[^>]*>/g, "")}`;
 
   const messages: AIMessage[] = [
-    { role: "system" as any, content: SOCRATIC_SYSTEM_PROMPT },
     {
       role: "user",
-      content: `Here is the note I'm studying:\n\n${noteContext}\n\nStart by asking me a question about the key concepts.`,
+      content: `${SOCRATIC_INSTRUCTIONS}\n\nHere is the note I'm studying:\n\n${noteContext}\n\nStart by asking me a question about the key concepts.`,
     },
     ...chatHistory.map((m) => ({
       role: m.role === "user" ? ("user" as const) : ("assistant" as const),
@@ -41,20 +52,12 @@ export async function sendSocraticMessage(
     })),
   ];
 
-  if (chatHistory.length === 0) {
-    // First message — AI initiates with a question
-  }
-
   try {
-    const provider = AIProviderFactory.getInstance();
-    await provider.streamChat(
-      messages.filter((m) => m.role !== ("system" as any)),
-      {
-        onChunk,
-        onError: onError || (() => {}),
-        onComplete: onComplete || (() => {}),
-      },
-    );
+    await provider.streamChat(messages, {
+      onChunk,
+      onError: onError || (() => {}),
+      onComplete: onComplete || (() => {}),
+    });
   } catch (err) {
     onError?.(err as Error);
   }

@@ -6,6 +6,7 @@ import {
   Text,
   ActivityIndicator,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -140,19 +141,21 @@ export function NotesListScreen({ navigation }: { navigation: any }) {
     [navigation],
   );
 
-  const handleQuickActionFlashcards = useCallback(
-    (noteId: string) => {
-      navigation.navigate("NoteViewer", { noteId });
-    },
-    [navigation],
-  );
+  const handleQuickActionFlashcards = useCallback((noteId: string) => {
+    Alert.alert(
+      "Flashcards",
+      "AI flashcard generation will be available in Phase 5. Stay tuned!",
+      [{ text: "OK" }],
+    );
+  }, []);
 
-  const handleQuickActionQuiz = useCallback(
-    (noteId: string) => {
-      navigation.navigate("NoteViewer", { noteId });
-    },
-    [navigation],
-  );
+  const handleQuickActionQuiz = useCallback((noteId: string) => {
+    Alert.alert(
+      "Quiz",
+      "AI quiz generation will be available in Phase 6. Stay tuned!",
+      [{ text: "OK" }],
+    );
+  }, []);
 
   const handleQuickActionTutor = useCallback(
     (noteId: string) => {
