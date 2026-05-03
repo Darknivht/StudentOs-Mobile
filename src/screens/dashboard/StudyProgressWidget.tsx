@@ -9,6 +9,7 @@ export function StudyProgressWidget() {
   if (isLoading) {
     return (
       <View style={styles.card}>
+        <Text style={styles.title}>Today</Text>
         <View style={styles.skeleton} />
       </View>
     );
@@ -51,6 +52,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.mutedForeground,
     marginBottom: spacing.sm,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   grid: {
     flexDirection: "row",
@@ -58,9 +61,9 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   gridItem: {
-    width: "46%",
+    width: "47%",
     backgroundColor: colors.muted,
-    borderRadius: 10,
+    borderRadius: 12,
     padding: spacing.sm,
   },
   itemEmoji: {
@@ -68,9 +71,10 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   itemValue: {
-    fontSize: typography.lg,
+    fontSize: 20,
     fontWeight: "700",
     color: colors.foreground,
+    letterSpacing: -0.3,
   },
   itemLabel: {
     fontSize: typography.xs,

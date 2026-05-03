@@ -7,6 +7,13 @@ import {
   StyleSheet,
   Dimensions,
 } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+  withSequence,
+} from "react-native-reanimated";
 import { OnboardingStep } from "./OnboardingStep";
 import { useAppStore } from "../../stores/appStore";
 import { colors, spacing, typography } from "../../lib/theme";
@@ -14,61 +21,107 @@ import { colors, spacing, typography } from "../../lib/theme";
 const ONBOARDING_STEPS = [
   {
     title: "Welcome to StudentOS",
-    description:
-      "Your AI-powered learning companion — built for students, by students.",
-    icon: "🎓",
+    description: "The smartest way to study. Built by students, for students.",
+    icon: "📚",
     gradientColors: ["#7c3aed", "#3b82f6"] as [string, string],
     particleColor: "#a78bfa",
+    iconBg: ["#8b5cf6", "#6366f1"] as [string, string],
   },
   {
-    title: "AI Learning",
+    title: "AI-Powered Learning",
     description:
-      "Get instant help from your AI tutor — summaries, quizzes, flashcards, and more.",
+      "Smart notes, AI tutor, math solver — AI that actually understands your homework.",
     icon: "🤖",
-    gradientColors: ["#0d9488", "#06b6d4"] as [string, string],
-    particleColor: "#5eead4",
+    gradientColors: ["#0891b2", "#06b6d4"] as [string, string],
+    particleColor: "#67e8f9",
+    iconBg: ["#22d3ee", "#06b6d4"] as [string, string],
   },
   {
-    title: "Spaced Repetition",
+    title: "Never Forget Again",
     description:
-      "Never forget what you learn. Smart flashcards that adapt to your memory.",
+      "Spaced-repetition flashcards and quizzes that adapt to how you learn.",
     icon: "🧠",
-    gradientColors: ["#16a34a", "#34d399"] as [string, string],
-    particleColor: "#86efac",
+    gradientColors: ["#16a34a", "#10b981"] as [string, string],
+    particleColor: "#6ee7b7",
+    iconBg: ["#4ade80", "#22c55e"] as [string, string],
   },
   {
-    title: "Focus Tools",
+    title: "Stay in the Zone",
     description:
-      "Stay in the zone with timers, app blockers, and study sessions.",
+      "Pomodoro timer, lofi radio, and app blocking to keep distractions away.",
     icon: "⏱️",
     gradientColors: ["#ea580c", "#f59e0b"] as [string, string],
     particleColor: "#fdba74",
+    iconBg: ["#fb923c", "#f59e0b"] as [string, string],
   },
   {
-    title: "Growth Tracking",
-    description: "Watch your streaks grow, earn XP, and climb the leaderboard.",
-    icon: "📈",
-    gradientColors: ["#e11d48", "#fb7185"] as [string, string],
-    particleColor: "#fda4af",
-  },
-  {
-    title: "Learn Together",
-    description: "Challenge friends, join study groups, and share resources.",
-    icon: "👥",
-    gradientColors: ["#4f46e5", "#8b5cf6"] as [string, string],
-    particleColor: "#c4b5fd",
-  },
-  {
-    title: "Let's Begin!",
+    title: "Track Your Growth",
     description:
-      "Your learning journey starts now. Tap to explore your dashboard.",
+      "Streaks, XP, levels, and achievements — watch yourself level up every day.",
+    icon: "🏆",
+    gradientColors: ["#e11d48", "#f43f5e"] as [string, string],
+    particleColor: "#fda4af",
+    iconBg: ["#fb7185", "#e11d48"] as [string, string],
+  },
+  {
+    title: "Study Together",
+    description:
+      "Join study groups, challenge friends, and climb the global leaderboard.",
+    icon: "👥",
+    gradientColors: ["#4f46e5", "#6366f1"] as [string, string],
+    particleColor: "#c4b5fd",
+    iconBg: ["#818cf8", "#4f46e5"] as [string, string],
+  },
+  {
+    title: "Ready to Begin?",
+    description:
+      "Join thousands of students already crushing their goals with StudentOS.",
     icon: "🚀",
-    gradientColors: ["#7c3aed", "#ec4899"] as [string, string],
-    particleColor: "#f0abfc",
+    gradientColors: ["#c026d3", "#7c3aed"] as [string, string],
+    particleColor: "#e879f9",
+    iconBg: ["#d946ef", "#c026d3"] as [string, string],
   },
 ] as const;
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
+
+function PulsingButton({
+  children,
+  onPress,
+}: {
+  children: React.ReactNode;
+  onPress: () => void;
+}) {
+  const scale = useSharedValue(1);
+  const opacity = useSharedValue(0.4);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    shadowOpacity: opacity.value,
+  }));
+
+  const handlePressIn = () => {
+    scale.value = withTiming(0.96, { duration: 100 });
+    opacity.value = withTiming(0.2, { duration: 100 });
+  };
+
+  const handlePressOut = () => {
+    scale.value = withTiming(1, { duration: 100 });
+    opacity.value = withTiming(0.4, { duration: 100 });
+  };
+
+  return (
+    <Pressable
+      onPress={onPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+    >
+      <Animated.View style={[styles.pulsingWrapper, animatedStyle]}>
+        {children}
+      </Animated.View>
+    </Pressable>
+  );
+}
 
 export function OnboardingScreen() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -83,6 +136,14 @@ export function OnboardingScreen() {
     }
   }, [currentStep]);
 
+  const handleBack = useCallback(() => {
+    if (currentStep > 0) {
+      const prev = currentStep - 1;
+      setCurrentStep(prev);
+      flatListRef.current?.scrollToIndex({ index: prev, animated: true });
+    }
+  }, [currentStep]);
+
   const handleSkip = useCallback(() => {
     setOnboardingSeen(true);
   }, [setOnboardingSeen]);
@@ -91,10 +152,33 @@ export function OnboardingScreen() {
     setOnboardingSeen(true);
   }, [setOnboardingSeen]);
 
+  const handleDotPress = useCallback((index: number) => {
+    setCurrentStep(index);
+    flatListRef.current?.scrollToIndex({ index, animated: true });
+  }, []);
+
   const isLastStep = currentStep === ONBOARDING_STEPS.length - 1;
 
   return (
     <View style={styles.wrapper}>
+      <View style={styles.progressBar}>
+        <View
+          style={[
+            styles.progressFill,
+            {
+              width: `${((currentStep + 1) / ONBOARDING_STEPS.length) * 100}%`,
+            },
+          ]}
+        />
+      </View>
+
+      <View style={styles.topBar}>
+        <View style={styles.spacer} />
+        <Pressable onPress={handleSkip}>
+          <Text style={styles.skipText}>Skip</Text>
+        </Pressable>
+      </View>
+
       <FlatList
         ref={flatListRef}
         data={
@@ -108,6 +192,7 @@ export function OnboardingScreen() {
             icon={item.icon}
             gradientColors={[item.gradientColors[0], item.gradientColors[1]]}
             particleColor={item.particleColor}
+            iconBg={[item.iconBg[0], item.iconBg[1]]}
           />
         )}
         horizontal
@@ -124,27 +209,34 @@ export function OnboardingScreen() {
       <View style={styles.bottomContainer}>
         <View style={styles.dotsContainer}>
           {ONBOARDING_STEPS.map((_, index) => (
-            <View
-              key={index}
-              style={[
-                styles.dot,
-                index === currentStep ? styles.dotActive : styles.dotInactive,
-              ]}
-            />
+            <Pressable key={index} onPress={() => handleDotPress(index)}>
+              <View
+                style={[
+                  styles.dot,
+                  index === currentStep ? styles.dotActive : styles.dotInactive,
+                ]}
+              />
+            </Pressable>
           ))}
         </View>
 
         {isLastStep ? (
-          <Pressable style={styles.primaryButton} onPress={handleComplete}>
-            <Text style={styles.primaryButtonText}>Get Started</Text>
-          </Pressable>
+          <PulsingButton onPress={handleComplete}>
+            <View style={styles.getStartedBtn}>
+              <Text style={styles.getStartedText}>Get Started</Text>
+              <Text style={styles.rocketEmoji}>🚀</Text>
+            </View>
+          </PulsingButton>
         ) : (
           <View style={styles.buttonRow}>
-            <Pressable style={styles.skipButton} onPress={handleSkip}>
-              <Text style={styles.skipButtonText}>Skip</Text>
-            </Pressable>
-            <Pressable style={styles.primaryButton} onPress={handleNext}>
-              <Text style={styles.primaryButtonText}>Next</Text>
+            {currentStep > 0 && (
+              <Pressable style={styles.backBtn} onPress={handleBack}>
+                <Text style={styles.backBtnText}>Back</Text>
+              </Pressable>
+            )}
+            <Pressable style={styles.nextBtn} onPress={handleNext}>
+              <Text style={styles.nextBtnText}>Next</Text>
+              <Text style={styles.arrowIcon}>→</Text>
             </Pressable>
           </View>
         )}
@@ -157,11 +249,30 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
   },
+  progressBar: {
+    height: 3,
+    backgroundColor: "rgba(255,255,255,0.2)",
+  },
+  progressFill: {
+    height: 3,
+    backgroundColor: "rgba(255,255,255,0.8)",
+  },
+  topBar: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.sm,
+  },
+  spacer: {
+    flex: 1,
+  },
+  skipText: {
+    fontSize: typography.base,
+    color: "rgba(255,255,255,0.7)",
+    fontWeight: "500",
+  },
   bottomContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
     paddingBottom: spacing["2xl"],
     paddingTop: spacing.lg,
     paddingHorizontal: spacing.lg,
@@ -173,41 +284,75 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    height: 10,
+    borderRadius: 5,
   },
   dotActive: {
-    backgroundColor: colors.primary,
-    width: 24,
+    backgroundColor: "#ffffff",
+    width: 32,
   },
   dotInactive: {
-    backgroundColor: "rgba(255, 255, 255, 0.4)",
+    backgroundColor: "rgba(255,255,255,0.3)",
+    width: 10,
   },
   buttonRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.lg,
+    gap: spacing.md,
   },
-  skipButton: {
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
+  backBtn: {
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.25)",
   },
-  skipButtonText: {
+  backBtnText: {
     fontSize: typography.base,
-    color: "rgba(255, 255, 255, 0.6)",
+    color: "rgba(255,255,255,0.8)",
+    fontWeight: "500",
   },
-  primaryButton: {
-    backgroundColor: "#ffffff",
+  nextBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255,255,255,0.2)",
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.xl,
-    borderRadius: 12,
-    minWidth: 200,
-    alignItems: "center",
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.25)",
+    gap: spacing.sm,
   },
-  primaryButtonText: {
+  nextBtnText: {
     fontSize: typography.base,
+    color: "#ffffff",
+    fontWeight: "600",
+  },
+  arrowIcon: {
+    fontSize: typography.lg,
+    color: "#ffffff",
+  },
+  pulsingWrapper: {
+    shadowColor: "rgba(255,255,255,0.5)",
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 20,
+    elevation: 8,
+  },
+  getStartedBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    paddingVertical: spacing.md + 2,
+    paddingHorizontal: spacing["2xl"],
+    borderRadius: 16,
+    gap: spacing.sm,
+  },
+  getStartedText: {
+    fontSize: typography.lg,
     fontWeight: "700",
-    color: "#0f0f23",
+    color: "#7c3aed",
+  },
+  rocketEmoji: {
+    fontSize: 20,
   },
 });

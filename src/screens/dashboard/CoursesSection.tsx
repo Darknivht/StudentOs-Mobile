@@ -9,9 +9,7 @@ export function CoursesSection() {
   const { courses, isLoading, createCourse } = useCourses();
   const [showAddCourse, setShowAddCourse] = useState(false);
 
-  const handleCoursePress = (_courseId: string) => {
-    // Course detail navigation — Phase 3
-  };
+  const handleCoursePress = (_courseId: string) => {};
 
   const handleAddCourse = () => {
     setShowAddCourse(true);
@@ -63,9 +61,14 @@ export function CoursesSection() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>My Courses</Text>
+        <View style={styles.headerLeft}>
+          <Text style={styles.headerTitle}>My Courses</Text>
+          <View style={styles.countBadge}>
+            <Text style={styles.countText}>{courses.length}</Text>
+          </View>
+        </View>
         <Pressable onPress={handleAddCourse}>
-          <Text style={styles.seeAll}>See All</Text>
+          <Text style={styles.seeAll}>+ Add</Text>
         </Pressable>
       </View>
       <FlatList
@@ -102,7 +105,7 @@ export function CoursesSection() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: spacing.sm,
+    marginTop: spacing.md,
   },
   header: {
     flexDirection: "row",
@@ -111,10 +114,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.sm,
   },
+  headerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+  },
   headerTitle: {
     fontSize: typography.lg,
-    fontWeight: "700",
+    fontWeight: "600",
     color: colors.foreground,
+    letterSpacing: -0.2,
+  },
+  countBadge: {
+    backgroundColor: colors.muted,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  countText: {
+    fontSize: typography.xs,
+    fontWeight: "600",
+    color: colors.mutedForeground,
   },
   seeAll: {
     fontSize: typography.sm,
@@ -129,14 +149,13 @@ const styles = StyleSheet.create({
   addCard: {
     flex: 1,
     borderRadius: 16,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: colors.border,
     borderStyle: "dashed",
-    minHeight: 90,
+    minHeight: 100,
     justifyContent: "center",
     alignItems: "center",
     padding: spacing.md,
-    opacity: 0.7,
   },
   addIcon: {
     fontSize: typography["2xl"],
@@ -180,7 +199,7 @@ const styles = StyleSheet.create({
   },
   skeletonCard: {
     flex: 1,
-    height: 90,
+    height: 100,
     backgroundColor: colors.muted,
     borderRadius: 16,
     opacity: 0.3,

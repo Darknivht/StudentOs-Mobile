@@ -16,6 +16,7 @@ export function StudyTimeWidget() {
   if (isLoading) {
     return (
       <View style={styles.card}>
+        <Text style={styles.title}>Study Time</Text>
         <View style={styles.skeleton} />
       </View>
     );
@@ -40,7 +41,7 @@ export function StudyTimeWidget() {
         <View style={styles.weeklyContainer}>
           {weeklyData.map((day) => {
             const barHeight = Math.max(
-              (day.minutes / maxWeeklyMinutes) * 44,
+              (day.minutes / maxWeeklyMinutes) * 48,
               4,
             );
             const isToday = day.date === todayStr;
@@ -53,7 +54,7 @@ export function StudyTimeWidget() {
                       height: barHeight,
                       backgroundColor: isToday
                         ? colors.primary
-                        : `${colors.primary}4D`,
+                        : `${colors.primary}33`,
                     },
                   ]}
                 />
@@ -87,22 +88,25 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.mutedForeground,
     marginBottom: spacing.xs,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   timeValue: {
-    fontSize: typography.xl,
+    fontSize: 28,
     fontWeight: "700",
     color: colors.primary,
     marginBottom: spacing.sm,
+    letterSpacing: -0.5,
   },
   progressBarBg: {
-    height: 6,
+    height: 5,
     borderRadius: 3,
     backgroundColor: colors.muted,
     marginBottom: spacing.xs,
     overflow: "hidden",
   },
   progressBarFill: {
-    height: 6,
+    height: 5,
     borderRadius: 3,
     backgroundColor: colors.primary,
   },
@@ -115,7 +119,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
-    height: 52,
+    height: 56,
     paddingTop: spacing.xs,
   },
   weeklyBarContainer: {
@@ -123,14 +127,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   weeklyBar: {
-    width: 10,
-    borderRadius: 3,
+    width: 8,
+    borderRadius: 4,
     minHeight: 4,
   },
   weeklyLabel: {
     fontSize: 9,
     color: colors.mutedForeground,
-    marginTop: 2,
+    marginTop: 4,
   },
   emptyText: {
     fontSize: typography.xs,
@@ -138,10 +142,10 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
   },
   skeleton: {
-    height: 20,
-    width: "80%",
+    height: 28,
+    width: "60%",
     backgroundColor: colors.muted,
-    borderRadius: 4,
+    borderRadius: 6,
     opacity: 0.3,
   },
 });

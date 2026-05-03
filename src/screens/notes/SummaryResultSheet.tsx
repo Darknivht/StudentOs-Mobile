@@ -4,14 +4,8 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  ActivityIndicator,
-  StyleSheet,
-} from "react-native";
+import { View, Text, Pressable, ScrollView, StyleSheet } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import {
   BottomSheetModal,
   BottomSheetView,
@@ -79,7 +73,7 @@ export const SummaryResultSheet = forwardRef(function SummaryResultSheet(
     >
       <BottomSheetView style={styles.sheetContent}>
         <View style={styles.sheetHeader}>
-          <Text style={styles.sheetTitle}>AI Summary</Text>
+          <Text style={styles.sheetTitle}>✨ AI Summary</Text>
           <Pressable onPress={() => sheetRef.current?.dismiss()} hitSlop={12}>
             <Text style={styles.closeButton}>✕</Text>
           </Pressable>
@@ -119,18 +113,28 @@ export const SummaryResultSheet = forwardRef(function SummaryResultSheet(
           <BottomSheetScrollView style={styles.resultScroll}>
             {isStreaming && !summaryText ? (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color={colors.primary} />
+                <View style={styles.streamingDots}>
+                  <View style={[styles.streamingDot, styles.dot1]} />
+                  <View style={[styles.streamingDot, styles.dot2]} />
+                  <View style={[styles.streamingDot, styles.dot3]} />
+                </View>
                 <Text style={styles.loadingText}>Generating summary...</Text>
               </View>
             ) : (
               <View style={styles.resultCard}>
-                <Text style={styles.resultText}>
-                  {summaryText || "Waiting for response..."}
-                </Text>
-                {isStreaming && (
-                  <View style={styles.streamingIndicator}>
-                    <View style={styles.streamingDot} />
-                  </View>
+                {summaryText ? (
+                  <>
+                    <Text style={styles.resultText}>{summaryText}</Text>
+                    {isStreaming && (
+                      <View style={styles.streamingIndicator}>
+                        <View style={styles.streamingDotInline} />
+                      </View>
+                    )}
+                  </>
+                ) : (
+                  <Text style={styles.waitingText}>
+                    Waiting for response...
+                  </Text>
                 )}
               </View>
             )}
@@ -178,7 +182,7 @@ const styles = StyleSheet.create({
   lengthButton: {
     flex: 1,
     paddingVertical: spacing.sm,
-    borderRadius: 8,
+    borderRadius: 10,
     backgroundColor: colors.muted,
     alignItems: "center",
   },
@@ -197,19 +201,42 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   resultCard: {
-    backgroundColor: colors.muted,
-    borderRadius: 12,
-    padding: spacing.md,
+    backgroundColor: `${colors.primary}10`,
+    borderRadius: 16,
+    padding: spacing.lg,
     marginBottom: spacing.lg,
+    borderWidth: 1,
+    borderColor: `${colors.primary}22`,
   },
   resultText: {
     fontSize: typography.base,
     color: colors.foreground,
-    lineHeight: 24,
+    lineHeight: 26,
   },
   streamingIndicator: {
     flexDirection: "row",
     marginTop: spacing.sm,
+  },
+  streamingDotInline: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: colors.primary,
+  },
+  waitingText: {
+    fontSize: typography.base,
+    color: colors.mutedForeground,
+    fontStyle: "italic",
+  },
+  loadingContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: spacing["2xl"],
+    gap: spacing.md,
+  },
+  streamingDots: {
+    flexDirection: "row",
+    gap: 6,
   },
   streamingDot: {
     width: 8,
@@ -217,11 +244,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: colors.primary,
   },
-  loadingContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: spacing["2xl"],
-    gap: spacing.md,
+  dot1: {
+    opacity: 0.4,
+  },
+  dot2: {
+    opacity: 0.7,
+  },
+  dot3: {
+    opacity: 1,
   },
   loadingText: {
     fontSize: typography.sm,

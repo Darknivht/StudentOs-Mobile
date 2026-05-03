@@ -13,6 +13,8 @@ interface NotesSectionProps {
   onSwipeDelete: (id: string) => void;
   onSwipePin: (id: string, isPinned: boolean) => void;
   onNoteLongPress?: (id: string) => void;
+  onSummary?: (id: string) => void;
+  onTutor?: (id: string) => void;
 }
 
 export function NotesSection({
@@ -24,6 +26,8 @@ export function NotesSection({
   onSwipeDelete,
   onSwipePin,
   onNoteLongPress,
+  onSummary,
+  onTutor,
 }: NotesSectionProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -74,6 +78,8 @@ export function NotesSection({
               onSwipeDelete={onSwipeDelete}
               onSwipePin={onSwipePin}
               onLongPress={onNoteLongPress}
+              onSummary={onSummary}
+              onTutor={onTutor}
             />
           )}
           scrollEnabled={false}

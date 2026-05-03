@@ -12,9 +12,9 @@ import {
   Pressable,
   TextInput,
   FlatList,
-  ActivityIndicator,
   StyleSheet,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import {
   BottomSheetModal,
   BottomSheetView,
@@ -78,32 +78,50 @@ export const SocraticChatSheet = forwardRef(function SocraticChatSheet(
   }, [inputText, isStreaming, onSendMessage]);
 
   const renderMessage = useCallback(
-    ({ item }: { item: SocraticMessage; index: number }) => (
-      <View
-        style={[
-          styles.messageBubble,
-          item.role === "user" ? styles.userBubble : styles.assistantBubble,
-        ]}
-      >
-        <Text
-          style={[
-            styles.messageText,
-            item.role === "user"
-              ? styles.userMessageText
-              : styles.assistantMessageText,
-          ]}
-        >
-          {item.content}
-        </Text>
-      </View>
-    ),
-    [],
+    ({ item, index }: { item: SocraticMessage; index: number }) => {
+      const isUser = item.role === "user";
+      const isLast = index === messages.length - 1 && isStreaming;
+
+      if (isUser) {
+        return (
+          <View style={styles.userMessageRow}>
+            <View style={styles.userMessageSpacer} />
+            <LinearGradient
+              colors={["#7c3aed", "#ec4899"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.userBubble}
+            >
+              <Text style={styles.userMessageText}>{item.content}</Text>
+            </LinearGradient>
+          </View>
+        );
+      }
+
+      return (
+        <View style={styles.assistantMessageRow}>
+          <View style={styles.assistantAvatar}>
+            <Text style={styles.assistantAvatarText}>🎓</Text>
+          </View>
+          <View style={styles.assistantBubble}>
+            <View style={styles.assistantBubbleHeader}>
+              <Text style={styles.assistantLabel}>Socratic Tutor</Text>
+            </View>
+            <Text style={styles.assistantMessageText}>
+              {item.content}
+              {isLast && <Text style={styles.cursor}>|</Text>}
+            </Text>
+          </View>
+        </View>
+      );
+    },
+    [messages.length, isStreaming],
   );
 
   return (
     <BottomSheetModal
       ref={sheetRef}
-      snapPoints={["75%"]}
+      snapPoints={["80%"]}
       enablePanDownToClose
       backdropComponent={renderBackdrop}
       backgroundStyle={styles.sheetBackground}
@@ -111,7 +129,10 @@ export const SocraticChatSheet = forwardRef(function SocraticChatSheet(
     >
       <BottomSheetView style={styles.sheetContent}>
         <View style={styles.sheetHeader}>
-          <Text style={styles.sheetTitle}>Socratic Tutor</Text>
+          <View style={styles.headerLeft}>
+            <Text style={styles.headerEmoji}>🎓</Text>
+            <Text style={styles.sheetTitle}>Socratic Tutor</Text>
+          </View>
           <Pressable onPress={() => sheetRef.current?.dismiss()} hitSlop={12}>
             <Text style={styles.closeButton}>✕</Text>
           </Pressable>
@@ -127,12 +148,13 @@ export const SocraticChatSheet = forwardRef(function SocraticChatSheet(
           inverted={false}
         />
 
-        {isStreaming && (
-          <View style={styles.streamingRow}>
-            <ActivityIndicator size="small" color={colors.primary} />
-            <Text style={styles.streamingText}>Tutor is thinking...</Text>
-          </View>
-        )}
+        {isStreaming &&
+          messages.length > 0 &&
+          messages[messages.length - 1].role === "user" && (
+            <View style={styles.streamingRow}>
+              <Text style={styles.streamingText}>Tutor is thinking...</Text>
+            </View>
+          )}
 
         {error && (
           <View style={styles.errorRow}>
@@ -187,6 +209,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    marginBottom: spacing.sm,
+  },
+  headerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+  },
+  headerEmoji: {
+    fontSize: 20,
   },
   sheetTitle: {
     fontSize: typography.lg,
@@ -205,31 +238,71 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     gap: spacing.sm,
   },
-  messageBubble: {
-    maxWidth: "85%",
-    borderRadius: 16,
+  userMessageRow: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    marginBottom: spacing.sm,
+  },
+  userMessageSpacer: {
+    flex: 1,
+  },
+  userBubble: {
+    maxWidth: "80%",
+    borderRadius: 18,
+    borderBottomRightRadius: 4,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
   },
-  userBubble: {
-    alignSelf: "flex-end",
-    backgroundColor: colors.primary,
-    borderBottomRightRadius: 4,
+  userMessageText: {
+    fontSize: typography.base,
+    color: "#ffffff",
+    lineHeight: 24,
+  },
+  assistantMessageRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: spacing.md,
+    maxWidth: "85%",
+  },
+  assistantAvatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: `${colors.primary}20`,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: spacing.sm,
+    flexShrink: 0,
+  },
+  assistantAvatarText: {
+    fontSize: 16,
   },
   assistantBubble: {
-    alignSelf: "flex-start",
+    flex: 1,
     backgroundColor: colors.muted,
-    borderBottomLeftRadius: 4,
+    borderRadius: 16,
+    borderTopLeftRadius: 4,
+    padding: spacing.md,
   },
-  messageText: {
-    fontSize: typography.sm,
-    lineHeight: 22,
+  assistantBubbleHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: spacing.xs,
   },
-  userMessageText: {
-    color: colors.primaryForeground,
+  assistantLabel: {
+    fontSize: typography.xs,
+    fontWeight: "600",
+    color: colors.primary,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   assistantMessageText: {
+    fontSize: typography.base,
     color: colors.foreground,
+    lineHeight: 24,
+  },
+  cursor: {
+    opacity: 0,
   },
   streamingRow: {
     flexDirection: "row",
@@ -240,6 +313,7 @@ const styles = StyleSheet.create({
   streamingText: {
     fontSize: typography.sm,
     color: colors.mutedForeground,
+    fontStyle: "italic",
   },
   errorRow: {
     paddingVertical: spacing.sm,
@@ -260,17 +334,17 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     backgroundColor: colors.muted,
-    borderRadius: 12,
+    borderRadius: 16,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.sm + 2,
     color: colors.foreground,
     fontSize: typography.base,
     maxHeight: 80,
   },
   sendButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
@@ -279,7 +353,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   sendIcon: {
-    fontSize: typography.lg,
+    fontSize: typography.xl,
     color: colors.primaryForeground,
     fontWeight: "700",
   },

@@ -1,5 +1,6 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
+import { LinearGradient } from "expo-linear-gradient";
 import { useBrainBoost } from "../../hooks/useBrainBoost";
 import { colors, spacing, typography } from "../../lib/theme";
 
@@ -62,7 +63,14 @@ export function BrainBoostCard() {
   if (isLoading && quizStarted) {
     return (
       <View style={styles.card}>
-        <View style={styles.accentBar} />
+        <View style={styles.gradientBar}>
+          <LinearGradient
+            colors={["#7c3aed", "#ec4899"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.gradientFill}
+          />
+        </View>
         <View style={styles.cardContent}>
           <Text style={styles.emoji}>🧠</Text>
           <Text style={styles.title}>Loading questions...</Text>
@@ -74,12 +82,19 @@ export function BrainBoostCard() {
   if (isCompletedToday) {
     return (
       <View style={styles.card}>
-        <View style={styles.accentBar} />
+        <View style={styles.gradientBar}>
+          <LinearGradient
+            colors={["#22c55e", "#10b981"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.gradientFill}
+          />
+        </View>
         <View style={styles.cardContent}>
           <Text style={styles.emoji}>🏆</Text>
           <Text style={styles.title}>Brain Boost Complete!</Text>
           <Text style={styles.scoreText}>
-            {score}/5 correct • {xpEarned} XP earned
+            {score}/5 correct — {xpEarned} XP earned
           </Text>
           {countdown ? (
             <Text style={styles.countdown}>Next challenge in {countdown}</Text>
@@ -98,7 +113,14 @@ export function BrainBoostCard() {
 
     return (
       <View style={styles.card}>
-        <View style={styles.accentBar} />
+        <View style={styles.gradientBar}>
+          <LinearGradient
+            colors={["#7c3aed", "#ec4899"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.gradientFill}
+          />
+        </View>
         <View style={styles.cardContent}>
           <Text style={styles.counter}>
             Question {currentQuestionIndex + 1}/{questions.length}
@@ -135,7 +157,14 @@ export function BrainBoostCard() {
   if (quizStarted && (error || questions.length === 0)) {
     return (
       <View style={styles.card}>
-        <View style={styles.accentBar} />
+        <View style={styles.gradientBar}>
+          <LinearGradient
+            colors={["#f59e0b", "#ef4444"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.gradientFill}
+          />
+        </View>
         <View style={styles.cardContent}>
           <Text style={styles.emoji}>🧠</Text>
           <Text style={styles.title}>Daily Brain Boost</Text>
@@ -149,11 +178,18 @@ export function BrainBoostCard() {
 
   return (
     <View style={styles.card}>
-      <View style={styles.accentBar} />
+      <View style={styles.gradientBar}>
+        <LinearGradient
+          colors={["#7c3aed", "#3b82f6"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.gradientFill}
+        />
+      </View>
       <View style={styles.cardContent}>
         <Text style={styles.emoji}>🧠</Text>
         <Text style={styles.title}>Daily Brain Boost</Text>
-        <Text style={styles.subtitle}>5 questions • 10 XP each</Text>
+        <Text style={styles.subtitle}>5 questions — 10 XP each</Text>
         <Pressable style={styles.startBtn} onPress={handleStart}>
           <Text style={styles.startBtnText}>Start Challenge</Text>
         </Pressable>
@@ -172,22 +208,27 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
+  gradientBar: {
+    height: 4,
+    overflow: "hidden",
+  },
+  gradientFill: {
+    height: 4,
+    width: "100%",
+  },
   cardContent: {
     padding: spacing.lg,
   },
-  accentBar: {
-    height: 3,
-    backgroundColor: colors.primary,
-  },
   emoji: {
-    fontSize: 28,
+    fontSize: 32,
     marginBottom: spacing.sm,
   },
   title: {
-    fontSize: typography.base,
-    fontWeight: "600",
+    fontSize: typography.lg,
+    fontWeight: "700",
     color: colors.foreground,
     marginBottom: spacing.xs,
+    letterSpacing: -0.2,
   },
   subtitle: {
     fontSize: typography.sm,
@@ -225,6 +266,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.foreground,
     marginBottom: spacing.md,
+    letterSpacing: -0.1,
   },
   optionBtn: {
     backgroundColor: colors.muted,
@@ -261,12 +303,5 @@ const styles = StyleSheet.create({
   optionWrongText: {
     fontSize: typography.base,
     color: colors.destructive,
-  },
-  skeleton: {
-    height: 20,
-    width: "80%",
-    backgroundColor: colors.muted,
-    borderRadius: 4,
-    opacity: 0.3,
   },
 });

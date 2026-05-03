@@ -119,6 +119,20 @@ export function NotesListScreen({ navigation }: { navigation: any }) {
     [notes],
   );
 
+  const handleSummary = useCallback(
+    (noteId: string) => {
+      navigation.navigate("NoteViewer", { noteId });
+    },
+    [navigation],
+  );
+
+  const handleTutor = useCallback(
+    (noteId: string) => {
+      navigation.navigate("NoteViewer", { noteId });
+    },
+    [navigation],
+  );
+
   const handleQuickActionEdit = useCallback(
     (noteId: string) => {
       navigation.navigate("NoteEditor", { noteId });
@@ -206,6 +220,8 @@ export function NotesListScreen({ navigation }: { navigation: any }) {
                 onSwipeDelete={handleSwipeDelete}
                 onSwipePin={handleSwipePin}
                 onNoteLongPress={handleNoteLongPress}
+                onSummary={handleSummary}
+                onTutor={handleTutor}
               />
             ))}
           </ScrollView>
