@@ -1,429 +1,302 @@
-# Requirements: StudentOS Mobile
+# Requirements: StudentOS Mobile — Native Android Conversion
 
-**Defined:** 2026-04-25
-**Core Value:** A student's complete learning operating system that works everywhere — on the go, offline, with focus enforcement, biometric security, and every feature the web app has — built to production grade.
+**Defined:** 2026-05-05
+**Core Value:** The native app must be indistinguishable from the web app — same UI, same features, same architecture, same UX.
 
 ## v1 Requirements
 
-Requirements for initial release. Each maps to roadmap phases.
+### Foundation & Platform
 
-### Foundation (FOUND-01 to FOUND-08)
+- [ ] **FND-01**: App runs as native React Native (Expo) Android app (not WebView/Capacitor wrapper)
+- [ ] **FND-02**: Monorepo structure with @studentos/shared package for portable business logic (hooks, types, utils)
+- [ ] **FND-03**: Environment variables validated at startup (zod schema) with no hardcoded keys in source
+- [ ] **FND-04**: Expo Router file-based routing replaces React Router with (auth)/, (tabs)/, and root stack groups
+- [ ] **FND-05**: NativeWind (TailwindCSS for RN) replicates the existing design system tokens and dark mode
+- [ ] **FND-06**: Per-route error boundaries prevent one route crash from taking down the entire app
+- [ ] **FND-07**: App performs smoothly on low-end Android devices (2GB RAM, Android 8+)
+- [ ] **FND-08**: Bundle size optimized with code splitting, lazy loading, and tree shaking
 
-- [ ] **FOUND-01**: Expo + Dev Client project setup with TypeScript, folder structure, and linting
-- [ ] **FOUND-02**: React Navigation v7 setup with Bottom tabs + Stack navigator
-- [ ] **FOUND-03**: Zustand stores for global state management (auth, subscription, UI)
-- [ ] **FOUND-04**: API service layer with configurable AI provider (base URL, API key, model name via env vars)
-- [ ] **FOUND-05**: API service layer with configurable payment provider (provider name, keys via env vars)
-- [ ] **FOUND-06**: WatermelonDB setup with models for offline-first data
-- [ ] **FOUND-07**: Supabase client integration for backend (Auth, Database, Storage, Realtime)
-- [ ] **FOUND-08**: Theme system (dark/light mode, consistent design tokens)
-
-### Authentication & Security (AUTH-01 to AUTH-11)
+### Authentication
 
 - [ ] **AUTH-01**: User can sign up with email and password via Supabase Auth
-- [ ] **AUTH-02**: User can sign in with email and password via Supabase Auth
-- [ ] **AUTH-03**: User session persists across app restarts (secure token storage)
-- [ ] **AUTH-04**: User can sign out from any screen
-- [ ] **AUTH-05**: User can reset password via email link
-- [ ] **AUTH-06**: App lock with biometric authentication (Face ID / fingerprint)
-- [ ] **AUTH-07**: App lock with 4-digit PIN (stored securely via expo-secure-store)
-- [ ] **AUTH-08**: Blocked user enforcement (is_blocked flag check on app open)
-- [ ] **AUTH-09**: Subscription tier enforcement (Free/Plus/Pro feature gating)
-- [ ] **AUTH-10**: Secure credential storage (encrypted, hardware-backed Keychain/Keystore)
-- [ ] **AUTH-11**: Auto session refresh with onAuthStateChange subscription
+- [ ] **AUTH-02**: User can sign in with email and password and stay logged in across app restarts (expo-secure-store for tokens)
+- [ ] **AUTH-03**: User can reset password via magic link email with deep linking back to the app (expo-linking)
+- [ ] **AUTH-04**: User can sign out from any page, clearing secure storage and redirecting to auth screen
+- [ ] **AUTH-05**: Blocked users are immediately signed out when is_blocked flag is detected
 
-### Onboarding (ONBOARD-01 to ONBOARD-03)
+### Onboarding
 
-- [ ] **ONBOARD-01**: 7-step onboarding flow with animations (welcome, AI learning, spaced repetition, focus tools, growth tracking, social, ready)
-- [ ] **ONBOARD-02**: Onboarding state persisted in local storage (skip on return)
-- [ ] **ONBOARD-03**: Unique gradient backgrounds and floating particle animations per step
+- [ ] **ONBD-01**: New users see a 7-step onboarding flow with Reanimated 3 spring animations and particle effects
+- [ ] **ONBD-02**: Returning users skip onboarding (flag stored in expo-sqlite/kv-store, not localStorage)
+- [ ] **ONBD-03**: Each onboarding step has unique gradient background, emoji icon, headline, and progress dots
 
-### Dashboard (DASH-01 to DASH-09)
+### Dashboard
 
-- [ ] **DASH-01**: Time-aware greeting (Good morning/afternoon/evening)
-- [ ] **DASH-02**: Display name from profile
-- [ ] **DASH-03**: Offline status indicator (yellow banner when offline)
-- [ ] **DASH-04**: Streak card with current streak, longest streak, flame animation
-- [ ] **DASH-05**: Daily Brain Boost challenge (5 questions, 10 XP each, tracked per day)
-- [ ] **DASH-06**: Study time widget (today's minutes, daily target progress, weekly trend)
-- [ ] **DASH-07**: Study progress widget (notes created, quizzes completed, flashcards reviewed, focus minutes)
-- [ ] **DASH-08**: Announcement banner (info/warning/success types, RLS-filtered)
-- [ ] **DASH-09**: Courses grid with progress cards (weighted: Notes 30%, Quizzes 30%, Flashcards 40%)
+- [ ] **DASH-01**: Dashboard shows time-aware greeting, display name, and offline status indicator
+- [ ] **DASH-02**: Streak card shows current streak, longest streak, with animated flame and calendar detail
+- [ ] **DASH-03**: Daily Quiz Challenge widget shows 5-question challenge with XP tracking
+- [ ] **DASH-04**: Study time widget shows today's total minutes with progress bar toward daily target
+- [ ] **DASH-05**: Study progress widget shows weekly aggregate stats (notes, quizzes, flashcards, focus minutes)
+- [ ] **DASH-06**: Announcement banner displays active announcements from admin (info/warning/success types)
+- [ ] **DASH-07**: Courses grid shows each course with name, color, emoji, and progress percentage
+- [ ] **DASH-08**: Add Course dialog with name, color picker (8 presets), and emoji picker (50+ emojis)
+- [ ] **DASH-09**: Ad banner for free-tier users (react-native-google-mobile-ads), hidden for Plus/Pro
 
-### Smart Notes (NOTES-01 to NOTES-14)
+### Smart Notes
 
-- [ ] **NOTES-01**: Rich text note creation with markdown support
-- [ ] **NOTES-02**: Note title + body with auto-save every 3 seconds
-- [ ] **NOTES-03**: Course assignment for notes
-- [ ] **NOTES-04**: PDF upload with text extraction (extract-pdf-text edge function)
-- [ ] **NOTES-05**: DOCX upload with text extraction
-- [ ] **NOTES-06**: Image upload with camera + OCR (extract-pdf-text-ocr edge function)
-- [ ] **NOTES-07**: Note card with title, preview, source badge, course tag, created date
-- [ ] **NOTES-08**: Note viewer dialog with full text display
-- [ ] **NOTES-09**: AI summary generation (short/medium/long) with streaming
-- [ ] **NOTES-10**: Socratic tutor mode for notes (AI asks leading questions)
-- [ ] **NOTES-11**: "Ask AI Tutor about this note" button with note context
-- [ ] **NOTES-12**: Quick actions: view, generate summary, generate flashcards, generate quiz, delete
-- [ ] **NOTES-13**: Daily note creation quotas enforced by tier (Free: 3, Plus: 10, Pro: unlimited)
-- [ ] **NOTES-14**: Note deletion with confirmation
+- [ ] **NOTE-01**: User can create notes with rich text editor, auto-save every 3 seconds, title + body + course assignment
+- [ ] **NOTE-02**: User can upload PDF, DOCX, TXT, and image files via expo-document-picker to Supabase Storage
+- [ ] **NOTE-03**: PDF text extraction via extract-pdf-text edge function works identically to web app
+- [ ] **NOTE-04**: OCR for scanned PDFs and images via extract-pdf-text-ocr edge function
+- [ ] **NOTE-05**: Note cards display title, preview, source type badge, course tag, and quick actions
+- [ ] **NOTE-06**: Note viewer shows full content, original file preview, AI summary, and link to AI Tutor
+- [ ] **NOTE-07**: AI Summary dialog streams summary from ai-study edge function (short/medium/long lengths)
+- [ ] **NOTE-08**: Socratic Tutor mode asks leading questions instead of explaining directly (Pro tier)
+- [ ] **NOTE-09**: Daily note quotas enforced per tier (Free: 3, Plus: 10, Pro: unlimited)
 
-### AI Tutor (AI-01 to AI-14)
+### AI Tutor
 
-- [ ] **AI-01**: Chat interface with AI tutor conversation
-- [ ] **AI-02**: 4 persona selection (Chill/Strict/Fun/Motivator) persisted to profile
-- [ ] **AI-03**: Course-aware context injection (full course notes as system context)
-- [ ] **AI-04**: Streaming responses via SSE (real-time word-by-word output)
-- [ ] **AI-05**: Math rendering with KaTeX (LaTeX inline and block)
-- [ ] **AI-06**: Voice mode (Web Speech API speech-to-text for input)
-- [ ] **AI-07**: Voice mode (text-to-speech for output)
-- [ ] **AI-08**: Conversation history with role-tagged messages (user/assistant)
-- [ ] **AI-09**: Clear history and scroll-back to old conversations
-- [ ] **AI-10**: Daily AI call quotas by tier (Free: 5, Plus: 30, Pro: 100)
-- [ ] **AI-11**: Configurable AI provider via environment variables (provider name, base URL, API key, model name)
-- [ ] **AI-12**: AI calls reset at midnight UTC (ai_calls_reset_at comparison)
-- [ ] **AI-13**: Conversation history saved to chat_messages table with course_id FK
-- [ ] **AI-14**: Math LaTeX input handling ($E = mc^2$, $$\int_0^1 x^2 dx$$)
+- [ ] **AITR-01**: Chat-based AI Tutor with streaming SSE responses (react-native-sse or custom implementation)
+- [ ] **AITR-02**: Four teaching personas (Chill, Strict, Fun, Motivator) selectable and persisted in profile
+- [ ] **AITR-03**: Course-aware context — tutor receives course notes as system context when opened from a course
+- [ ] **AITR-04**: KaTeX math rendering in AI responses (WebView component or react-native-math-view)
+- [ ] **AITR-05**: Conversation history saved to chat_messages table with user/assistant roles and course_id
+- [ ] **AITR-06**: Daily AI call quotas enforced per tier (Free: 5, Plus: 30, Pro: 100)
+- [ ] **AITR-07**: Voice mode with speech-to-text input and text-to-speech output (expo-speech + expo-speech-recognition)
 
-### Flashcards (FLASHC-01 to FLASHC-11)
+### Flashcards
 
-- [ ] **FLASHC-01**: Flashcard creation (manual: front + back text)
-- [ ] **FLASHC-02**: AI flashcard generation from notes (10-20 cards, JSON format)
-- [ ] **FLASHC-03**: AI flashcard generation approval flow (user reviews before save)
-- [ ] **FLASHC-04**: SM-2 spaced repetition review session (Again/Hard/Good/Easy ratings)
-- [ ] **FLASHC-05**: Cards due for review (next_review <= NOW()) shown one at a time
-- [ ] **FLASHC-06**: Flashcard flip animation (front to back)
-- [ ] **FLASHC-07**: SM-2 algorithm: ease_factor, interval_days, repetitions, next_review updates
-- [ ] **FLASHC-08**: Flashcards list with search and filters (course, due today, mastered)
-- [ ] **FLASHC-09**: Edit and delete individual flashcards
-- [ ] **FLASHC-10**: Course assignment for flashcards
-- [ ] **FLASHC-11**: Flashcard generation quotas by tier (Free: 3, Plus: 20, Pro: unlimited); reviewing existing cards is unlimited
+- [ ] **FLSH-01**: AI-generated flashcards from notes (10-20 cards per note via ai-study edge function)
+- [ ] **FLSH-02**: Manual flashcard creation with front + back text and optional course assignment
+- [ ] **FLSH-03**: SM-2 spaced repetition review sessions with Again/Hard/Good/Easy difficulty rating
+- [ ] **FLSH-04**: Card flip animation with Reanimated 3
+- [ ] **FLSH-05**: Flashcards list with search, filter by course, due-today, and mastered
+- [ ] **FLSH-06**: Daily flashcard generation quotas (Free: 3, Plus: 20, Pro: unlimited); reviewing always unlimited
 
-### Quizzes (QUIZ-01 to QUIZ-10)
+### Quizzes
 
-- [ ] **QUIZ-01**: AI quiz generation from notes or course content
-- [ ] **QUIZ-02**: Quiz configuration (number: 5/10/20, difficulty: easy/medium/hard)
-- [ ] **QUIZ-03**: Quiz taking flow (one question at a time, 4 multiple-choice options)
-- [ ] **QUIZ-04**: Optional per-question or total timer
-- [ ] **QUIZ-05**: Instant feedback after answer (correct/incorrect + explanation)
-- [ ] **QUIZ-06**: Final score screen (percentage, time taken, missed questions review)
-- [ ] **QUIZ-07**: Quiz history with sortable attempts (date, score, course)
-- [ ] **QUIZ-08**: Re-view individual quiz attempts
-- [ ] **QUIZ-09**: Challenge a friend (peer quiz challenges with XP rewards)
-- [ ] **QUIZ-10**: Quiz generation quotas by tier (Free: 3, Plus: 10, Pro: unlimited)
+- [ ] **QUIZ-01**: AI-generated multiple-choice quizzes from notes or course content (5/10/20 questions, 3 difficulties)
+- [ ] **QUIZ-02**: Quiz-taking UI with one question at a time, 4 options, optional timer, instant feedback
+- [ ] **QUIZ-03**: Final score screen with percentage, time taken, and missed question review
+- [ ] **QUIZ-04**: Quiz history stored in quiz_attempts table, sortable by date/score/course
+- [ ] **QUIZ-05**: Friend challenges via peer_challenges table — both users take same quiz, winner gets bonus XP
+- [ ] **QUIZ-06**: Daily quiz quotas (Free: 3, Plus: 10, Pro: unlimited)
 
-### ExamPrep CBT Engine (EXAM-01 to EXAM-27)
+### ExamPrep CBT
 
-- [ ] **EXAM-01**: Exam selector (WAEC, NECO, JAMB, IELTS, TOEFL, SAT, GRE)
-- [ ] **EXAM-02**: Subject selector per exam type
-- [ ] **EXAM-03**: Practice mode selector (8 modes)
-- [ ] **EXAM-04**: Quick Practice (Untimed): 20 random questions, instant feedback
-- [ ] **EXAM-05**: Quick Practice (Timed): 20 questions with strict timer
-- [ ] **EXAM-06**: Topic-Based Practice: filter by specific topic
-- [ ] **EXAM-07**: Year-Based Practice: past papers from specific years
-- [ ] **EXAM-08**: Study Material-Based Practice: generate from uploaded PDF past papers
-- [ ] **EXAM-09**: Mock Exam Mode: single-subject simulation with real exam format
-- [ ] **EXAM-10**: Multi-Subject Full CBT: JAMB-style 4-subject × 120-minute timer
-- [ ] **EXAM-11**: Guided Learning: AI lesson + 5 practice questions
-- [ ] **EXAM-12**: Bookmarked Questions: review saved questions
-- [ ] **EXAM-13**: Practice session UI with question display, KaTeX math, 4-5 options
-- [ ] **EXAM-14**: Session timer in header
-- [ ] **EXAM-15**: Bookmark button to save questions for later
-- [ ] **EXAM-16**: Report button to flag bad questions
-- [ ] **EXAM-17**: Skip / Previous / Next navigation
-- [ ] **EXAM-18**: Submit exam button when finished
-- [ ] **EXAM-19**: Session review (total score, time taken, per-question review with explanations)
-- [ ] **EXAM-20**: Add missed questions to flashcard deck
-- [ ] **EXAM-21**: Exam performance analytics (radar chart by subject/topic, difficulty breakdown)
-- [ ] **EXAM-22**: Session history timeline
-- [ ] **EXAM-23**: Improvement trend line chart over time
-- [ ] **EXAM-24**: Weakness report (3 weakest topics + personalized study plan)
-- [ ] **EXAM-25**: Study plan view (AI-generated schedule based on exam date, weaknesses, available hours)
-- [ ] **EXAM-26**: Per-exam subscriptions (single-exam access beyond global tiers)
-- [ ] **EXAM-27**: CBT timer integrity (local-first answer persistence, recalculate on foreground)
+- [ ] **EXAM-01**: Exam selector for WAEC, NECO, JAMB, IELTS, TOEFL, SAT, GRE
+- [ ] **EXAM-02**: Subject selector with per-exam subject lists
+- [ ] **EXAM-03**: 8 practice modes: Quick (untimed), Quick (timed), Topic-based, Year-based, Study material-based, Mock exam, Multi-subject CBT (JAMB), Guided learning
+- [ ] **EXAM-04**: Practice session UI with KaTeX-rendered questions, 4-5 options, timer, bookmark, report, navigation
+- [ ] **EXAM-05**: Multi-subject CBT with 4 subjects, single timer, free navigation between subjects (JAMB mode)
+- [ ] **EXAM-06**: Session review with total score, time taken, per-question review with correct answer and explanation
+- [ ] **EXAM-07**: Exam performance analytics with radar chart, difficulty breakdown, session history, improvement trend
+- [ ] **EXAM-08**: Weakness report identifying 3 weakest topics with AI-generated study plan
+- [ ] **EXAM-09**: Bookmarked questions for later review
+- [ ] **EXAM-10**: Per-exam subscriptions in addition to global Plus/Pro tiers
+- [ ] **EXAM-11**: ExamPrep access requires Plus/Pro tier or per-exam subscription (Plus/Pro: full, Free: limited)
 
-### Study Suite (STUDY-01 to STUDY-12)
+### Study Suite
 
-- [ ] **STUDY-01**: Pomodoro timer (25/5 cycle, configurable durations)
-- [ ] **STUDY-02**: Pomodoro session logging to pomodoro_sessions table
-- [ ] **STUDY-03**: Cheat sheet creator (AI generates one-page summary from notes)
-- [ ] **STUDY-04**: Mnemonic generator (AI generates rhymes, acronyms, memory palaces)
-- [ ] **STUDY-05**: Cram mode (AI rapid-fire study sequence)
-- [ ] **STUDY-06**: Concept linking (AI generates knowledge graph)
-- [ ] **STUDY-07**: Fill in the blanks (AI cloze-deletion exercises)
-- [ ] **STUDY-08**: Audio notes (text-to-speech with speed control)
-- [ ] **STUDY-09**: Debate partner (AI takes opposing position)
-- [ ] **STUDY-10**: Study statistics (total hours, avg session length, best subject, peak hour)
-- [ ] **STUDY-11**: Streak calendar (GitHub-style heatmap of daily activity)
-- [ ] **STUDY-12**: Mock exam generator (customizable questions, time limit, topic)
+- [ ] **STUD-01**: Cheat Sheet Creator — AI generates one-page cheat sheet, export as PDF
+- [ ] **STUD-02**: Mnemonic Generator — AI creates rhymes, acronyms, memory palaces
+- [ ] **STUD-03**: Cram Mode — rapid-fire study sequence (key concepts → flashcards → mini-quiz)
+- [ ] **STUD-04**: Mock Exam — quick mock exam generator with customizable question count and time limit
+- [ ] **STUD-05**: Concept Linking — AI generates knowledge graph showing concept connections
+- [ ] **STUD-06**: Fill in the Blanks — AI converts notes to cloze-deletion exercises
+- [ ] **STUD-07**: Audio Notes — convert notes to spoken audio via expo-speech with speed control
+- [ ] **STUD-08**: Debate Partner — AI takes opposing position for critical thinking training
+- [ ] **STUD-09**: Pomodoro Timer — 25-min focus / 5-min break cycle, configurable, logs to pomodoro_sessions
+- [ ] **STUD-10**: Study Statistics — total hours, average session length, best subject, peak hour
+- [ ] **STUD-11**: Streak Calendar — GitHub-style heatmap of daily study activity
+- [ ] **STUD-12**: Voice Mode — hands-free Q&A with AI Tutor (speech-to-text + text-to-speech)
 
-### AI Tools Lab (AITOOLS-01 to AITOOLS-12)
+### AI Tools Lab
 
-- [ ] **AITOOLS-01**: Math solver (step-by-step working, KaTeX rendering, "Explain like I'm 5" mode)
-- [ ] **AITOOLS-02**: Code debugger (paste code, identify bugs, corrected code output)
-- [ ] **AITOOLS-03**: Language translator (50+ languages, educational mode with grammar explanations)
-- [ ] **AITOOLS-04**: Book scanner / OCR (camera capture, Tesseract.js / vision AI)
-- [ ] **AITOOLS-05**: Diagram interpreter (upload diagram, AI describes and explains)
-- [ ] **AITOOLS-06**: OCR to LaTeX (camera capture math equations, convert to LaTeX)
-- [ ] **AITOOLS-07**: Live lecture recorder (microphone recording + real-time transcription)
-- [ ] **AITOOLS-08**: Post-lecture AI summary + key points + flashcards
-- [ ] **AITOOLS-09**: Consistent AI tool layout (AIToolLayout: back button, input, generate, output)
-- [ ] **AITOOLS-10**: Download dropdown (Fast PDF + HD PDF)
-- [ ] **AITOOLS-11**: Copy-to-clipboard for AI outputs
-- [ ] **AITOOLS-12**: Save-as-note for AI tool outputs
+- [ ] **AITL-01**: Math Solver — type or photograph math problem, AI solves step-by-step with KaTeX rendering
+- [ ] **AITL-02**: Code Debugger — paste broken code, AI identifies bugs and provides corrected code
+- [ ] **AITL-03**: Language Translator — translate between 50+ languages with educational grammar mode
+- [ ] **AITL-04**: YouTube Summarizer — paste URL or transcript, AI generates summary and study materials
+- [ ] **AITL-05**: Book Scanner / OCR — take photo of textbook page (expo-camera), OCR extracts text
+- [ ] **AITL-06**: Diagram Interpreter — upload photo of diagram, AI describes and explains
+- [ ] **AITL-07**: OCR to LaTeX — photograph handwritten/printed math, AI converts to LaTeX
+- [ ] **AITL-08**: Live Lecture Recorder — record audio (expo-audio), transcribe, AI generates summary + flashcards
+- [ ] **AITL-09**: Common AIToolLayout — consistent layout with input area, generate button, output with markdown + math, PDF download dropdown, copy-to-clipboard, save-as-note
 
-### Career Module (CAREER-01 to CAREER-14)
+### Career Module
 
-- [ ] **CAREER-01**: Resume builder with 10 templates (3 Free, 7 Plus, 10 Pro)
-- [ ] **CAREER-02**: Live resume preview (updates in real-time as user types)
-- [ ] **CAREER-03**: Resume sections: contact, summary, education, experience, skills, projects, certifications
-- [ ] **CAREER-04**: AI summary generator (3-sentence professional summary from experience)
-- [ ] **CAREER-05**: AI bullet improver (rewrite weak bullets into strong action-verb-led achievements)
-- [ ] **CAREER-06**: PDF export (Fast: instant, HD: pixel-perfect via html2canvas + jsPDF)
-- [ ] **CAREER-07**: HTML export and plain text export
-- [ ] **CAREER-08**: Job search integration (real listings via external API)
-- [ ] **CAREER-09**: Job search filters (location, role, experience level)
-- [ ] **CAREER-10**: Save jobs for later
-- [ ] **CAREER-11**: Internship matcher (AI matching based on skills, location, availability)
-- [ ] **CAREER-12**: Real World Why (connecting school topics to real-world careers, salary ranges)
-- [ ] **CAREER-13**: Job search quotas by tier (Free: 5/month, Plus: 20/month, Pro: unlimited)
-- [ ] **CAREER-14**: InputRow component outside render loop to prevent input-focus-loss bug
+- [ ] **CARE-01**: Resume Builder with 10 templates (3 Free, 7 Plus, 10 Pro), live preview, AI summary generator, AI bullet improver
+- [ ] **CARE-02**: Resume PDF export (Fast via expo-print, HD via react-native-view-shot + expo-print)
+- [ ] **CARE-03**: Job Search via job-search edge function with location/role/experience filters
+- [ ] **CARE-04**: Internship Matcher — AI matches user skills/availability to internships
+- [ ] **CARE-05**: Real World Why — AI explains real-world careers and salaries for school topics
+- [ ] **CARE-06**: Monthly job search quotas (Free: 5, Plus: 20, Pro: unlimited)
 
-### Plan & Focus (PLAN-01 to PLAN-11)
+### Plan & Focus
 
-- [ ] **PLAN-01**: Study timetable (weekly calendar view, Mon-Sun, hourly slots)
-- [ ] **PLAN-02**: Smart scheduler (AI-powered: subjects + exam date + available hours → optimal schedule)
-- [ ] **PLAN-03**: Weakness detector (AI analyzes quiz/exam history, identifies topics below 60% accuracy)
-- [ ] **PLAN-04**: Lo-fi radio (streaming audio, 5+ stations, background playback)
-- [ ] **PLAN-05**: Sleep calculator (input wake-up time, calculates ideal bedtime based on 90-min cycles)
-- [ ] **PLAN-06**: Progress tracker (month-over-month XP growth, course completion, goal-setting)
-- [ ] **PLAN-07**: Recharts line chart (4-week XP trend)
-- [ ] **PLAN-08**: Focus mode toggle integrated with Pomodoro timer
-- [ ] **PLAN-09**: Focus mode with app selector (which apps to block)
-- [ ] **PLAN-10**: Full-screen focus overlay during active sessions
-- [ ] **PLAN-11**: Emergency exit with PIN
+- [ ] **PLAN-01**: Study Timetable — weekly calendar view with drag-and-drop study blocks, color-coded by course
+- [ ] **PLAN-02**: Smart Scheduler — AI generates optimal study schedule based on subjects, exam date, available hours
+- [ ] **PLAN-03**: Weakness Detector — analyzes quiz/exam history, identifies topics below 60% accuracy
+- [ ] **PLAN-04**: Lo-Fi Radio — streaming lo-fi beats with 5+ stations via expo-av (free for all tiers)
+- [ ] **PLAN-05**: Sleep Calculator — input wake-up time, calculates ideal bedtime based on 90-min sleep cycles
+- [ ] **PLAN-06**: Progress Tracker — month-over-month XP growth, course completion, weekly XP target with chart
 
-### Focus Mode & App Blocker (FOCUS-01 to FOCUS-10)
+### Focus Mode & App Blocker
 
-- [ ] **FOCUS-01**: Native Android app blocker via AccessibilityService (Expo Dev Client)
-- [ ] **FOCUS-02**: BootReceiver to restore blocking state after device restart
-- [ ] **FOCUS-03**: App selector (list all installed apps, user checks which to block)
-- [ ] **FOCUS-04**: Full-screen lock overlay during focus sessions
-- [ ] **FOCUS-05**: Countdown timer display during focus
-- [ ] **FOCUS-06**: Motivational quote display
-- [ ] **FOCUS-07**: Emergency exit with PIN (required if parental controls enabled)
-- [ ] **FOCUS-08**: Blocked app list storage (per user)
-- [ ] **FOCUS-09**: Background sync during focus sessions
-- [ ] **FOCUS-10**: Push notification reminders for focus sessions
+- [ ] **FOCS-01**: Pomodoro timer with start/pause/reset, integrated with Focus Mode app blocking
+- [ ] **FOCS-02**: Native Android AccessibilityService module blocks selected apps during focus sessions
+- [ ] **FOCS-03**: BootReceiver restores blocking state after device restart
+- [ ] **FOCS-04**: Permissions setup flow guides user through granting Accessibility, Display Over Other Apps, and Notification permissions
+- [ ] **FOCS-05**: App Selector lists installed apps on device, user checks apps to block (TikTok, Instagram, etc.)
+- [ ] **FOCS-06**: Focus Mode Overlay — full-screen lock during active sessions with countdown timer and motivational quote
+- [ ] **FOCS-07**: Emergency exit requires parental PIN if parental controls are enabled
+- [ ] **FOCS-08**: Focus sessions logged to focus_sessions table with XP awards
 
-### Social Hub (SOCIAL-01 to SOCIAL-12)
+### Chat
 
-- [ ] **SOCIAL-01**: Leaderboard (global XP ranking, all-time and weekly)
-- [ ] **SOCIAL-02**: Top 100 displayed with avatars and stats
-- [ ] **SOCIAL-03**: School filter for leaderboard (if school name set)
-- [ ] **SOCIAL-04**: Study challenges (community time-limited challenges with progress bars)
-- [ ] **SOCIAL-05**: Challenge a friend (quiz challenges with bonus XP for winner)
-- [ ] **SOCIAL-06**: Friends list (friend requests, pending, accepted, blocked)
-- [ ] **SOCIAL-07**: Friend profile view (XP, streak, achievements)
-- [ ] **SOCIAL-08**: Study groups (create, join, max 10 members Plus, 25 Pro)
-- [ ] **SOCIAL-09**: Group invite code (6 characters)
-- [ ] **SOCIAL-10**: Group chat with Supabase Realtime
-- [ ] **SOCIAL-11**: Group shared resources (notes, quizzes shared by members)
-- [ ] **SOCIAL-12**: Peer finder (discover by school, grade, interests)
+- [ ] **CHAT-01**: Direct messages with any friend via Supabase Realtime subscriptions
+- [ ] **CHAT-02**: Group chats for study groups (Plus/Pro only for creation and access)
+- [ ] **CHAT-03**: Media upload via expo-image-picker to Supabase Storage chat-media bucket with inline image preview
+- [ ] **CHAT-04**: Message replies with clickable quoted preview that scrolls to original message
+- [ ] **CHAT-05**: Real-time new message updates via Supabase Realtime without manual refresh
+- [ ] **CHAT-06**: Read receipts via is_read boolean
+- [ ] **CHAT-07**: AppState-aware reconnection — Realtime subscriptions reconnect when app returns to foreground
 
-### Chat System (CHAT-01 to CHAT-10)
+### Social Hub
 
-- [ ] **CHAT-01**: Direct messages with friends (1-on-1 chat)
-- [ ] **CHAT-02**: Group chats for study groups (Plus/Pro only)
-- [ ] **CHAT-03**: Real-time updates via Supabase Realtime
-- [ ] **CHAT-04**: Media upload (images) to Supabase Storage
-- [ ] **CHAT-05**: Image previews inline in chat
-- [ ] **CHAT-06**: Message replies with quoted preview
-- [ ] **CHAT-07**: Clickable quoted preview (scrolls to original message)
-- [ ] **CHAT-08**: Read receipts (is_read boolean)
-- [ ] **CHAT-09**: Unified ChatRoom component for DMs and group chats
-- [ ] **CHAT-10**: Supabase Realtime WebSocket subscription for messages table
+- [ ] **SOCL-01**: Leaderboard — global ranking by total XP (all-time and weekly), top 100, user's rank highlighted, school filter
+- [ ] **SOCL-02**: Study Challenges — time-limited community challenges with progress bars and XP rewards
+- [ ] **SOCL-03**: Challenge a Friend — send quiz challenge, both take same quiz, winner gets bonus XP
+- [ ] **SOCL-04**: Friends List — send requests by username, pending/accepted/blocked, view friend profile
+- [ ] **SOCL-05**: Study Groups — create/join groups (max 10 Plus, 25 Pro), unique 6-char invite code, public/private
+- [ ] **SOCL-06**: Group Detail — group chat, shared resources tab, members tab with roles
+- [ ] **SOCL-07**: Peer Finder — discover students by school, grade, interests
 
-### Store (STORE-01 to STORE-08)
+### Store
 
-- [ ] **STORE-01**: Resource marketplace (textbooks, past papers, notes, videos)
-- [ ] **STORE-02**: Resource card (thumbnail, title, author, subject, grade, download count, tier badge)
-- [ ] **STORE-03**: Download button or "Upgrade to access" CTA for locked resources
-- [ ] **STORE-04**: Search by title
-- [ ] **STORE-05**: Filter by category (textbook/past paper/notes/video)
-- [ ] **STORE-06**: Filter by subject and grade level
-- [ ] **STORE-07**: Tier gating (Free/Plus/Pro visibility)
-- [ ] **STORE-08**: Download tracking (increment download_count)
+- [ ] **STOR-01**: Educational resource cards with thumbnail, title, author, subject, grade, download count, tier badge
+- [ ] **STOR-02**: Resource filters — search by title, filter by category/subject/grade level
+- [ ] **STOR-03**: YouTube section with curated playlists and embedded video player (react-native-youtube-iframe)
+- [ ] **STOR-04**: Tier-gated access — Free resources for all, Plus for Plus+Pro, Pro for Pro only
+- [ ] **STOR-05**: Download tracking increments download_count, files saved via expo-file-system + expo-sharing
 
-### Gamification (GAM-01 to GAM-13)
+### Gamification
 
-- [ ] **GAM-01**: XP system (quiz: 5 XP/correct, flashcards: 1 XP/card, Pomodoro: 10 XP/session)
-- [ ] **GAM-02**: Streak tracking (consecutive days with study activity)
-- [ ] **GAM-03**: Streak milestones (50 XP at 7 days, 200 XP at 30 days, 1000 XP at 100 days)
-- [ ] **GAM-04**: Daily challenges (3 rotating tasks, 25 XP per challenge)
-- [ ] **GAM-05**: Levels (every 1000 XP = 1 level)
-- [ ] **GAM-06**: 50+ achievements across 5 categories (Study Time, Streak, Social, Academic Mastery, Exam Prep)
-- [ ] **GAM-07**: Achievement unlock computed from real-time database queries
-- [ ] **GAM-08**: Achievement celebration toast with XP reward
-- [ ] **GAM-09**: XP persisted to profiles.total_xp and weekly_xp table
-- [ ] **GAM-10**: Streak card animations (flame grows brighter as streak increases)
-- [ ] **GAM-11**: Profile level display
-- [ ] **GAM-12**: Leaderboard badges display
-- [ ] **GAM-13**: Gamification UI in dashboard (daily challenges, streak, XP progress)
+- [ ] **GAMF-01**: XP system — quiz answers, flashcard reviews, pomodoro sessions, daily challenge, streak milestones, achievements, friend challenges
+- [ ] **GAMF-02**: Streak tracking — consecutive days with study activity, current and longest streak in profiles
+- [ ] **GAMF-03**: Daily Challenges — 3 rotating tasks (quiz, flashcards, study time), 25 XP per challenge
+- [ ] **GAMF-04**: Daily Quiz Challenge (Brain Boost) — 5 questions/day, 10 XP each, max 50 XP/day
+- [ ] **GAMF-05**: Level calculation — every 1000 XP = 1 level, displayed on profile and leaderboard
 
-### Safety & Parental Controls (SAFETY-01 to SAFETY-09)
+### Achievements
 
-- [ ] **SAFETY-01**: 4-digit parental PIN (hashed, stored in profiles.parental_pin)
-- [ ] **SAFETY-02**: Daily time limit (block app after X minutes)
-- [ ] **SAFETY-03**: Time limit enforcement (full-screen blocking overlay)
-- [ ] **SAFETY-04**: Content filter toggle (profiles.content_filter_enabled)
-- [ ] **SAFETY-05**: Safe search toggle (profiles.safe_search_enabled)
-- [ ] **SAFETY-06**: Under 14 mode (profiles.is_under_14)
-- [ ] **SAFETY-07**: Parent email for weekly progress reports
-- [ ] **SAFETY-08**: Parent dashboard (today's study time, activities, focus sessions, subjects, streak)
-- [ ] **SAFETY-09**: Parental controls require PIN to access (settings are read-only without PIN)
+- [ ] **ACHV-01**: 50+ achievements across 5 categories (Study Time, Streak, Social, Academic Mastery, Exam Prep)
+- [ ] **ACHV-02**: Achievements computed from real-time database queries via useAchievements hook
+- [ ] **ACHV-03**: New unlocks trigger celebration toast with XP reward
+- [ ] **ACHV-04**: user_achievements table tracks which user unlocked which achievement and when
 
-### Profile & Settings (PROFILE-01 to PROFILE-12)
+### Safety & Parental Controls
 
-- [ ] **PROFILE-01**: Avatar upload to Supabase Storage
-- [ ] **PROFILE-02**: Display name (editable)
-- [ ] **PROFILE-03**: Username (unique, for friend requests)
-- [ ] **PROFILE-04**: Full name, school name, grade level (JSS1-SS3 / Year 1-4 / Postgrad)
-- [ ] **PROFILE-05**: Stats display (XP, level, streak, achievements, member since)
-- [ ] **PROFILE-06**: Study preferences (persona, daily study target, notifications)
-- [ ] **PROFILE-07**: Subscription status (tier badge, expiration date)
-- [ ] **PROFILE-08**: Sign out action
-- [ ] **PROFILE-09**: Delete account (with confirmation)
-- [ ] **PROFILE-10**: Privacy policy and Terms of Service links
-- [ ] **PROFILE-11**: Email (read-only)
-- [ ] **PROFILE-12**: Notification preferences per feature
+- [ ] **SAFE-01**: 4-digit PIN protection for parental control settings (hashed in profiles.parental_pin)
+- [ ] **SAFE-02**: Daily time limit enforcement — full-screen blocking overlay when limit reached, override requires PIN
+- [ ] **SAFE-03**: Content filter sanitizes AI prompts (profiles.content_filter_enabled)
+- [ ] **SAFE-04**: Safe search filters store resources (profiles.safe_search_enabled)
+- [ ] **SAFE-05**: Under-14 mode with extra restrictions (profiles.is_under_14)
+- [ ] **SAFE-06**: Parent email for weekly progress reports (profiles.parent_email)
+- [ ] **SAFE-07**: App blocker settings — configure blocked apps and schedule blocking times
+- [ ] **SAFE-08**: Parent dashboard showing today's study time, activities, focus sessions, subjects, weekly trend chart, streaks, and achievements
 
-### Payments & Subscriptions (PAY-01 to PAY-14)
+### Subscription & Payments
 
-- [ ] **PAY-01**: Upgrade page with plan comparison (Free/Plus ₦2,000/mo/Pro ₦5,000/mo)
-- [ ] **PAY-02**: Yearly plans (Plus ₦20,000, Pro ₦50,000 — save 17%)
-- [ ] **PAY-03**: Configurable payment provider via environment variables (provider name, public key, etc.)
-- [ ] **PAY-04**: Payment checkout (cards, bank transfer, USSD via configurable provider)
-- [ ] **PAY-05**: Server-side payment verification (verify-payment edge function)
-- [ ] **PAY-06**: Subscription tier update on successful payment
-- [ ] **PAY-07**: Subscription expiration (subscription_expires_at tracking)
-- [ ] **PAY-08**: useSubscription hook (auto-refresh every 5 minutes, event listener)
-- [ ] **PAY-09**: Feature gating (FeatureGateDialog, UpgradePrompt components)
-- [ ] **PAY-10**: Kill switch for payments (ENABLED flag in subscriptionConfig)
-- [ ] **PAY-11**: Per-exam subscriptions (single-exam access table)
-- [ ] **PAY-12**: Ad banner hidden for Plus/Pro subscribers
-- [ ] **PAY-13**: Subscription event dispatch (subscription-updated window event)
-- [ ] **PAY-14**: Handle expired subscriptions, downgrades, admin overrides
+- [ ] **PAYM-01**: Paystack WebView checkout opens in react-native-webview, intercepts redirect callback URL with reference
+- [ ] **PAYM-02**: Payment verification via verify-payment edge function, updates subscription_tier and subscription_expires_at
+- [ ] **PAYM-03**: Bank transfer + USSD support within Paystack WebView (critical for Nigerian market)
+- [ ] **PAYM-04**: Subscription state sync — useSubscription hook auto-refreshes every 5 min, listens to subscription-updated events
+- [ ] **PAYM-05**: Feature gating — FeatureGateDialog and UpgradePrompt shown when free user hits paywall
+- [ ] **PAYM-06**: Kill switch — subscriptionConfig.ts ENABLED flag unlocks all features when false
 
-### Offline Mode (OFFLINE-01 to OFFLINE-10)
+### Profile & Settings
 
-- [ ] **OFFLINE-01**: WatermelonDB offline-first local storage
-- [ ] **OFFLINE-02**: Background sync to Supabase when online
-- [ ] **OFFLINE-03**: Sync queue for queued mutations
-- [ ] **OFFLINE-04**: Offline status banner (yellow indicator)
-- [ ] **OFFLINE-05**: Offline sync indicator (spinner when syncing)
-- [ ] **OFFLINE-06**: View notes offline (cached content)
-- [ ] **OFFLINE-07**: Review flashcards offline (existing decks from WatermelonDB)
-- [ ] **OFFLINE-08**: View course list offline
-- [ ] **OFFLINE-09**: Read summaries offline
-- [ ] **OFFLINE-10**: Offline AI (cached responses for previously-asked questions)
+- [ ] **PROF-01**: Avatar upload via expo-image-picker to Supabase Storage avatars bucket
+- [ ] **PROF-02**: Editable display name and unique username
+- [ ] **PROF-03**: Stats display — total XP, level, current/longest streak, achievements count, member since
+- [ ] **PROF-04**: Study preferences — persona selection, daily study target, notification preferences
+- [ ] **PROF-05**: Subscription status badge with expiration date and manage subscription link
+- [ ] **PROF-06**: Account actions — sign out, delete account with confirmation, privacy policy + terms links
 
-### PDF Export & Documents (PDF-01 to PDF-05)
+### Offline Mode
 
-- [ ] **PDF-01**: PDF export for notes (Fast + HD modes)
-- [ ] **PDF-02**: PDF export for flashcards
-- [ ] **PDF-03**: PDF export for cheat sheets
-- [ ] **PDF-04**: Resume PDF export (Fast + HD)
-- [ ] **PDF-05**: Document viewer (PDF, DOCX)
+- [ ] **OFFL-01**: expo-sqlite local database stores notes, flashcards, courses, and cached data for offline access
+- [ ] **OFFL-02**: OfflineStatusBanner displays yellow banner when device is offline (via @react-native-community/netinfo)
+- [ ] **OFFL-03**: OfflineSyncIndicator shows spinner when syncing queued mutations on reconnect
+- [ ] **OFFL-04**: Offline-capable features: view cached notes, review flashcard decks, view course list, read summaries
+- [ ] **OFFL-05**: Online-required features clearly indicate need for connection: AI generation, sending messages, payments, new exam questions
 
-### Notifications (NOTIF-01 to NOTIF-05)
+### PDF Export
 
-- [ ] **NOTIF-01**: Push notifications (focus reminders, streak reminders, daily challenge)
-- [ ] **NOTIF-02**: Local notifications (Pomodoro timer, daily challenge)
-- [ ] **NOTIF-03**: Notification preferences per feature
-- [ ] **NOTIF-04**: Background fetch for sync
-- [ ] **NOTIF-05**: Notification permission request flow
+- [ ] **PDFX-01**: Fast PDF export via expo-print (HTML → native PDF)
+- [ ] **PDFX-02**: HD PDF export via react-native-view-shot (screenshot → image) + expo-print
+- [ ] **PDFX-03**: KaTeX font bundling for math rendering in exported PDFs
 
-### Admin Panel (ADMIN-01 to ADMIN-04)
+### Navigation & Layout
 
-- [ ] **ADMIN-01**: Admin dashboard (announcements, resources, user activity)
-- [ ] **ADMIN-02**: Upload educational resources (textbooks, past papers)
-- [ ] **ADMIN-03**: Manage exam question bank (add/edit/disable questions)
-- [ ] **ADMIN-04**: View user activity statistics
+- [ ] **NAVL-01**: Bottom navigation with 5 tabs (Home, Study, Exams, Social, Profile) via Expo Router tabs layout
+- [ ] **NAVL-02**: AppLayout wraps authenticated routes with auth check and redirect
+- [ ] **NAVL-03**: Deep linking for password reset magic links and shareable content URLs
+- [ ] **NAVL-04**: Dark mode toggle (NativeWind + useColorScheme) matching web app behavior
+
+### Testing & Quality
+
+- [ ] **TEST-01**: Unit tests for business logic hooks (useAuth, useSubscription, SM-2 algorithm, XP calculation, streak logic)
+- [ ] **TEST-02**: Integration tests for Supabase Auth flow (signup, login, logout, password reset)
+- [ ] **TEST-03**: E2E tests for critical user journeys (onboarding → auth → dashboard → notes → AI tutor)
+- [ ] **TEST-04**: Frontend API rate limiting prevents users from spamming AI and edge function calls
 
 ## v2 Requirements
 
-### Advanced Features (v2)
+### Native Enhancements
 
-- **V2-01**: Voice input for AI tutor (hands-free Q&A)
-- **V2-02**: Text-to-speech for notes (listen while walking/commuting)
-- **V2-03**: Advanced animations with Reanimated
-- **V2-04**: Haptic feedback throughout the app
-- **V2-05**: Deep linking
-- **V2-06**: Share extension
-- **V2-07**: Widget support (study streak, daily challenge)
-- **V2-08**: Tablet-specific layouts
-- **V2-09**: Foldable device support
-- **V2-10**: Video calling / live study sessions
-- **V2-11**: FSRS spaced repetition algorithm (alternative to SM-2)
-- **V2-12**: Cross-device sync improvements
-- **V2-13**: Battery optimization
-- **V2-14**: Accessibility audit
-- **V2-15**: Performance optimization pass
+- **NHNC-01**: Push notifications via expo-notifications with FCM
+- **NHNC-02**: Biometric authentication via expo-local-authentication
+- **NHNC-03**: Android home screen widget via Expo Modules API
+- **NHNC-04**: Typing indicators in chat via Supabase Realtime
 
-### Enhanced Social (v2)
+### Platform Expansion
 
-- **V2-16**: Typing indicators in chat
-- **V2-17**: Voice messages in chat
-- **V2-18**: Study streaks with friends
-- **V2-19**: Video study sessions
-- **V2-20**: Custom study groups with roles (admin/moderator/member)
+- **PLTF-01**: iOS build and TestFlight distribution
+- **PLTF-02**: Multi-language UI (Yoruba, Igbo, Hausa, French)
+
+### AI Improvements
+
+- **AIMP-01**: On-device AI inference via ONNX Runtime React Native
+- **AIMP-02**: FSRS algorithm replaces SM-2 for flashcard scheduling
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| iOS app blocker | Not technically possible on iOS without Screen Time API (user-initiated only) |
-| Video calling / live study sessions | High complexity, defer to v2 |
-| Custom AI model training | Use existing providers only |
-| Standalone web dashboard | Use existing studentoss/ web app |
-| iOS App Clip / Android Instant Apps | Future consideration |
-| Web app wrapper | This is a native rebuild, not a Capacitor wrapper |
+| iOS build | Android-first constraint; defer to v1.1. Expo architecture makes it achievable without rework |
+| Push notifications | New feature not in web app; violates "feature parity only" constraint |
+| Biometric auth | New feature not in web app; can be added later without breaking existing auth |
+| On-device AI (WebLLM → ONNX Runtime) | WebLLM is browser-only; ONNX Runtime RN is experimental; cloud AI is sufficient for v1 |
+| Material Design redesign | Core value is pixel-perfect parity; redesigning 30+ pages breaks the "indistinguishable from web app" promise |
+| Real-time sync overhaul | Scope creep; port existing sync logic faithfully, improve in v1.1 |
+| Typing indicators in chat | v1.1 feature per web app roadmap; not in current web app |
+| Multi-language UI | Massive scope expansion (30+ pages × multiple languages); defer to v1.3 |
+| School admin/teacher accounts | New product vertical, not a conversion task |
+| Android home screen widget | New feature; requires native Kotlin development beyond the conversion scope |
 
 ## Traceability
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 to FOUND-08 | Phase 0 | Pending |
-| AUTH-01 to AUTH-11 | Phase 1 | Pending |
-| ONBOARD-01 to ONBOARD-03 | Phase 2 | Pending |
-| DASH-01 to DASH-09 | Phase 2 | Pending |
-| NOTES-01 to NOTES-14 | Phase 3 | Pending |
-| AI-01 to AI-14 | Phase 4 | Pending |
-| FLASHC-01 to FLASHC-11 | Phase 5 | Pending |
-| QUIZ-01 to QUIZ-10 | Phase 6 | Pending |
-| EXAM-01 to EXAM-27 | Phase 7 | Pending |
-| STUDY-01 to STUDY-12 | Phase 8 | Pending |
-| AITOOLS-01 to AITOOLS-12 | Phase 9 | Pending |
-| CAREER-01 to CAREER-14 | Phase 10 | Pending |
-| PLAN-01 to PLAN-11 | Phase 11 | Pending |
-| FOCUS-01 to FOCUS-10 | Phase 12 | Pending |
-| SOCIAL-01 to SOCIAL-12 | Phase 13 | Pending |
-| CHAT-01 to CHAT-10 | Phase 14 | Pending |
-| STORE-01 to STORE-08 | Phase 15 | Pending |
-| GAM-01 to GAM-13 | Phase 16 | Pending |
-| SAFETY-01 to SAFETY-09 | Phase 17 | Pending |
-| PROFILE-01 to PROFILE-12 | Phase 18 | Pending |
-| PAY-01 to PAY-14 | Phase 19 | Pending |
-| OFFLINE-01 to OFFLINE-10 | Phase 20 | Pending |
-| PDF-01 to PDF-05 | Phase 21 | Pending |
-| NOTIF-01 to NOTIF-05 | Phase 22 | Pending |
-| ADMIN-01 to ADMIN-04 | Phase 23 | Pending |
+| *(Populated during roadmap creation)* | | |
 
 **Coverage:**
-- v1 requirements: 210 total
-- Mapped to phases: 210
-- Unmapped: 0 ✓
+- v1 requirements: 0 total *(will be counted after roadmap mapping)*
+- Mapped to phases: 0
+- Unmapped: 0
 
 ---
-*Requirements defined: 2026-04-25*
-*Last updated: 2026-04-25 after initial definition*
+*Requirements defined: 2026-05-05*
+*Last updated: 2026-05-05 after initial definition*
