@@ -32,7 +32,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 3. Blocked users are immediately signed out when the is_blocked flag is detected
 4. SSE streaming client delivers real-time AI responses; KaTeX math renders in a test component; environment variables are validated at startup with no hardcoded keys
 5. Per-route error boundaries prevent one route crash from taking down the entire app
-**Plans**: TBD
+**Plans**: 4 (01-01 to 01-04) — written 2026-05-05
 
 Plans:
 - [ ] 01-01: Monorepo scaffold, Expo project setup, NativeWind v4 config
@@ -136,7 +136,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Platform Services | 0/4 | Not started | - |
+| 1. Foundation & Platform Services | 0/4 | Plans written | - |
 | 2. UI Primitives & Navigation Shell | 0/4 | Not started | - |
 | 3. Core Study & AI Features | 0/TBD | Not started | - |
 | 4. Exam Prep & Advanced Tools | 0/TBD | Not started | - |
