@@ -8,5 +8,13 @@
   "scripts": {
     "test": "npm test --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present"
+  },
+  "dependencies": {
+    "@react-native/virtualized-lists": "^0.85.3",
+    "expo-asset": "^55.0.17",
+    "memoize-one": "^6.0.0",
+    "react-native-reanimated": "^4.3.0",
+    "react-native-svg": "^15.15.4",
+    "react-native-worklets": "^0.8.3"
   }
 }
