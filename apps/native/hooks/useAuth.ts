@@ -75,8 +75,31 @@ export function useAuthCore(): AuthContextType {
       blockedCheckInterval.current = setInterval(() => {
         checkBlocked(user.id);
       }, 5 * 60 * 1000);
+
+      const channel = supabase
+        .channel(`profile-blocked-${user.id}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "profiles",
+            filter: `user_id=eq.${user.id}`,
+          },
+          (payload) => {
+            if (payload.new?.is_blocked) {
+              setBlockedMessage("Your account has been blocked. Contact support.");
+              supabase.auth.signOut();
+              setUser(null);
+              setSession(null);
+            }
+          }
+        )
+        .subscribe();
+
       return () => {
         if (blockedCheckInterval.current) clearInterval(blockedCheckInterval.current);
+        supabase.removeChannel(channel);
       };
     } else {
       if (blockedCheckInterval.current) clearInterval(blockedCheckInterval.current);
