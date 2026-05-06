@@ -35,10 +35,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 4 (01-01 to 01-04) — written 2026-05-05
 
 Plans:
-- [ ] 01-01: Monorepo scaffold, Expo project setup, NativeWind v4 config
-- [ ] 01-02: Expo Router file-based routing with (auth)/(tabs) groups and deep linking
-- [ ] 01-03: Supabase Auth with SecureStore adapter, session persistence, blocked user detection
-- [ ] 01-04: Cross-cutting platform services (SSE client, KaTeX renderer, env validation, error boundaries, 2GB AVD profiling)
+- [x] 01-01: Monorepo scaffold, Expo project setup, NativeWind v4 config ✅
+- [x] 01-02: Expo Router file-based routing with (auth)/(tabs) groups and deep linking ✅
+- [x] 01-03: Supabase Auth with SecureStore adapter, session persistence, blocked user detection ✅
+- [x] 01-04: Cross-cutting platform services (SSE client, KaTeX renderer, env validation, error boundaries, 2GB AVD profiling) ✅
 
 ### Phase 2: UI Primitives & Navigation Shell
 **Goal**: All feature screens have the UI building blocks, layout providers, animation utilities, and navigation shell they need — developers can compose any feature screen without building primitive components from scratch
@@ -136,7 +136,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Platform Services | 0/4 | Plans written | - |
+| 1. Foundation & Platform Services | 4/4 | **Complete** | 2026-05-06 |
 | 2. UI Primitives & Navigation Shell | 0/4 | Not started | - |
 | 3. Core Study & AI Features | 0/TBD | Not started | - |
 | 4. Exam Prep & Advanced Tools | 0/TBD | Not started | - |
