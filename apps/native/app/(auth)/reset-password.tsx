@@ -1,10 +1,12 @@
-import { View, Text, TextInput, Pressable, ActivityIndicator } from "react-native";
+import { View, Text, TextInput, Pressable, ActivityIndicator, Alert } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState, useEffect } from "react";
+import { useAuth } from "../../hooks/useAuthContext";
 
 export default function ResetPasswordScreen() {
   const params = useLocalSearchParams<{ access_token?: string; refresh_token?: string }>();
   const router = useRouter();
+  const { updatePassword, setSessionFromTokens } = useAuth();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -13,8 +15,9 @@ export default function ResetPasswordScreen() {
 
   useEffect(() => {
     if (params.access_token && params.refresh_token) {
-      // Supabase session will be set via useAuth in Plan 01-03
-      setSessionReady(true);
+      setSessionFromTokens(params.access_token, params.refresh_token)
+        .then(() => setSessionReady(true))
+        .catch((err) => setError(err.message));
     }
   }, [params.access_token, params.refresh_token]);
 
@@ -29,8 +32,15 @@ export default function ResetPasswordScreen() {
     }
     setLoading(true);
     setError(null);
-    // Password update will be wired in Plan 01-03 with supabase.auth.updateUser
+    const { error: updateError } = await updatePassword(newPassword);
     setLoading(false);
+    if (updateError) {
+      setError(updateError.message);
+    } else {
+      Alert.alert("Password Updated", "Your password has been changed successfully.", [
+        { text: "OK", onPress: () => router.replace("/(tabs)") },
+      ]);
+    }
   };
 
   if (!sessionReady && !params.access_token) {
@@ -40,9 +50,21 @@ export default function ResetPasswordScreen() {
         <Text className="text-muted-foreground mb-8">
           Check your email for a password reset link
         </Text>
-        <Pressable className="bg-primary rounded-lg px-6 py-3" onPress={() => router.replace("/(auth)/login")}>
+        <Pressable
+          className="bg-primary rounded-lg px-6 py-3"
+          onPress={() => router.replace("/(auth)/login")}
+        >
           <Text className="text-primary-foreground font-medium">Back to Login</Text>
         </Pressable>
+      </View>
+    );
+  }
+
+  if (!sessionReady && params.access_token) {
+    return (
+      <View className="flex-1 items-center justify-center p-6 bg-background">
+        <ActivityIndicator />
+        <Text className="text-muted-foreground mt-4">Setting up session...</Text>
       </View>
     );
   }
@@ -81,7 +103,10 @@ export default function ResetPasswordScreen() {
       {loading ? (
         <ActivityIndicator />
       ) : (
-        <Pressable className="bg-primary rounded-lg p-3 w-full max-w-sm" onPress={handleUpdatePassword}>
+        <Pressable
+          className="bg-primary rounded-lg p-3 w-full max-w-sm"
+          onPress={handleUpdatePassword}
+        >
           <Text className="text-primary-foreground text-center font-semibold">
             Update Password
           </Text>

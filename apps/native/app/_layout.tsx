@@ -3,6 +3,7 @@ import { Stack, useSegments, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider, useAuth } from "../hooks/useAuthContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,7 +18,9 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
-        <RootLayoutNav />
+        <AuthProvider>
+          <RootLayoutNav />
+        </AuthProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>
   );
@@ -26,16 +29,20 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const segments = useSegments();
   const router = useRouter();
+  const { session, authReady, blockedMessage } = useAuth();
 
   useEffect(() => {
+    if (!authReady) return;
+
     const inAuthGroup = segments[0] === "(auth)";
     const onOnboarding = segments[0] === "onboarding";
 
-    if (!inAuthGroup && !onOnboarding && segments.length > 0) {
-      // Auth redirect will be wired in Plan 01-03 when useAuth is ready
-      // For now, allow navigation to all routes
+    if (!session && !inAuthGroup && !onOnboarding) {
+      router.replace("/(auth)/login");
+    } else if (session && inAuthGroup) {
+      router.replace("/(tabs)");
     }
-  }, [segments]);
+  }, [session, authReady, segments]);
 
   return <Stack screenOptions={{ headerShown: false }} />;
 }
