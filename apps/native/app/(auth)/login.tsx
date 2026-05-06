@@ -2,6 +2,9 @@ import { View, Text, TextInput, Pressable, ActivityIndicator, Alert } from "reac
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuthContext";
+import { ErrorFallback } from "../../components/ErrorFallback";
+
+export { ErrorFallback as ErrorBoundary };
 
 export default function LoginScreen() {
   const router = useRouter();

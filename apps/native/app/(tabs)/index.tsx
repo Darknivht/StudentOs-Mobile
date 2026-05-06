@@ -1,4 +1,7 @@
 import { View, Text } from "react-native";
+import { ErrorFallback } from "../../components/ErrorFallback";
+
+export { ErrorFallback as ErrorBoundary };
 
 export default function HomeScreen() {
   return (
