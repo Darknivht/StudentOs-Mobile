@@ -1,11 +1,26 @@
 import { Tabs } from "expo-router";
 import { Home, BookOpen, GraduationCap, Users, User } from "lucide-react-native";
+import { useTheme } from "../../hooks/useThemeContext";
 
 export default function TabLayout() {
+  const { isDark } = useTheme();
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#6366f1",
+        tabBarActiveTintColor: isDark ? "hsl(262, 83%, 65%)" : "hsl(262, 83%, 58%)",
+        tabBarInactiveTintColor: "hsl(var(--muted-foreground))",
+        tabBarStyle: {
+          backgroundColor: "hsl(var(--card))",
+          borderTopColor: "hsl(var(--border))",
+          borderTopWidth: 1,
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: "500",
+        },
         headerShown: false,
       }}
     >
