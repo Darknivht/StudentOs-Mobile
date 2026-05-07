@@ -12,8 +12,8 @@ Convert the StudentOS React PWA + Capacitor wrapper into a true native React Nat
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Platform Services** - Monorepo, Expo scaffold, routing, storage, auth, SSE streaming, KaTeX, env validation, error boundaries
-- [ ] **Phase 2: UI Primitives & Navigation Shell** - Component library, layouts/providers, animation utilities, dark mode, bottom tabs
+- [x] **Phase 1: Foundation & Platform Services** ✅
+- [x] **Phase 2: UI Primitives & Navigation Shell** ✅
 - [ ] **Phase 3: Core Study & AI Features** - Dashboard, notes, AI tutor, flashcards, quizzes, onboarding, profile, gamification base
 - [ ] **Phase 4: Exam Prep & Advanced Tools** - ExamPrep CBT, study suite, AI tools lab, career module
 - [ ] **Phase 5: Social & Communication** - Chat, social hub, achievements, store
@@ -50,13 +50,13 @@ Plans:
 3. Reanimated 3 animation utility layer (useFadeIn, useSlideIn, useScalePress) produces spring animations; onboarding flow plays 7-step animation sequence with particle effects and gradient backgrounds, returning users skip it
 4. Offline status banner displays when device is offline; sync indicator shows spinner when reconnecting
 5. Ad banner renders for free-tier users, hidden for Plus/Pro
-**Plans**: TBD
+**Plans**: 4 (02-01 to 02-04) — written 2026-05-07
 
 Plans:
-- [ ] 02-01: NativeWindUI component library (15+ primitives) with design system tokens and dark mode
-- [ ] 02-02: Root/Auth/Tab layouts with providers (Query, Auth, Theme, Gesture), bottom navigation with 5 tabs
-- [ ] 02-03: Reanimated 3 animation utility layer and onboarding flow (7 steps, spring animations, particle effects)
-- [ ] 02-04: Offline banner, sync indicator, ad banner for free-tier users
+- [x] 02-01: NativeWindUI component library (17 primitives) with design system tokens and dark mode ✅
+- [x] 02-02: Root/Auth/Tab layouts with providers (Query, Auth, Theme, Gesture), bottom navigation with 5 tabs ✅
+- [x] 02-03: Reanimated 3 animation utility layer and onboarding flow (7 steps, spring animations, particle effects) ✅
+- [x] 02-04: Offline banner, sync indicator, ad banner for free-tier users ✅
 
 **UI hint**: yes
 
