@@ -10,6 +10,7 @@ import { AuthProvider, useAuth } from "../hooks/useAuthContext";
 import { ThemeProvider, useTheme } from "../hooks/useThemeContext";
 import { envParseError } from "../lib/env";
 import { EnvErrorScreen } from "../components/EnvErrorScreen";
+import { OfflineStatusBanner } from "../components/OfflineStatusBanner";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -70,6 +71,7 @@ function ThemedContent() {
   return (
     <View className={isDark ? "dark" : ""} style={{ flex: 1 }}>
       <StatusBar style={isDark ? "light" : "dark"} />
+      <OfflineStatusBanner />
       <RootLayoutNav />
     </View>
   );
