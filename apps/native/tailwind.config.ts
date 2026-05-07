@@ -7,7 +7,7 @@ export default {
     "./components/**/*.{ts,tsx}",
     "./features/**/*.{ts,tsx}",
   ],
-  presets: ["nativewind/tailwind/css"],
+  presets: ["nativewind/tailwind/css"] as unknown as Config["presets"],
   theme: {
     extend: {
       fontFamily: {
