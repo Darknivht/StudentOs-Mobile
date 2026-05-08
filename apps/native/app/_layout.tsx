@@ -6,6 +6,8 @@ import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { Toast, toastConfig } from "../components/ui/toast";
 import { AuthProvider, useAuth } from "../hooks/useAuthContext";
 import { ThemeProvider, useTheme } from "../hooks/useThemeContext";
 import { envParseError } from "../lib/env";
@@ -56,7 +58,9 @@ export default function RootLayout() {
         <QueryClientProvider client={queryClient}>
           <ThemeProvider>
             <AuthProvider>
-              <ThemedContent />
+              <BottomSheetModalProvider>
+                <ThemedContent />
+              </BottomSheetModalProvider>
             </AuthProvider>
           </ThemeProvider>
         </QueryClientProvider>
@@ -73,6 +77,7 @@ function ThemedContent() {
       <StatusBar style={isDark ? "light" : "dark"} />
       <OfflineStatusBanner />
       <RootLayoutNav />
+      <Toast config={toastConfig} />
     </View>
   );
 }

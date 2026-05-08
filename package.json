@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-native/virtualized-lists": "^0.85.3",
     "expo-asset": "^55.0.17",
+    "expo-image-picker": "^55.0.20",
     "memoize-one": "^6.0.0",
     "react-native-reanimated": "^4.3.0",
     "react-native-svg": "^15.15.4",
