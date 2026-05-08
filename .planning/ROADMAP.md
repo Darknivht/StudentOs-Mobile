@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation & Platform Services** ✅
 - [x] **Phase 2: UI Primitives & Navigation Shell** ✅
-- [ ] **Phase 3: Core Study & AI Features** - Dashboard, notes, AI tutor, flashcards, quizzes, onboarding, profile, gamification base
+- [x] **Phase 3: Core Study & AI Features** ✅ - Dashboard, notes, AI tutor, flashcards, quizzes, profile, gamification base
 - [ ] **Phase 4: Exam Prep & Advanced Tools** - ExamPrep CBT, study suite, AI tools lab, career module
 - [ ] **Phase 5: Social & Communication** - Chat, social hub, achievements, store
 - [ ] **Phase 6: Native Integration & Payments** - Focus Mode native module, Paystack, parental controls, subscriptions
@@ -70,9 +70,13 @@ Plans:
 3. Student chats with AI Tutor with streaming responses, selects teaching persona, sees KaTeX-rendered math, accesses course-aware context, and uses voice mode (speech-to-text + text-to-speech) — with daily AI call quotas
 4. Student creates AI-generated or manual flashcards, reviews with SM-2 spaced repetition (Again/Hard/Good/Easy), sees card flip animation, and filters by course/due-today/mastered — with generation quotas per tier
 5. Student takes AI-generated quizzes (5/10/20 questions, 3 difficulties), sees instant feedback and final score with missed question review, challenges friends, and reviews quiz history — with daily quotas per tier
-**Plans**: TBD
+**Plans**: 4 (03-01 to 03-04) — written 2026-05-08
 
-**UI hint**: yes
+Plans:
+- [x] 03-01: Dashboard — greeting, StreakCard, DailyQuizChallenge, StudyTimeWidget, StudyProgressWidget, AnnouncementBanner, courses grid, AddCourseSheet ✅
+- [x] 03-02: Smart Notes + AI Tutor — note CRUD, AI Summary sheet, Note Viewer sheet, SocraticTutor chat, SSE streaming ✅
+- [x] 03-03: Flashcards + Quizzes — SM-2 spaced repetition, card flip, quiz generation, quiz-taking UI, history ✅
+- [x] 03-04: Profile — avatar upload, username check, editable fields, persona selector, StreakCalendar, subscription badge, dark mode, sign out ✅
 
 ### Phase 4: Exam Prep & Advanced Tools
 **Goal**: Students preparing for major exams (WAEC/NECO/JAMB/IELTS/TOEFL/SAT/GRE) can practice via 8 CBT modes with KaTeX questions, and all users can access 12 study suite tools, 8 AI tools, and the career module
@@ -137,8 +141,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Platform Services | 4/4 | **Complete** | 2026-05-06 |
-| 2. UI Primitives & Navigation Shell | 0/4 | Not started | - |
-| 3. Core Study & AI Features | 0/TBD | Not started | - |
+| 2. UI Primitives & Navigation Shell | 4/4 | **Complete** | 2026-05-07 |
+| 3. Core Study & AI Features | 4/4 | **Complete** | 2026-05-08 |
 | 4. Exam Prep & Advanced Tools | 0/TBD | Not started | - |
 | 5. Social & Communication | 0/TBD | Not started | - |
 | 6. Native Integration & Payments | 0/TBD | Not started | - |
