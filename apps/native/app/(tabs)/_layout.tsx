@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { Home, BookOpen, GraduationCap, Users, User } from "lucide-react-native";
+import { Home, BookOpen, GraduationCap, Briefcase, CalendarDays, User } from "lucide-react-native";
 import { useTheme } from "../../hooks/useThemeContext";
 
 export default function TabLayout() {
@@ -18,7 +18,7 @@ export default function TabLayout() {
           shadowOpacity: 0,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: 10,
           fontWeight: "500",
         },
         headerShown: false,
@@ -46,10 +46,17 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="social"
+        name="career"
         options={{
-          title: "Social",
-          tabBarIcon: ({ color, size }) => <Users color={color} size={size} />,
+          title: "Career",
+          tabBarIcon: ({ color, size }) => <Briefcase color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="plan"
+        options={{
+          title: "Plan",
+          tabBarIcon: ({ color, size }) => <CalendarDays color={color} size={size} />,
         }}
       />
       <Tabs.Screen
