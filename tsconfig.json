@@ -14,7 +14,12 @@
     "sourceMap": true
   },
   "references": [
-    { "path": "./apps/native" },
-    { "path": "./packages/shared" }
-  ]
+    {
+      "path": "./apps/native"
+    },
+    {
+      "path": "./packages/shared"
+    }
+  ],
+  "extends": "expo/tsconfig.base"
 }

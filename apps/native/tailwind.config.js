@@ -1,13 +1,14 @@
-import type { Config } from "tailwindcss";
+const nativewindPreset = require("nativewind/preset");
 
-export default {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   darkMode: "class",
   content: [
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./features/**/*.{ts,tsx}",
   ],
-  presets: ["nativewind/tailwind/css"] as unknown as Config["presets"],
+  presets: [nativewindPreset],
   theme: {
     extend: {
       fontFamily: {
@@ -73,4 +74,4 @@ export default {
     },
   },
   plugins: [],
-} satisfies Config;
+};
