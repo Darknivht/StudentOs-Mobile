@@ -70,6 +70,9 @@ export function useAuthCore(): AuthContextType {
     return () => subscription.unsubscribe();
   }, [checkBlocked]);
 
+  // TODO: Enable Supabase Realtime for profiles table in production
+  // Go to Supabase Dashboard → Database → Replication → Enable "profiles" table
+  // Then replace polling with realtime subscription for instant blocking detection
   useEffect(() => {
     if (user) {
       blockedCheckInterval.current = setInterval(() => {
