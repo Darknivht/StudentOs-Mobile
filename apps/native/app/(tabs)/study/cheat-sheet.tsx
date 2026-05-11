@@ -19,7 +19,7 @@ import { ErrorFallback } from "../../../components/ErrorFallback";
 import { streamAIChat, formatAIResponse } from "../../../lib/ai";
 import Markdown from "react-native-markdown-display";
 import Toast from "react-native-toast-message";
-import Clipboard from "@react-native-clipboard/clipboard";
+import * as Clipboard from "expo-clipboard";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 
@@ -93,7 +93,7 @@ export default function CheatSheetScreen() {
   };
 
   const handleCopy = async () => {
-    Clipboard.setString(cheatSheet);
+    await Clipboard.setStringAsync(cheatSheet);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
     Toast.show({ type: "success", text1: "Copied!" });

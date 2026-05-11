@@ -46,8 +46,8 @@ export default function ResetPasswordScreen() {
   if (!sessionReady && !params.access_token) {
     return (
       <View className="flex-1 items-center justify-center p-6 bg-background">
-        <Text className="text-2xl font-bold text-foreground mb-2">Reset Password</Text>
-        <Text className="text-muted-foreground mb-8">
+        <Text className="text-2xl font-bold text-white mb-2">Reset Password</Text>
+        <Text className="text-white/80 mb-8">
           Check your email for a password reset link
         </Text>
         <Pressable
@@ -62,28 +62,28 @@ export default function ResetPasswordScreen() {
 
   if (!sessionReady && params.access_token) {
     return (
-      <View className="flex-1 items-center justify-center p-6 bg-background">
+      <View className="flex-1 items-center justify-center p-6">
         <ActivityIndicator />
-        <Text className="text-muted-foreground mt-4">Setting up session...</Text>
+        <Text className="text-white/70 mt-4">Setting up session...</Text>
       </View>
     );
   }
 
   return (
-    <View className="flex-1 items-center justify-center p-6 bg-background">
-      <Text className="text-2xl font-bold text-foreground mb-2">Set New Password</Text>
-      <Text className="text-muted-foreground mb-8">Enter your new password</Text>
+    <View className="flex-1 items-center justify-center p-6">
+      <Text className="text-2xl font-bold text-white mb-2">Set New Password</Text>
+      <Text className="text-white/80 mb-8">Enter your new password</Text>
 
       {error && (
-        <View className="bg-destructive/10 p-3 rounded-lg mb-4 w-full max-w-sm">
-          <Text className="text-destructive text-sm">{error}</Text>
+        <View className="bg-white/20 p-3 rounded-lg mb-4 w-full max-w-sm">
+          <Text className="text-white text-sm">{error}</Text>
         </View>
       )}
 
       <TextInput
-        className="bg-input border border-border rounded-lg p-3 mb-3 w-full max-w-sm text-foreground"
+        className="bg-white/10 border border-white/20 rounded-lg p-3 mb-3 w-full max-w-sm text-white"
         placeholder="New password"
-        placeholderTextColor="#9ca3af"
+        placeholderTextColor="#ffffff40"
         value={newPassword}
         onChangeText={setNewPassword}
         secureTextEntry
@@ -91,9 +91,9 @@ export default function ResetPasswordScreen() {
       />
 
       <TextInput
-        className="bg-input border border-border rounded-lg p-3 mb-6 w-full max-w-sm text-foreground"
+        className="bg-white/10 border border-white/20 rounded-lg p-3 mb-6 w-full max-w-sm text-white"
         placeholder="Confirm password"
-        placeholderTextColor="#9ca3af"
+        placeholderTextColor="#ffffff40"
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry

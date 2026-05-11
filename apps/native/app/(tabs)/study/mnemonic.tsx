@@ -17,7 +17,7 @@ import { ErrorFallback } from "../../../components/ErrorFallback";
 import { streamAIChat, formatAIResponse } from "../../../lib/ai";
 import Markdown from "react-native-markdown-display";
 import Toast from "react-native-toast-message";
-import Clipboard from "@react-native-clipboard/clipboard";
+import * as Clipboard from "expo-clipboard";
 
 export { ErrorFallback as ErrorBoundary };
 
@@ -54,8 +54,8 @@ export default function MnemonicGeneratorScreen() {
     });
   };
 
-  const copyToClipboard = () => {
-    Clipboard.setString(result);
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(result);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
     Toast.show({ type: "success", text1: "Copied!", text2: "Mnemonics copied" });

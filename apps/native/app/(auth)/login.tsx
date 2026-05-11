@@ -81,9 +81,9 @@ export default function LoginScreen() {
 
   if (blockedMessage) {
     return (
-      <View className="flex-1 items-center justify-center p-6 bg-background">
-        <View className="bg-destructive/10 p-4 rounded-lg w-full max-w-sm mb-4">
-          <Text className="text-destructive text-center font-medium">{blockedMessage}</Text>
+      <View className="flex-1 items-center justify-center p-6">
+        <View className="bg-white/20 p-4 rounded-lg w-full max-w-sm mb-4">
+          <Text className="text-white text-center font-medium">{blockedMessage}</Text>
         </View>
         <Button className="w-full max-w-sm" onPress={() => router.replace("/(auth)/login")}>
           <Text className="text-primary-foreground font-semibold">OK</Text>
@@ -94,7 +94,7 @@ export default function LoginScreen() {
 
   if (resetSent) {
     return (
-      <View className="flex-1 items-center justify-center p-6 bg-background/90">
+      <View className="flex-1 items-center justify-center p-6">
         <Text className="text-2xl font-bold text-white mb-2">Check Your Email</Text>
         <Text className="text-white/80 mb-8 text-center">
           We've sent a password reset link to {email}

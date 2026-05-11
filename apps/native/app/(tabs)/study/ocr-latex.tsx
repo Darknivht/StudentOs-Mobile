@@ -8,7 +8,7 @@ import { useSubscription } from "../../../hooks/useSubscription";
 import { Button } from "../../../components/ui/button";
 import { ErrorFallback } from "../../../components/ErrorFallback";
 import FeatureGateSheet from "../../../components/subscription/FeatureGateSheet";
-import Clipboard from "@react-native-clipboard/clipboard";
+import * as Clipboard from "expo-clipboard";
 import Toast from "react-native-toast-message";
 
 export { ErrorFallback as ErrorBoundary };
@@ -53,8 +53,8 @@ export default function OCRToLatexScreen() {
     });
   };
 
-  const copyToClipboard = () => {
-    Clipboard.setString(result);
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(result);
     Toast.show({
       type: "success",
       text1: "Copied!",

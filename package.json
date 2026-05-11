@@ -10,9 +10,11 @@
     "lint": "npm run lint --workspaces --if-present"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native/virtualized-lists": "^0.85.3",
     "@shopify/react-native-skia": "^2.6.2",
     "expo-asset": "^55.0.17",
+    "expo-clipboard": "~8.0.8",
     "expo-image-picker": "^55.0.20",
     "memoize-one": "^6.0.0",
     "react-native-reanimated": "~4.1.1",
