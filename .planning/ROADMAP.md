@@ -102,7 +102,7 @@ Plans:
 3. Student browses store with search/filter by category/subject/grade, watches YouTube playlists with embedded player, downloads tier-gated resources with download tracking — Free/Plus/Pro access enforced
 4. Student earns 50+ achievements across 5 categories, sees celebration toasts with XP rewards when unlocking new achievements, and views achievement history
 5. Student participates in study challenges with progress bars and XP rewards, and challenges friends to quiz competitions for bonus XP
-**Plans**: TBD
+**Plans**: In Progress with 5 sub-plans (05-01 to 05-05)
 
 **UI hint**: yes
 

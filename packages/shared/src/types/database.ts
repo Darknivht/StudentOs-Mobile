@@ -1423,6 +1423,162 @@ export type Database = {
           xp_earned?: number
         }
         Relationships: []
+}
+      direct_messages: {
+        Row: {
+          id: string
+          conversation_id: string
+          sender_id: string
+          recipient_id: string | null
+          content: string
+          media_url: string | null
+          reply_to_id: string | null
+          reply_preview: string | null
+          is_read: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          conversation_id: string
+          sender_id: string
+          recipient_id?: string | null
+          content: string
+          media_url?: string | null
+          reply_to_id?: string | null
+          reply_preview?: string | null
+          is_read?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          conversation_id?: string
+          sender_id?: string
+          recipient_id?: string | null
+          content?: string
+          media_url?: string | null
+          reply_to_id?: string | null
+          reply_preview?: string | null
+          is_read?: boolean
+          created_at?: string
+        }
+        Relationships: []
+      }
+      conversations: {
+        Row: {
+          id: string
+          participants: string[]
+          last_message_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          participants: string[]
+          last_message_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          participants?: string[]
+          last_message_at?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      group_messages: {
+        Row: {
+          id: string
+          group_id: string
+          sender_id: string
+          content: string
+          media_url: string | null
+          reply_to_id: string | null
+          reply_preview: string | null
+          is_read: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          group_id: string
+          sender_id: string
+          content: string
+          media_url?: string | null
+          reply_to_id?: string | null
+          reply_preview?: string | null
+          is_read?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          group_id?: string
+          sender_id?: string
+          content?: string
+          media_url?: string | null
+          reply_to_id?: string | null
+          reply_preview?: string | null
+          is_read?: boolean
+          created_at?: string
+        }
+        Relationships: []
+      }
+      groups: {
+        Row: {
+          id: string
+          name: string
+          invite_code: string
+          is_public: boolean
+          max_members: number
+          subject: string | null
+          grade: string | null
+          created_by: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          invite_code: string
+          is_public?: boolean
+          max_members?: number
+          subject?: string | null
+          grade?: string | null
+          created_by: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          invite_code?: string
+          is_public?: boolean
+          max_members?: number
+          subject?: string | null
+          grade?: string | null
+          created_by?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      group_members: {
+        Row: {
+          id: string
+          group_id: string
+          user_id: string
+          role: string
+          joined_at: string
+        }
+        Insert: {
+          id?: string
+          group_id: string
+          user_id: string
+          role?: string
+          joined_at?: string
+        }
+        Update: {
+          id?: string
+          group_id?: string
+          user_id?: string
+          role?: string
+          joined_at?: string
+        }
+        Relationships: []
       }
     }
     Views: {
