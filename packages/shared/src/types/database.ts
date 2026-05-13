@@ -1580,6 +1580,75 @@ export type Database = {
         }
         Relationships: []
       }
+      educational_resources: {
+        Row: {
+          id: string
+          title: string
+          description: string
+          thumbnail_url: string | null
+          author: string
+          subject: string
+          grade: string
+          category: string
+          resource_type: string
+          download_url: string
+          download_count: number
+          tier_required: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          description?: string
+          thumbnail_url?: string | null
+          author?: string
+          subject?: string
+          grade?: string
+          category?: string
+          resource_type?: string
+          download_url: string
+          download_count?: number
+          tier_required?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string
+          thumbnail_url?: string | null
+          author?: string
+          subject?: string
+          grade?: string
+          category?: string
+          resource_type?: string
+          download_url?: string
+          download_count?: number
+          tier_required?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      resource_downloads: {
+        Row: {
+          id: string
+          user_id: string
+          resource_id: string
+          downloaded_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          resource_id: string
+          downloaded_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          resource_id?: string
+          downloaded_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
