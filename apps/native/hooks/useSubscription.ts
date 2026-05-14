@@ -53,6 +53,7 @@ interface SubscriptionData {
   canUseChat: boolean;
   canUseGroupChat: boolean;
   canUseAdvancedTools: boolean;
+  canUseFocusMode: boolean;
   canUseMockExam: boolean;
   showAds: boolean;
 }
@@ -128,6 +129,7 @@ const FULL_ACCESS: SubscriptionData = {
   canUseChat: true,
   canUseGroupChat: true,
   canUseAdvancedTools: true,
+  canUseFocusMode: true,
   canUseMockExam: true,
   showAds: false,
 };
@@ -156,6 +158,7 @@ const DEFAULT_FREE: SubscriptionData = {
   canUseChat: true,
   canUseGroupChat: false,
   canUseAdvancedTools: false,
+  canUseFocusMode: false,
   canUseMockExam: false,
   showAds: true,
 };
@@ -320,6 +323,7 @@ export const useSubscription = () => {
         canUseChat: true,
         canUseGroupChat: isPro || isPlus,
         canUseAdvancedTools: isPro,
+        canUseFocusMode: isPro || isPlus,
         canUseMockExam: isPro || isPlus,
         showAds: tier === "free",
       });

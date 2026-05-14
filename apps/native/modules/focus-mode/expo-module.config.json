@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["FocusModeModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.focusmode.FocusModeModule"]
+  }
+}
