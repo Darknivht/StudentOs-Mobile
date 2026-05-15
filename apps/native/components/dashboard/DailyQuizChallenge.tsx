@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import {
   Brain,
   CheckCircle,
@@ -11,7 +11,7 @@ import {
   BookOpen,
   GraduationCap,
 } from "lucide-react-native";
-import { Button } from "../ui/button";
+
 import { useAuth } from "../../hooks/useAuthContext";
 import { supabase } from "../../services/supabase";
 import { useRouter } from "expo-router";
@@ -192,10 +192,10 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
             <Text className="text-xs font-medium text-primary">50 XP</Text>
           </View>
         </View>
-        <Button onPress={startQuiz} className="w-full h-9 bg-primary rounded-xl">
+        <Pressable onPress={startQuiz} className="w-full h-9 bg-primary rounded-xl flex-row items-center justify-center gap-2">
           <Sparkles className="w-4 h-4 text-primary-foreground" />
           <Text className="text-primary-foreground font-semibold text-sm">Start Quiz</Text>
-        </Button>
+        </Pressable>
       </Animated.View>
     );
   }
@@ -222,13 +222,13 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
         <Text className="text-sm text-muted-foreground mt-1">
           You earned <Text className="font-semibold text-primary">{finalScore * 10} XP</Text>
         </Text>
-        <Button
+        <Pressable
           onPress={() => router.push("/(tabs)/study")}
-          className="w-full mt-3 h-9 bg-secondary rounded-xl"
+          className="w-full mt-3 h-9 bg-secondary rounded-xl flex-row items-center justify-center gap-2"
         >
           <GraduationCap className="w-4 h-4 text-secondary-foreground" />
           <Text className="text-secondary-foreground font-semibold text-sm">Review with AI Tutor</Text>
-        </Button>
+        </Pressable>
         <Text className="text-xs text-muted-foreground mt-2">Streak updated! Come back tomorrow. 🔥</Text>
       </Animated.View>
     );
@@ -291,7 +291,7 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
       </View>
 
       {answered && (
-        <Button 
+        <Pressable 
           onPress={() => {
             if (currentQ < questions.length - 1) {
               setCurrentQ((c) => c + 1);
@@ -301,12 +301,12 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
               finishQuiz();
             }
           }} 
-          className="w-full mt-3 h-9 rounded-xl"
+          className="w-full mt-3 h-9 rounded-xl bg-primary items-center justify-center"
         >
           <Text className="text-primary-foreground font-semibold text-sm">
             {currentQ < questions.length - 1 ? "Next Question" : "See Results"}
           </Text>
-        </Button>
+        </Pressable>
       )}
     </Animated.View>
   );
