@@ -121,7 +121,7 @@ export default function FlashcardsScreen() {
           <Text className="text-2xl font-bold text-foreground">Flashcards</Text>
 
           {(dueLoading || allLoading) ? (
-            <ActivityIndicator color="hsl(var(--primary))" />
+            <ActivityIndicator color=""#6D28D9"" />
           ) : (
             <>
               <Pressable onPress={startStudy}>

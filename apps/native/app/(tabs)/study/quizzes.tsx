@@ -316,7 +316,7 @@ export default function QuizzesScreen() {
   if (view === "generating") {
     return (
       <View className="flex-1 bg-background items-center justify-center p-6">
-        <ActivityIndicator size="large" color="hsl(var(--primary))" />
+        <ActivityIndicator size="large" color=""#6D28D9"" />
         <Text className="text-sm font-medium text-foreground mt-4">Generating quiz from your notes...</Text>
         <Text className="text-xs text-muted-foreground mt-1">AI is creating personalized questions</Text>
       </View>

@@ -1,11 +1,17 @@
 import { Stack } from "expo-router";
 import { ScrollView, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { AuthProvider } from "../../hooks/useAuthContext";
+import { Gradients } from "../../theme/colors";
 
 export default function AuthLayout() {
   return (
     <AuthProvider>
-      <View className="flex-1 bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 dark:from-violet-800 dark:via-purple-800 dark:to-indigo-900">
+      <View className="flex-1">
+        <LinearGradient
+          colors={Gradients.auth}
+          style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+        />
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"

@@ -424,7 +424,7 @@ function ResumeBuilder() {
                       value={data.name}
                       onChangeText={(v) => update("name", v)}
                       placeholder="John Doe"
-                      placeholderTextColor="hsl(var(--muted-foreground))"
+                      placeholderTextColor=""#94A3B8""
                     />
                   </View>
                   <View className="flex-1">
@@ -434,7 +434,7 @@ function ResumeBuilder() {
                       value={data.email}
                       onChangeText={(v) => update("email", v)}
                       placeholder="john@example.com"
-                      placeholderTextColor="hsl(var(--muted-foreground))"
+                      placeholderTextColor=""#94A3B8""
                       keyboardType="email-address"
                     />
                   </View>
@@ -447,7 +447,7 @@ function ResumeBuilder() {
                       value={data.phone}
                       onChangeText={(v) => update("phone", v)}
                       placeholder="+1 234 567 8900"
-                      placeholderTextColor="hsl(var(--muted-foreground))"
+                      placeholderTextColor=""#94A3B8""
                     />
                   </View>
                   <View className="flex-1">
@@ -457,7 +457,7 @@ function ResumeBuilder() {
                       value={data.location}
                       onChangeText={(v) => update("location", v)}
                       placeholder="City, Country"
-                      placeholderTextColor="hsl(var(--muted-foreground))"
+                      placeholderTextColor=""#94A3B8""
                     />
                   </View>
                 </View>
@@ -468,7 +468,7 @@ function ResumeBuilder() {
                     value={data.website}
                     onChangeText={(v) => update("website", v)}
                     placeholder="linkedin.com/in/johndoe"
-                    placeholderTextColor="hsl(var(--muted-foreground))"
+                    placeholderTextColor=""#94A3B8""
                   />
                 </View>
                 <View>
@@ -484,7 +484,7 @@ function ResumeBuilder() {
                     value={data.summary}
                     onChangeText={(v) => update("summary", v)}
                     placeholder="Brief professional summary..."
-                    placeholderTextColor="hsl(var(--muted-foreground))"
+                    placeholderTextColor=""#94A3B8""
                     multiline
                     numberOfLines={3}
                     textAlignVertical="top"
@@ -518,14 +518,14 @@ function ResumeBuilder() {
                         placeholder="School"
                         value={e.school}
                         onChangeText={(v) => updateItem("education", i, "school", v)}
-                        placeholderTextColor="hsl(var(--muted-foreground))"
+                        placeholderTextColor=""#94A3B8""
                       />
                       <TextInput
                         className="flex-1 border border-border rounded-md px-2 py-1.5 text-sm text-foreground bg-background"
                         placeholder="Degree"
                         value={e.degree}
                         onChangeText={(v) => updateItem("education", i, "degree", v)}
-                        placeholderTextColor="hsl(var(--muted-foreground))"
+                        placeholderTextColor=""#94A3B8""
                       />
                     </View>
                     <View className="flex-row gap-2">
@@ -534,14 +534,14 @@ function ResumeBuilder() {
                         placeholder="Year"
                         value={e.year}
                         onChangeText={(v) => updateItem("education", i, "year", v)}
-                        placeholderTextColor="hsl(var(--muted-foreground))"
+                        placeholderTextColor=""#94A3B8""
                       />
                       <TextInput
                         className="flex-1 border border-border rounded-md px-2 py-1.5 text-sm text-foreground bg-background"
                         placeholder="GPA (optional)"
                         value={e.gpa}
                         onChangeText={(v) => updateItem("education", i, "gpa", v)}
-                        placeholderTextColor="hsl(var(--muted-foreground))"
+                        placeholderTextColor=""#94A3B8""
                       />
                     </View>
                   </View>
@@ -574,14 +574,14 @@ function ResumeBuilder() {
                         placeholder="Job Title"
                         value={e.title}
                         onChangeText={(v) => updateItem("experience", i, "title", v)}
-                        placeholderTextColor="hsl(var(--muted-foreground))"
+                        placeholderTextColor=""#94A3B8""
                       />
                       <TextInput
                         className="flex-1 border border-border rounded-md px-2 py-1.5 text-sm text-foreground bg-background"
                         placeholder="Company"
                         value={e.company}
                         onChangeText={(v) => updateItem("experience", i, "company", v)}
-                        placeholderTextColor="hsl(var(--muted-foreground))"
+                        placeholderTextColor=""#94A3B8""
                       />
                     </View>
                     <TextInput
@@ -589,14 +589,14 @@ function ResumeBuilder() {
                       placeholder="Period (e.g. 2023-Present)"
                       value={e.period}
                       onChangeText={(v) => updateItem("experience", i, "period", v)}
-                      placeholderTextColor="hsl(var(--muted-foreground))"
+                      placeholderTextColor=""#94A3B8""
                     />
                     <TextInput
                       className="border border-border rounded-md px-2 py-1.5 text-sm text-foreground bg-background"
                       placeholder="Description of responsibilities and achievements"
                       value={e.description}
                       onChangeText={(v) => updateItem("experience", i, "description", v)}
-                      placeholderTextColor="hsl(var(--muted-foreground))"
+                      placeholderTextColor=""#94A3B8""
                       multiline
                       numberOfLines={2}
                       textAlignVertical="top"
@@ -625,7 +625,7 @@ function ResumeBuilder() {
                         placeholder="Skill"
                         value={s.name}
                         onChangeText={(v) => updateItem("skills", i, "name", v)}
-                        placeholderTextColor="hsl(var(--muted-foreground))"
+                        placeholderTextColor=""#94A3B8""
                       />
                       <SelectDropdown
                         value={s.level}
@@ -662,14 +662,14 @@ function ResumeBuilder() {
                           placeholder="Project Name"
                           value={p.name}
                           onChangeText={(v) => updateItem("projects", i, "name", v)}
-                          placeholderTextColor="hsl(var(--muted-foreground))"
+                          placeholderTextColor=""#94A3B8""
                         />
                         <TextInput
                           className="flex-1 border border-border rounded-md px-2 py-1.5 text-sm text-foreground bg-background"
                           placeholder="Technologies"
                           value={p.tech}
                           onChangeText={(v) => updateItem("projects", i, "tech", v)}
-                          placeholderTextColor="hsl(var(--muted-foreground))"
+                          placeholderTextColor=""#94A3B8""
                         />
                       </View>
                       <TextInput
@@ -677,7 +677,7 @@ function ResumeBuilder() {
                         placeholder="Description"
                         value={p.description}
                         onChangeText={(v) => updateItem("projects", i, "description", v)}
-                        placeholderTextColor="hsl(var(--muted-foreground))"
+                        placeholderTextColor=""#94A3B8""
                         multiline
                         numberOfLines={2}
                         textAlignVertical="top"
@@ -699,21 +699,21 @@ function ResumeBuilder() {
                         placeholder="Name"
                         value={c.name}
                         onChangeText={(v) => updateItem("certifications", i, "name", v)}
-                        placeholderTextColor="hsl(var(--muted-foreground))"
+                        placeholderTextColor=""#94A3B8""
                       />
                       <TextInput
                         className="flex-1 border border-border rounded-md px-2 py-1.5 text-sm text-foreground bg-background"
                         placeholder="Issuer"
                         value={c.issuer}
                         onChangeText={(v) => updateItem("certifications", i, "issuer", v)}
-                        placeholderTextColor="hsl(var(--muted-foreground))"
+                        placeholderTextColor=""#94A3B8""
                       />
                       <TextInput
                         className="w-16 border border-border rounded-md px-2 py-1.5 text-sm text-foreground bg-background"
                         placeholder="Year"
                         value={c.year}
                         onChangeText={(v) => updateItem("certifications", i, "year", v)}
-                        placeholderTextColor="hsl(var(--muted-foreground))"
+                        placeholderTextColor=""#94A3B8""
                       />
                       <Pressable onPress={() => removeItem("certifications", i)}>
                         <Trash2 size={14} className="text-destructive" />
@@ -735,7 +735,7 @@ function ResumeBuilder() {
                         placeholder="Language"
                         value={l.language}
                         onChangeText={(v) => updateItem("languages", i, "language", v)}
-                        placeholderTextColor="hsl(var(--muted-foreground))"
+                        placeholderTextColor=""#94A3B8""
                       />
                       <SelectDropdown
                         value={l.proficiency}
@@ -906,7 +906,7 @@ function InternshipMatcher() {
                   value={newSkill}
                   onChangeText={setNewSkill}
                   placeholder="Add a skill..."
-                  placeholderTextColor="hsl(var(--muted-foreground))"
+                  placeholderTextColor=""#94A3B8""
                   onSubmitEditing={addSkill}
                 />
                 <Button size="sm" variant="outline" onPress={addSkill}>
@@ -1081,7 +1081,7 @@ function JobSearchWidget({
             value={query}
             onChangeText={setQuery}
             placeholder="e.g. Software Engineer, Intern..."
-            placeholderTextColor="hsl(var(--muted-foreground))"
+            placeholderTextColor=""#94A3B8""
             onSubmitEditing={searchJobs}
           />
           <View className="flex-row gap-2 mb-2">
@@ -1090,7 +1090,7 @@ function JobSearchWidget({
               value={location}
               onChangeText={setLocation}
               placeholder="Location"
-              placeholderTextColor="hsl(var(--muted-foreground))"
+              placeholderTextColor=""#94A3B8""
             />
             <Pressable
               className="flex-1 border border-border rounded-md px-2 py-1.5 justify-center bg-background"
@@ -1290,7 +1290,7 @@ Keep it engaging and relatable for students!`;
           <TextInput
             className="border border-border rounded-md px-3 py-2 text-sm text-foreground bg-background mb-2"
             placeholder="Enter a topic you're studying..."
-            placeholderTextColor="hsl(var(--muted-foreground))"
+            placeholderTextColor=""#94A3B8""
             value={topic}
             onChangeText={setTopic}
           />
