@@ -74,7 +74,7 @@ export default function HomeScreen() {
   if (isLoading) {
     return (
       <View className="flex-1 bg-background items-center justify-center">
-        <ActivityIndicator size="large" color="#6D28D9" />
+        <ActivityIndicator size="large" className="text-primary" />
       </View>
     );
   }
