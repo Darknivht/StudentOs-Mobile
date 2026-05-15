@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { View, Text, Pressable, TouchableOpacity } from "react-native";
+import { useState, useEffect, useRef } from "react";
+import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import {
   Brain,
   CheckCircle,
@@ -8,14 +8,12 @@ import {
   Trophy,
   Sparkles,
   Loader2,
-  BookOpen,
   GraduationCap,
 } from "lucide-react-native";
 
 import { useAuth } from "../../hooks/useAuthContext";
 import { supabase } from "../../services/supabase";
 import { useRouter } from "expo-router";
-import Animated, { FadeIn, SlideInRight, SlideOutLeft, withSpring, useAnimatedStyle, withRepeat, withSequence, withTiming } from "react-native-reanimated";
 import Toast from "react-native-toast-message";
 
 interface Question {
@@ -73,69 +71,68 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
   const scoreRef = useRef(0);
   const [answered, setAnswered] = useState(false);
   const [alreadyDone, setAlreadyDone] = useState(false);
-  const [userAnswers, setUserAnswers] = useState<(number | null)[]>([]);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => { isMounted.current = false; };
+  }, []);
 
   useEffect(() => {
     try {
       const Storage = require("expo-sqlite/kv-store");
       const today = new Date().toISOString().split("T")[0];
       const lastQuiz = Storage.getItemSync("daily_quiz_date");
-      if (lastQuiz === today) setAlreadyDone(true);
+      if (lastQuiz === today && isMounted.current) {
+        setAlreadyDone(true);
+      }
     } catch {}
   }, []);
 
   const startQuiz = async () => {
+    if (!isMounted.current) return;
     setScore(0);
     scoreRef.current = 0;
     setCurrentQ(0);
     setSelected(null);
     setAnswered(false);
-    setUserAnswers([]);
     setQuestions(getRandomQuestions(5));
     setQuizState("playing");
   };
 
-  const handleAnswer = useCallback(
-    (idx: number) => {
-      if (answered || questions.length === 0) return;
-      const correctAnswer = questions[currentQ]?.correct;
-      setSelected(idx);
-      setAnswered(true);
-      setUserAnswers((prev) => {
-        const updated = [...prev];
-        updated[currentQ] = idx;
-        return updated;
-      });
-      if (correctAnswer !== undefined && idx === correctAnswer) {
-        scoreRef.current += 1;
-        setScore((s) => s + 1);
-      }
-    },
-    [answered, questions, currentQ]
-  );
-
-  const nextQuestion = useCallback(() => {
-    const nextQ = currentQ + 1;
-    if (nextQ < questions.length) {
-      setCurrentQ(nextQ);
-      setSelected(null);
-      setAnswered(false);
-    } else {
-      finishQuiz();
+  const handleAnswer = (idx: number) => {
+    if (answered || !isMounted.current) return;
+    
+    const q = questions[currentQ];
+    if (!q) return;
+    
+    setSelected(idx);
+    setAnswered(true);
+    
+    if (idx === q.correct) {
+      scoreRef.current += 1;
+      setScore((s) => s + 1);
     }
-  }, [currentQ, questions.length]);
+  };
 
   const finishQuiz = async () => {
+    if (!isMounted.current) return;
+    
     const finalScore = scoreRef.current;
     setQuizState("result");
+    
     try {
       const Storage = require("expo-sqlite/kv-store");
       const today = new Date().toISOString().split("T")[0];
       Storage.setItemSync("daily_quiz_date", today);
     } catch {}
-    setAlreadyDone(true);
+    
+    if (isMounted.current) {
+      setAlreadyDone(true);
+    }
 
     if (!user) return;
+    
     const xpEarned = finalScore * 10;
     try {
       if (xpEarned > 0) {
@@ -159,7 +156,21 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
       });
 
       onComplete?.();
-    } catch {}
+    } catch (e) {
+      console.error("Error saving quiz:", e);
+    }
+  };
+
+  const goToNextQuestion = () => {
+    if (!isMounted.current) return;
+    
+    if (currentQ < questions.length - 1) {
+      setCurrentQ((c) => c + 1);
+      setSelected(null);
+      setAnswered(false);
+    } else {
+      finishQuiz();
+    }
   };
 
   if (alreadyDone && quizState === "idle") {
@@ -180,7 +191,7 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
 
   if (quizState === "idle") {
     return (
-      <Animated.View entering={FadeIn} className="p-4 rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-accent/5">
+      <View className="p-4 rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-accent/5">
         <View className="flex-row items-center gap-3 mb-3">
           <View className="w-10 h-10 rounded-xl bg-primary/15 items-center justify-center">
             <Brain className="w-5 h-5 text-primary" />
@@ -194,18 +205,21 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
             <Text className="text-xs font-medium text-primary">50 XP</Text>
           </View>
         </View>
-        <Pressable onPress={startQuiz} className="w-full h-9 bg-primary rounded-xl flex-row items-center justify-center gap-2">
-          <Sparkles className="w-4 h-4 text-primary-foreground" />
+        <Pressable 
+          onPress={startQuiz} 
+          className="w-full h-9 bg-primary rounded-xl flex-row items-center justify-center"
+        >
+          <Sparkles className="w-4 h-4 text-primary-foreground mr-2" />
           <Text className="text-primary-foreground font-semibold text-sm">Start Quiz</Text>
         </Pressable>
-      </Animated.View>
+      </View>
     );
   }
 
   if (quizState === "loading") {
     return (
       <View className="p-5 rounded-2xl border border-border bg-card items-center">
-        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+        <ActivityIndicator size="large" color="#6D28D9" />
         <Text className="text-sm font-medium text-foreground mt-3">Generating quiz from your notes...</Text>
         <Text className="text-xs text-muted-foreground mt-1">AI is creating personalized questions</Text>
       </View>
@@ -215,7 +229,7 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
   if (quizState === "result") {
     const finalScore = scoreRef.current;
     return (
-      <Animated.View entering={FadeIn} className="p-5 rounded-2xl border border-border bg-gradient-to-br from-primary/10 to-accent/10 items-center">
+      <View className="p-5 rounded-2xl border border-border bg-gradient-to-br from-primary/10 to-accent/10 items-center">
         <View className="w-16 h-16 rounded-full bg-primary/20 items-center justify-center mb-3">
           <Trophy className="w-8 h-8 text-primary" />
         </View>
@@ -226,17 +240,18 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
         </Text>
         <Pressable
           onPress={() => router.push("/(tabs)/study")}
-          className="w-full mt-3 h-9 bg-secondary rounded-xl flex-row items-center justify-center gap-2"
+          className="w-full mt-3 h-9 bg-secondary rounded-xl flex-row items-center justify-center"
         >
-          <GraduationCap className="w-4 h-4 text-secondary-foreground" />
+          <GraduationCap className="w-4 h-4 text-secondary-foreground mr-2" />
           <Text className="text-secondary-foreground font-semibold text-sm">Review with AI Tutor</Text>
         </Pressable>
         <Text className="text-xs text-muted-foreground mt-2">Streak updated! Come back tomorrow. 🔥</Text>
-      </Animated.View>
+      </View>
     );
   }
 
   const q = questions[currentQ];
+  if (!q) return null;
 
   return (
     <View className="p-4 rounded-2xl border border-border bg-card">
@@ -254,8 +269,10 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
       <Text className="font-semibold text-foreground text-sm mb-3">{q.question}</Text>
       <View className="gap-2">
         {q.options.map((opt, i) => {
-          let optBg = "bg-background border-border";
+          let optBg = "bg-background";
           let optBorder = "border-border";
+          let textColor = "text-foreground";
+          
           if (answered) {
             if (i === q.correct) {
               optBg = "bg-emerald-500/10";
@@ -264,11 +281,12 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
               optBg = "bg-red-500/10";
               optBorder = "border-red-500";
             } else {
-              optBg = "bg-background/50";
+              optBg = "bg-muted/30";
               optBorder = "border-border";
+              textColor = "text-muted-foreground";
             }
           } else if (i === selected) {
-            optBg = "bg-primary/5";
+            optBg = "bg-primary/10";
             optBorder = "border-primary";
           }
 
@@ -277,14 +295,14 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
               key={i}
               onPress={() => handleAnswer(i)}
               disabled={answered}
-              className={`w-full p-3 rounded-xl border ${optBg} ${optBorder} flex-row items-center gap-2`}
+              className={`w-full p-3 rounded-xl border ${optBg} ${optBorder} flex-row items-center`}
             >
-              <View className="w-6 h-6 rounded-full border border-current items-center justify-center">
-                <Text className="text-xs font-medium text-foreground">
+              <View className="w-6 h-6 rounded-full border border-current items-center justify-center mr-2">
+                <Text className={`text-xs font-medium ${textColor}`}>
                   {String.fromCharCode(65 + i)}
                 </Text>
               </View>
-              <Text className="text-sm text-foreground flex-1">{opt}</Text>
+              <Text className={`text-sm flex-1 ${textColor}`}>{opt}</Text>
               {answered && i === q.correct && <CheckCircle className="w-4 h-4 text-emerald-500" />}
               {answered && i === selected && i !== q.correct && <XCircle className="w-4 h-4 text-red-500" />}
             </Pressable>
@@ -294,21 +312,8 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
 
       {answered && (
         <Pressable 
-          onPress={() => {
-            try {
-              const nextQ = currentQ + 1;
-              if (nextQ < questions.length) {
-                setCurrentQ(nextQ);
-                setSelected(null);
-                setAnswered(false);
-              } else {
-                finishQuiz();
-              }
-            } catch (err) {
-              console.error("Next question error:", err);
-            }
-          }} 
-          className="w-full mt-3 h-9 rounded-xl bg-primary items-center justify-center"
+          onPress={goToNextQuestion}
+          className="w-full mt-3 h-9 rounded-xl bg-primary flex-row items-center justify-center"
         >
           <Text className="text-primary-foreground font-semibold text-sm">
             {currentQ < questions.length - 1 ? "Next Question" : "See Results"}
