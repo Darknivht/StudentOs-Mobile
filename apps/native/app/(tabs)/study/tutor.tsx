@@ -290,7 +290,7 @@ export default function AITutorScreen() {
             ))}
             {isStreaming && !streamingText && (
               <View className="self-start bg-card border border-border p-3 rounded-2xl rounded-bl-sm">
-                <ActivityIndicator size="small" color="#6D28D9" />
+                <ActivityIndicator size="small" className="text-primary" />
               </View>
             )}
           </View>
@@ -301,7 +301,7 @@ export default function AITutorScreen() {
             value={input}
             onChangeText={setInput}
             placeholder="Ask your tutor..."
-            placeholderTextColor="#94A3B8"
+            placeholderTextColor="#71717A"
             className="flex-1 h-10 rounded-full border border-input bg-background px-4 text-sm text-foreground"
             editable={!isStreaming}
             onSubmitEditing={handleSend}

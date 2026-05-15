@@ -219,7 +219,7 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
   if (quizState === "loading") {
     return (
       <View className="p-5 rounded-2xl border border-border bg-card items-center">
-        <ActivityIndicator size="large" color="#6D28D9" />
+        <ActivityIndicator size="large" className="text-primary" />
         <Text className="text-sm font-medium text-foreground mt-3">Generating quiz from your notes...</Text>
         <Text className="text-xs text-muted-foreground mt-1">AI is creating personalized questions</Text>
       </View>

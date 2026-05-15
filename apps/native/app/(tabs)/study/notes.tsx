@@ -422,7 +422,7 @@ export default function SmartNotesScreen() {
             className="w-full bg-primary"
           >
             {createNote.isPending ? (
-              <ActivityIndicator color="#FFFFFF" />
+              <ActivityIndicator className="text-primary-foreground" />
             ) : (
               <>
                 <Sparkles className="w-4 h-4 text-primary-foreground" />
