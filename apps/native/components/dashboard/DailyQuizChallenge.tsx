@@ -295,12 +295,17 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
       {answered && (
         <Pressable 
           onPress={() => {
-            if (currentQ < questions.length - 1) {
-              setCurrentQ((c) => c + 1);
-              setSelected(null);
-              setAnswered(false);
-            } else {
-              finishQuiz();
+            try {
+              const nextQ = currentQ + 1;
+              if (nextQ < questions.length) {
+                setCurrentQ(nextQ);
+                setSelected(null);
+                setAnswered(false);
+              } else {
+                finishQuiz();
+              }
+            } catch (err) {
+              console.error("Next question error:", err);
             }
           }} 
           className="w-full mt-3 h-9 rounded-xl bg-primary items-center justify-center"
