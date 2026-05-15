@@ -1,39 +1,27 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { View, Text } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSequence } from "react-native-reanimated";
 import { WifiOff, Wifi } from "lucide-react-native";
 import { useNetInfo } from "../hooks/useNetInfo";
 
 export function OfflineStatusBanner() {
   const { isOnline, wasOffline } = useNetInfo();
-  const height = useSharedValue(0);
-  const opacity = useSharedValue(0);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (!isOnline) {
-      height.value = withTiming(44, { duration: 300 });
-      opacity.value = withTiming(1, { duration: 300 });
-    } else if (isOnline && wasOffline) {
-      height.value = withTiming(44, { duration: 300 });
-      opacity.value = withTiming(1, { duration: 300 });
+    if (!isOnline || (isOnline && wasOffline)) {
+      setVisible(true);
     } else {
-      height.value = withTiming(0, { duration: 300 });
-      opacity.value = withTiming(0, { duration: 300 });
+      const timer = setTimeout(() => setVisible(false), 300);
+      return () => clearTimeout(timer);
     }
   }, [isOnline, wasOffline]);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    height: height.value,
-    opacity: opacity.value,
-  }));
+  if (!visible) return null;
 
   const showReconnecting = isOnline && wasOffline;
 
   return (
-    <Animated.View
-      style={animatedStyle}
-      className="overflow-hidden z-50"
-    >
+    <View className="overflow-hidden">
       {!isOnline && (
         <View className="bg-amber-500 px-4 py-2 flex-row items-center gap-2">
           <WifiOff className="w-4 h-4 text-amber-950" />
@@ -50,6 +38,6 @@ export function OfflineStatusBanner() {
           </Text>
         </View>
       )}
-    </Animated.View>
+    </View>
   );
 }
