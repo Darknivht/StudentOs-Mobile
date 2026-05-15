@@ -239,7 +239,7 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
   const q = questions[currentQ];
 
   return (
-    <Animated.View entering={FadeIn} className="p-4 rounded-2xl border border-border bg-card">
+    <View className="p-4 rounded-2xl border border-border bg-card">
       <View className="flex-row items-center justify-between mb-3">
         <Text className="text-xs font-medium text-muted-foreground">{q.category}</Text>
         <Text className="text-xs font-medium text-primary">{currentQ + 1}/{questions.length}</Text>
@@ -315,6 +315,6 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
           </Text>
         </Pressable>
       )}
-    </Animated.View>
+    </View>
   );
 }
