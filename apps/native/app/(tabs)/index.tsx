@@ -81,26 +81,18 @@ export default function HomeScreen() {
 
   return (
     <ScrollView className="flex-1 bg-background">
-      <View className="p-6 pt-12 gap-6">
-        <View className="flex-row items-center justify-between">
-          <View>
-            <View className="flex-row items-center gap-2">
-              <Text className="text-muted-foreground text-sm">{getGreeting()}</Text>
-              {!isOnline && (
-                <View className="flex-row items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10">
-                  <WifiOff className="w-3 h-3 text-amber-600" />
-                  <Text className="text-amber-600 text-xs">Offline</Text>
-                </View>
-              )}
-            </View>
-            <Text className="text-2xl font-bold text-foreground">{firstName} 👋</Text>
+      <View className="p-4 gap-4">
+        <View>
+          <View className="flex-row items-center gap-2">
+            <Text className="text-muted-foreground text-sm">{getGreeting()}</Text>
+            {!isOnline && (
+              <View className="flex-row items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10">
+                <WifiOff className="w-3 h-3 text-amber-600" />
+                <Text className="text-amber-600 text-xs">Offline</Text>
+              </View>
+            )}
           </View>
-          <Pressable
-            onPress={() => router.push("/(tabs)/profile")}
-            className="w-10 h-10 rounded-full bg-muted items-center justify-center"
-          >
-            <Settings size={20} className="text-muted-foreground" />
-          </Pressable>
+          <Text className="text-2xl font-bold text-foreground">{firstName} 👋</Text>
         </View>
 
         {fetchError && (
