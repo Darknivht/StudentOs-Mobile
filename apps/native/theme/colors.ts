@@ -1,50 +1,64 @@
 export const Colors = {
-  background: "#0B1220",
-  foreground: "#FFFFFF",
+  // Light theme
+  background: "#F8FAFC",
+  foreground: "#0F172A",
   primary: "#6D28D9",
-  secondary: "#22C55E",
-  muted: "#1F2937",
-  mutedForeground: "#94A3B8",
-  card: "#111827",
-  cardForeground: "#F1F5F9",
-  border: "#1F2937",
-  borderForeground: "#374151",
-  input: "#1E293B",
-  inputForeground: "#94A3B8",
   primaryForeground: "#FFFFFF",
+  secondary: "#0EA5E9",
+  secondaryForeground: "#FFFFFF",
+  accent: "#EC4899",
+  accentForeground: "#FFFFFF",
+  success: "#22C55E",
+  successForeground: "#FFFFFF",
+  warning: "#F59E0B",
+  warningForeground: "#FFFFFF",
   destructive: "#EF4444",
   destructiveForeground: "#FFFFFF",
-  accent: "#1E293B",
-  accentForeground: "#F8FAFC",
+  muted: "#F1F5F9",
+  mutedForeground: "#64748B",
+  card: "#FFFFFF",
+  cardForeground: "#0F172A",
+  border: "#E2E8F0",
+  input: "#E2E8F0",
   ring: "#6D28D9",
 
-  // Gradient colors
-  gradientStart: "#7C23DF",
-  gradientMid: "#3F1B6A",
-  gradientEnd: "#5B1BE6",
-
   // Dark theme
-  darkBackground: "#0B1220",
-  darkForeground: "#FFFFFF",
+  darkBackground: "#0F172A",
+  darkForeground: "#F8FAFC",
+  darkCard: "#1E293B",
+  darkCardForeground: "#F8FAFC",
+  darkMuted: "#1E293B",
+  darkMutedForeground: "#94A3B8",
+  darkBorder: "#334155",
+  darkInput: "#334155",
+  darkRing: "#8B5CF6",
+
+  // Gradient colors
+  gradientStart: "#6D28D9",
+  gradientMid: "#8B5CF6",
+  gradientEnd: "#EC4899",
 
   // Auth specific
-  authBackground: "#18002C",
-  authSecondary: "#360060",
+  authBackground: "#0F172A",
+  authSecondary: "#1E293B",
 
   // Social
-  socialBackground: "#0F0B1E",
+  socialBackground: "#F8FAFC",
   chartPrimary: "#6D28D9",
-  chartSecondary: "#4C1D95",
+  chartSecondary: "#8B5CF6",
 
   // Focus mode
-  focusBackground: "#2D1B69",
+  focusBackground: "#1E293B",
+
+  // Tab bar
+  tabActive: "#6D28D9",
+  tabInactive: "#64748B",
 };
 
 export const Gradients = {
-  auth: ["#18002C", "#360060"] as const,
-  primary: ["#18002C", "#360060"] as const,
-  main: ["#0B1220", "#111827"] as const,
-  surface: ["#111827", "#0B1220"] as const,
-  card: ["#1F2937", "#111827"] as const,
- skl: ["#1F2937", "#111827"] as const,
+  auth: ["#0F172A", "#1E293B"] as const,
+  primary: ["#6D28D9", "#8B5CF6"] as const,
+  main: ["#F8FAFC", "#F1F5F9"] as const,
+  surface: ["#FFFFFF", "#F8FAFC"] as const,
+  card: ["#FFFFFF", "#F8FAFC"] as const,
 };

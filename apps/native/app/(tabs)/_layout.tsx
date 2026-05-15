@@ -1,35 +1,92 @@
-import { Tabs } from "expo-router";
-import { Home, BookOpen, GraduationCap, Briefcase, CalendarDays, User, Users, Store, MessageCircle } from "lucide-react-native";
+import { Tabs, useRouter } from "expo-router";
+import { Home, BookOpen, GraduationCap, Briefcase, CalendarDays, User, Users, Store, MessageCircle, Settings, Bell } from "lucide-react-native";
+import { View, Text, Pressable, StyleSheet, Platform } from "react-native";
 import { useTheme } from "../../hooks/useThemeContext";
+import { useAuth } from "../../hooks/useAuthContext";
 import { Colors } from "../../theme/colors";
+
+function HeaderRight() {
+  const router = useRouter();
+  const { isDark } = useTheme();
+
+  return (
+    <View style={styles.headerRight}>
+      <Pressable 
+        onPress={() => router.push("/(tabs)/profile")}
+        style={styles.iconButton}
+      >
+        <User size={20} color={isDark ? Colors.darkForeground : Colors.foreground} />
+      </Pressable>
+      <Pressable 
+        onPress={() => router.push("/(tabs)/profile")}
+        style={styles.iconButton}
+      >
+        <Settings size={20} color={isDark ? Colors.darkForeground : Colors.foreground} />
+      </Pressable>
+    </View>
+  );
+}
 
 export default function TabLayout() {
   const { isDark } = useTheme();
+  const { user } = useAuth();
+
+  const activeColor = isDark ? "hsl(262, 83%, 65%)" : "hsl(262, 83%, 58%)";
+  const inactiveColor = isDark ? "#94A3B8" : "#64748B";
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: isDark ? "hsl(262, 83%, 65%)" : "hsl(262, 83%, 58%)",
-        tabBarInactiveTintColor: Colors.mutedForeground,
+        tabBarActiveTintColor: activeColor,
+        tabBarInactiveTintColor: inactiveColor,
         tabBarStyle: {
-          backgroundColor: Colors.card,
-          borderTopColor: Colors.border,
+          backgroundColor: isDark ? "#0F172A" : "#FFFFFF",
+          borderTopColor: isDark ? "#1E293B" : "#E2E8F0",
           borderTopWidth: 1,
           elevation: 0,
           shadowOpacity: 0,
+          height: Platform.OS === "ios" ? 88 : 65,
+          paddingBottom: Platform.OS === "ios" ? 28 : 8,
+          paddingTop: 8,
         },
         tabBarLabelStyle: {
           fontSize: 10,
           fontWeight: "500",
+          marginTop: 2,
         },
-        headerShown: false,
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: isDark ? "#0F172A" : "#FFFFFF",
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 1,
+          borderBottomColor: isDark ? "#1E293B" : "#E2E8F0",
+        },
+        headerTintColor: isDark ? Colors.darkForeground : Colors.foreground,
+        headerTitleStyle: {
+          fontWeight: "700",
+          fontSize: 18,
+        },
+        headerRight: () => <HeaderRight />,
+        headerTitleAlign: "left",
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "StudentOS",
+          tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
+          headerTitle: () => (
+            <View style={styles.headerTitle}>
+              <View style={[styles.logo, { backgroundColor: activeColor }]}>
+                <Text style={styles.logoText}>S</Text>
+              </View>
+              <Text style={[styles.appName, { color: isDark ? "#F8FAFC" : "#0F172A" }]}>
+                StudentOS
+              </Text>
+            </View>
+          ),
         }}
       />
       <Tabs.Screen
@@ -65,6 +122,7 @@ export default function TabLayout() {
         options={{
           title: "Profile",
           tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
+          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -91,3 +149,37 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: 16,
+    gap: 8,
+  },
+  iconButton: {
+    padding: 8,
+    borderRadius: 20,
+  },
+  headerTitle: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  logo: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  logoText: {
+    color: "#FFFFFF",
+    fontWeight: "700",
+    fontSize: 14,
+  },
+  appName: {
+    fontWeight: "700",
+    fontSize: 18,
+  },
+});
