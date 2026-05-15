@@ -97,7 +97,8 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
 
   const handleAnswer = useCallback(
     (idx: number) => {
-      if (answered) return;
+      if (answered || questions.length === 0) return;
+      const correctAnswer = questions[currentQ]?.correct;
       setSelected(idx);
       setAnswered(true);
       setUserAnswers((prev) => {
@@ -105,7 +106,7 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
         updated[currentQ] = idx;
         return updated;
       });
-      if (idx === questions[currentQ].correct) {
+      if (correctAnswer !== undefined && idx === correctAnswer) {
         scoreRef.current += 1;
         setScore((s) => s + 1);
       }
@@ -113,15 +114,16 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
     [answered, questions, currentQ]
   );
 
-  const nextQuestion = () => {
-    if (currentQ < questions.length - 1) {
-      setCurrentQ((c) => c + 1);
+  const nextQuestion = useCallback(() => {
+    const nextQ = currentQ + 1;
+    if (nextQ < questions.length) {
+      setCurrentQ(nextQ);
       setSelected(null);
       setAnswered(false);
     } else {
       finishQuiz();
     }
-  };
+  }, [currentQ, questions.length]);
 
   const finishQuiz = async () => {
     const finalScore = scoreRef.current;
