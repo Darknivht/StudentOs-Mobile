@@ -3,7 +3,6 @@ import { View, Text, Pressable } from "react-native";
 import { X, Megaphone, AlertTriangle, Gift } from "lucide-react-native";
 import { supabase } from "../../services/supabase";
 import { useAuth } from "../../hooks/useAuthContext";
-import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 
 interface Announcement {
   id: string;
@@ -48,9 +47,7 @@ export function AnnouncementBanner() {
         const config = typeConfig[a.type] || typeConfig.info;
         const IconComp = config.IconComponent;
         return (
-          <Animated.View
-            entering={FadeIn}
-            exiting={FadeOut}
+          <View
             key={a.id}
             className={`flex-row items-start gap-3 p-3 rounded-lg border ${config.bgClass} ${config.borderClass}`}
           >
@@ -67,7 +64,7 @@ export function AnnouncementBanner() {
             >
               <X className="w-4 h-4 text-foreground" />
             </Pressable>
-          </Animated.View>
+          </View>
         );
       })}
     </View>
