@@ -36,6 +36,8 @@ export default function LoginScreen() {
       setError(authError.message.includes("Invalid login credentials")
         ? "Invalid email or password. Please try again."
         : authError.message);
+    } else {
+      router.replace("/(tabs)");
     }
   };
 
@@ -59,7 +61,7 @@ export default function LoginScreen() {
     if (authError) {
       setError(authError.message);
     } else {
-      Alert.alert("Check your email", "We've sent you a confirmation link.");
+      Alert.alert("Check your email", "We've sent you a confirmation link. After confirming, sign in here.");
     }
   };
 
