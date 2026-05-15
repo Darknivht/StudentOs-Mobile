@@ -380,7 +380,7 @@ export default function SmartNotesScreen() {
               value={newTitle}
               onChangeText={setNewTitle}
               placeholder="Note title"
-              placeholderTextColor=""#94A3B8""
+              placeholderTextColor="#94A3B8""
               className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
             />
           </View>
@@ -408,7 +408,7 @@ export default function SmartNotesScreen() {
               value={newContent}
               onChangeText={setNewContent}
               placeholder="Paste or type your notes here..."
-              placeholderTextColor=""#94A3B8""
+              placeholderTextColor="#94A3B8""
               multiline
               numberOfLines={8}
               textAlignVertical="top"
@@ -422,7 +422,7 @@ export default function SmartNotesScreen() {
             className="w-full bg-primary"
           >
             {createNote.isPending ? (
-              <ActivityIndicator color=""#FFFFFF"" />
+              <ActivityIndicator color="#FFFFFF"" />
             ) : (
               <>
                 <Sparkles className="w-4 h-4 text-primary-foreground" />
