@@ -492,7 +492,7 @@ function SmartScheduler() {
                 <TextInput
                   className="border border-border rounded-md px-3 py-2 text-sm text-foreground bg-background"
                   placeholder="e.g., Math Final Exam"
-                  placeholderTextColor="#94A3B8""
+                  placeholderTextColor="#94A3B8"
                   value={title}
                   onChangeText={setTitle}
                 />
@@ -518,7 +518,7 @@ function SmartScheduler() {
                 <TextInput
                   className="border border-border rounded-md px-3 py-2 text-sm text-foreground bg-background"
                   placeholder="YYYY-MM-DD"
-                  placeholderTextColor="#94A3B8""
+                  placeholderTextColor="#94A3B8"
                   value={dueDate}
                   onChangeText={setDueDate}
                   keyboardType="numbers-and-punctuation"
@@ -1079,7 +1079,7 @@ function LofiRadio() {
                     maximumValue={100}
                     step={1}
                     minimumTrackTintColor={currentStation.color}
-                    maximumTrackTintColor="#1F2937""
+                    maximumTrackTintColor="#1F2937"
                     thumbTintColor={currentStation.color}
                   />
                 </View>
@@ -1302,7 +1302,7 @@ function SleepCalculator() {
                     maximumValue={12}
                     step={1}
                     minimumTrackTintColor="#6366f1"
-                    maximumTrackTintColor="#1F2937""
+                    maximumTrackTintColor="#1F2937"
                     thumbTintColor="#6366f1"
                   />
                 </View>
@@ -1316,7 +1316,7 @@ function SleepCalculator() {
                     maximumValue={45}
                     step={15}
                     minimumTrackTintColor="#6366f1"
-                    maximumTrackTintColor="#1F2937""
+                    maximumTrackTintColor="#1F2937"
                     thumbTintColor="#6366f1"
                   />
                 </View>
