@@ -291,7 +291,18 @@ export function DailyQuizChallenge({ onComplete }: DailyQuizChallengeProps) {
       </View>
 
       {answered && (
-        <Button onPress={nextQuestion} className="w-full mt-3 h-9 rounded-xl">
+        <Button 
+          onPress={() => {
+            if (currentQ < questions.length - 1) {
+              setCurrentQ((c) => c + 1);
+              setSelected(null);
+              setAnswered(false);
+            } else {
+              finishQuiz();
+            }
+          }} 
+          className="w-full mt-3 h-9 rounded-xl"
+        >
           <Text className="text-primary-foreground font-semibold text-sm">
             {currentQ < questions.length - 1 ? "Next Question" : "See Results"}
           </Text>
