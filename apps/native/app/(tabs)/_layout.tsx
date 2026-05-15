@@ -1,27 +1,26 @@
 import { Tabs, useRouter } from "expo-router";
 import { Home, BookOpen, GraduationCap, Briefcase, CalendarDays, User, Users, Store, MessageCircle, Settings, Bell } from "lucide-react-native";
-import { View, Text, Pressable, StyleSheet, Platform } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { useTheme } from "../../hooks/useThemeContext";
 import { useAuth } from "../../hooks/useAuthContext";
 import { Colors } from "../../theme/colors";
 
 function HeaderRight() {
   const router = useRouter();
-  const { isDark } = useTheme();
 
   return (
-    <View style={styles.headerRight}>
+    <View className="flex-row items-center mr-4 gap-2">
       <Pressable 
         onPress={() => router.push("/(tabs)/profile")}
-        style={styles.iconButton}
+        className="p-2 rounded-full"
       >
-        <User size={20} color={isDark ? Colors.darkForeground : Colors.foreground} />
+        <User size={20} className="text-foreground" />
       </Pressable>
       <Pressable 
         onPress={() => router.push("/(tabs)/profile")}
-        style={styles.iconButton}
+        className="p-2 rounded-full"
       >
-        <Settings size={20} color={isDark ? Colors.darkForeground : Colors.foreground} />
+        <Settings size={20} className="text-foreground" />
       </Pressable>
     </View>
   );
@@ -29,7 +28,6 @@ function HeaderRight() {
 
 export default function TabLayout() {
   const { isDark } = useTheme();
-  const { user } = useAuth();
 
   const activeColor = isDark ? "hsl(262, 83%, 65%)" : "hsl(262, 83%, 58%)";
   const inactiveColor = isDark ? "#94A3B8" : "#64748B";
@@ -45,8 +43,8 @@ export default function TabLayout() {
           borderTopWidth: 1,
           elevation: 0,
           shadowOpacity: 0,
-          height: Platform.OS === "ios" ? 88 : 65,
-          paddingBottom: Platform.OS === "ios" ? 28 : 8,
+          height: 65,
+          paddingBottom: 8,
           paddingTop: 8,
         },
         tabBarLabelStyle: {
@@ -62,7 +60,7 @@ export default function TabLayout() {
           borderBottomWidth: 1,
           borderBottomColor: isDark ? "#1E293B" : "#E2E8F0",
         },
-        headerTintColor: isDark ? Colors.darkForeground : Colors.foreground,
+        headerTintColor: isDark ? "#F8FAFC" : "#0F172A",
         headerTitleStyle: {
           fontWeight: "700",
           fontSize: 18,
@@ -78,13 +76,11 @@ export default function TabLayout() {
           tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
           headerTitle: () => (
-            <View style={styles.headerTitle}>
-              <View style={[styles.logo, { backgroundColor: activeColor }]}>
-                <Text style={styles.logoText}>S</Text>
+            <View className="flex-row items-center gap-2">
+              <View className="w-8 h-8 rounded-lg bg-primary items-center justify-center">
+                <Text className="text-primary-foreground font-bold text-sm">S</Text>
               </View>
-              <Text style={[styles.appName, { color: isDark ? "#F8FAFC" : "#0F172A" }]}>
-                StudentOS
-              </Text>
+              <Text className="text-foreground font-bold text-lg">StudentOS</Text>
             </View>
           ),
         }}
@@ -149,37 +145,3 @@ export default function TabLayout() {
     </Tabs>
   );
 }
-
-const styles = StyleSheet.create({
-  headerRight: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 16,
-    gap: 8,
-  },
-  iconButton: {
-    padding: 8,
-    borderRadius: 20,
-  },
-  headerTitle: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  logo: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  logoText: {
-    color: "#FFFFFF",
-    fontWeight: "700",
-    fontSize: 14,
-  },
-  appName: {
-    fontWeight: "700",
-    fontSize: 18,
-  },
-});
