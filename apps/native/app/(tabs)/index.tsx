@@ -10,7 +10,6 @@ import { StreakCard } from "../../components/dashboard/StreakCard";
 import { CourseCard } from "../../components/dashboard/CourseCard";
 import { AddCourseSheet } from "../../components/dashboard/AddCourseSheet";
 import { AnnouncementBanner } from "../../components/dashboard/AnnouncementBanner";
-import { DailyQuizChallenge } from "../../components/dashboard/DailyQuizChallenge";
 import { StudyTimeWidget } from "../../components/dashboard/StudyTimeWidget";
 import { StudyProgressWidget } from "../../components/dashboard/StudyProgressWidget";
 import { AdBanner } from "../../components/AdBanner";
@@ -121,8 +120,6 @@ export default function HomeScreen() {
           longestStreak={profile?.longest_streak || 0}
           totalXP={profile?.total_xp || 0}
         />
-
-        <DailyQuizChallenge onComplete={handleRetry} />
 
         <StudyTimeWidget
           focusMinutesToday={stats?.focusMinutesToday ?? 0}
