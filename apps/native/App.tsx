@@ -1,6 +1,6 @@
 import './src/global.css';
-import { ReactNode } from 'react';
-import { View, Text, Pressable, ActivityIndicator } from 'react-native';
+import { ReactNode, useState } from 'react';
+import { View, Text, Pressable, ActivityIndicator, TextInput } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts, SpaceGrotesk_400Regular, SpaceGrotesk_500Medium, SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
 import { Inter_300Light, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
@@ -11,6 +11,9 @@ import { AuthProvider, useAuth } from '@/hooks/useAuth';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import { linking } from '@/navigation/linking';
+import RootNavigator from '@/navigation/RootNavigator';
 
 // Keep splash screen visible while fonts load
 SplashScreen.preventAutoHideAsync();
@@ -57,9 +60,11 @@ export default function App() {
         <QueryClientProvider client={queryClient}>
           <ThemeProvider>
             <AuthProvider>
-              <RootLayout>
-                <AuthGate />
-              </RootLayout>
+              <NavigationContainer linking={linking}>
+                <RootLayout>
+                  <AuthGate />
+                </RootLayout>
+              </NavigationContainer>
             </AuthProvider>
           </ThemeProvider>
         </QueryClientProvider>
@@ -85,7 +90,7 @@ function AuthGate() {
     return <LoginScreen />;
   }
 
-  return <MainApp />;
+  return <RootNavigator />;
 }
 
 // Login screen
@@ -206,44 +211,3 @@ function LoginScreen() {
     </View>
   );
 }
-
-// Main app after login
-function MainApp() {
-  const { user, signOut } = useAuth();
-  const { theme, effectiveMode, toggleMode } = useTheme();
-
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24, backgroundColor: theme.background }}>
-      <Text style={{ fontFamily: 'SpaceGrotesk_700Bold', fontSize: 32, color: theme.foreground, marginBottom: 8 }}>
-        StudentOS
-      </Text>
-      <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: theme.mutedForeground, marginBottom: 8 }}>
-        Welcome, {user?.email}
-      </Text>
-      <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 14, color: theme.mutedForeground, marginBottom: 24 }}>
-        Session survives app restart ✓
-      </Text>
-
-      <Pressable
-        onPress={toggleMode}
-        style={{ backgroundColor: theme.primary, paddingHorizontal: 24, paddingVertical: 12, borderRadius: 12, marginBottom: 12 }}
-      >
-        <Text style={{ color: theme.primaryForeground, fontFamily: 'Inter_600SemiBold', fontSize: 16 }}>
-          Toggle Dark Mode
-        </Text>
-      </Pressable>
-
-      <Pressable
-        onPress={signOut}
-        style={{ backgroundColor: theme.destructive, paddingHorizontal: 24, paddingVertical: 12, borderRadius: 12 }}
-      >
-        <Text style={{ color: theme.destructiveForeground, fontFamily: 'Inter_600SemiBold', fontSize: 16 }}>
-          Sign Out
-        </Text>
-      </Pressable>
-    </View>
-  );
-}
-
-import { useState } from 'react';
-import { TextInput } from 'react-native';
