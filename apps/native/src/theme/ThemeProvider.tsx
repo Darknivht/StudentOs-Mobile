@@ -1,10 +1,9 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useColorScheme } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { tokens, Theme, ThemeMode } from './tokens';
 
-// MMKV setup
-const { MMKV } = require('react-native-mmkv');
-const storage = new MMKV({ id: 'theme' });
+const THEME_KEY = '@theme_mode';
 
 interface ThemeContextType {
   theme: Theme;
@@ -18,11 +17,18 @@ const ThemeContext = createContext<ThemeContextType>({} as ThemeContextType);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const systemScheme = useColorScheme();
-  const [mode, setModeState] = useState<ThemeMode>(() => {
-    const saved = storage.getString('mode');
-    if (saved === 'light' || saved === 'dark' || saved === 'system') return saved;
-    return 'system';
-  });
+  const [mode, setModeState] = useState<ThemeMode>('system');
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Load saved theme on mount
+  useEffect(() => {
+    AsyncStorage.getItem(THEME_KEY).then((saved) => {
+      if (saved === 'light' || saved === 'dark' || saved === 'system') {
+        setModeState(saved);
+      }
+      setIsLoaded(true);
+    });
+  }, []);
 
   const effectiveMode: 'light' | 'dark' = mode === 'system' 
     ? (systemScheme ?? 'light') 
@@ -31,14 +37,19 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const theme = tokens[effectiveMode] as Theme;
 
   const setMode = (newMode: ThemeMode) => {
-    storage.set('mode', newMode);
     setModeState(newMode);
+    AsyncStorage.setItem(THEME_KEY, newMode).catch(console.error);
   };
 
   const toggleMode = () => {
     const next = effectiveMode === 'light' ? 'dark' : 'light';
     setMode(next);
   };
+
+  // Don't render until we've loaded the saved theme
+  if (!isLoaded) {
+    return null;
+  }
 
   return (
     <ThemeContext.Provider value={{ theme, mode, effectiveMode, setMode, toggleMode }}>
