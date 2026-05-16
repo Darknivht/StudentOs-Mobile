@@ -30,14 +30,13 @@ const config: ExpoConfig = {
     ],
   },
   plugins: [
-    'expo-notifications',
     'expo-secure-store',
   ],
   extra: {
     supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
     supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
     eas: {
-      projectId: 'YOUR_EAS_ID',
+      projectId: 'a7dfe62a-2d85-47ad-a500-0f98abcb93ef',
     },
   },
 };
