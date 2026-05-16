@@ -7,8 +7,15 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter'],
-        display: ['SpaceGrotesk'],
+        sans: ['Inter_400Regular'],
+        display: ['SpaceGrotesk_700Bold'],
+        'sans-light': ['Inter_300Light'],
+        'sans-medium': ['Inter_500Medium'],
+        'sans-semibold': ['Inter_600SemiBold'],
+        'sans-bold': ['Inter_700Bold'],
+        'display-regular': ['SpaceGrotesk_400Regular'],
+        'display-medium': ['SpaceGrotesk_500Medium'],
+        'display-semibold': ['SpaceGrotesk_600SemiBold'],
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -57,6 +64,11 @@ const config: Config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      boxShadow: {
+        glow: '0 0 40px hsl(var(--primary) / 0.3)',
+        'glow-lg': '0 0 60px hsl(var(--primary) / 0.4)',
+        elevated: '0 20px 40px -10px hsl(var(--foreground) / 0.1)',
       },
     },
   },
