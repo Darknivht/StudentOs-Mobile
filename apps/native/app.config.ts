@@ -6,6 +6,7 @@ const config: ExpoConfig = {
   scheme: 'studentos',
   version: '1.0.0',
   orientation: 'portrait',
+  userInterfaceStyle: 'automatic',
   icon: './assets/icon.png',
   splash: {
     image: './assets/splash.png',
@@ -27,7 +28,6 @@ const config: ExpoConfig = {
       'RECEIVE_BOOT_COMPLETED',
       'POST_NOTIFICATIONS',
     ],
-    googleServicesFile: './google-services.json',
   },
   plugins: [
     'expo-notifications',

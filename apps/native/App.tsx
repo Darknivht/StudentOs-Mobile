@@ -1,5 +1,6 @@
 import './src/global.css';
 import { ReactNode } from 'react';
+import { View, Text, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts, SpaceGrotesk_400Regular, SpaceGrotesk_500Medium, SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
 import { Inter_300Light, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
@@ -101,5 +102,3 @@ function TestScreen() {
     </View>
   );
 }
-
-import { View, Text, Pressable } from 'react-native';
