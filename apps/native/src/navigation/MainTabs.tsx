@@ -1,12 +1,11 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home, BookOpen, Library, Calendar, Users, Briefcase } from 'lucide-react-native';
-import { MotiView } from 'moti';
 import { Pressable, Text, View, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/theme/ThemeProvider';
 import * as Haptics from 'expo-haptics';
 
-// Import screens (placeholder for now)
+// Import screens
 import DashboardScreen from '@/screens/DashboardScreen';
 import StudyScreen from '@/screens/StudyScreen';
 import StoreScreen from '@/screens/StoreScreen';
@@ -47,7 +46,7 @@ function CustomTabBar({ state, navigation }: any) {
       style={[
         styles.tabBar,
         {
-          backgroundColor: theme.card + 'CC', // 80% opacity
+          backgroundColor: theme.card,
           borderTopColor: theme.border,
           paddingBottom: 12 + insets.bottom,
         },
@@ -69,13 +68,10 @@ function CustomTabBar({ state, navigation }: any) {
           >
             <View style={styles.iconContainer}>
               {isActive && (
-                <MotiView
-                  from={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                <View
                   style={[
                     styles.activePill,
-                    { backgroundColor: theme.primary + '1A' }, // 10% opacity
+                    { backgroundColor: theme.primary + '1A' },
                   ]}
                 />
               )}
@@ -93,10 +89,7 @@ function CustomTabBar({ state, navigation }: any) {
               {item.label}
             </Text>
             {isActive && (
-              <MotiView
-                from={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+              <View
                 style={[styles.activeDot, { backgroundColor: theme.primary }]}
               />
             )}
