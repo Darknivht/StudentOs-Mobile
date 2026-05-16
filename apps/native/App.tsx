@@ -1,9 +1,9 @@
 import './src/global.css';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { View, Text, Pressable, ActivityIndicator, TextInput } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useFonts, SpaceGrotesk_400Regular, SpaceGrotesk_500Medium, SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
-import { Inter_300Light, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
+import { useFonts, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
+import { Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
@@ -12,68 +12,129 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { linking } from '@/navigation/linking';
-import RootNavigator from '@/navigation/RootNavigator';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Home, BookOpen, Library, Calendar, Users, Briefcase } from 'lucide-react-native';
 
-// Keep splash screen visible while fonts load
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
+const Tab = createBottomTabNavigator();
 
-function RootLayout({ children }: { children: ReactNode }) {
-  const { effectiveMode } = useTheme();
+function DashboardScreen() {
+  const { theme } = useTheme();
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.background }}>
+      <Text style={{ fontFamily: 'SpaceGrotesk_700Bold', fontSize: 24, color: theme.foreground }}>Dashboard</Text>
+    </View>
+  );
+}
+
+function StudyScreen() {
+  const { theme } = useTheme();
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.background }}>
+      <Text style={{ fontFamily: 'SpaceGrotesk_700Bold', fontSize: 24, color: theme.foreground }}>Study</Text>
+    </View>
+  );
+}
+
+function StoreScreen() {
+  const { theme } = useTheme();
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.background }}>
+      <Text style={{ fontFamily: 'SpaceGrotesk_700Bold', fontSize: 24, color: theme.foreground }}>Store</Text>
+    </View>
+  );
+}
+
+function PlanScreen() {
+  const { theme } = useTheme();
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.background }}>
+      <Text style={{ fontFamily: 'SpaceGrotesk_700Bold', fontSize: 24, color: theme.foreground }}>Plan</Text>
+    </View>
+  );
+}
+
+function SocialScreen() {
+  const { theme } = useTheme();
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.background }}>
+      <Text style={{ fontFamily: 'SpaceGrotesk_700Bold', fontSize: 24, color: theme.foreground }}>Social</Text>
+    </View>
+  );
+}
+
+function CareerScreen() {
+  const { theme } = useTheme();
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.background }}>
+      <Text style={{ fontFamily: 'SpaceGrotesk_700Bold', fontSize: 24, color: theme.foreground }}>Career</Text>
+    </View>
+  );
+}
+
+function MainTabs() {
+  const { theme } = useTheme();
   
   return (
-    <>
-      <StatusBar style={effectiveMode === 'dark' ? 'light' : 'dark'} />
-      {children}
-    </>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: theme.card,
+          borderTopColor: theme.border,
+        },
+        tabBarActiveTintColor: theme.primary,
+        tabBarInactiveTintColor: theme.mutedForeground,
+      }}
+    >
+      <Tab.Screen 
+        name="Dashboard" 
+        component={DashboardScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => <Home size={size} color={color} />,
+        }}
+      />
+      <Tab.Screen 
+        name="Study" 
+        component={StudyScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => <BookOpen size={size} color={color} />,
+        }}
+      />
+      <Tab.Screen 
+        name="Store" 
+        component={StoreScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => <Library size={size} color={color} />,
+        }}
+      />
+      <Tab.Screen 
+        name="Plan" 
+        component={PlanScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => <Calendar size={size} color={color} />,
+        }}
+      />
+      <Tab.Screen 
+        name="Social" 
+        component={SocialScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => <Users size={size} color={color} />,
+        }}
+      />
+      <Tab.Screen 
+        name="Career" 
+        component={CareerScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => <Briefcase size={size} color={color} />,
+        }}
+      />
+    </Tab.Navigator>
   );
 }
 
-export default function App() {
-  const [fontsLoaded, fontError] = useFonts({
-    SpaceGrotesk_400Regular,
-    SpaceGrotesk_500Medium,
-    SpaceGrotesk_600SemiBold,
-    SpaceGrotesk_700Bold,
-    Inter_300Light,
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-    Inter_700Bold,
-  });
-
-  useEffect(() => {
-    if (fontsLoaded || fontError) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, fontError]);
-
-  if (!fontsLoaded && !fontError) {
-    return null;
-  }
-
-  return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider>
-            <AuthProvider>
-              <NavigationContainer linking={linking}>
-                <RootLayout>
-                  <AuthGate />
-                </RootLayout>
-              </NavigationContainer>
-            </AuthProvider>
-          </ThemeProvider>
-        </QueryClientProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
-  );
-}
-
-// Auth gate - shows login or main app
 function AuthGate() {
   const { user, loading, authReady } = useAuth();
   const { theme } = useTheme();
@@ -90,10 +151,9 @@ function AuthGate() {
     return <LoginScreen />;
   }
 
-  return <RootNavigator />;
+  return <MainTabs />;
 }
 
-// Login screen
 function LoginScreen() {
   const { signIn, signUp, signInWithGoogle } = useAuth();
   const { theme } = useTheme();
@@ -107,7 +167,6 @@ function LoginScreen() {
   const handleSubmit = async () => {
     setError('');
     setLoading(true);
-    
     try {
       if (isSignUp) {
         const { error } = await signUp(email, password, name);
@@ -116,19 +175,6 @@ function LoginScreen() {
         const { error } = await signIn(email, password);
         if (error) throw error;
       }
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogle = async () => {
-    setError('');
-    setLoading(true);
-    try {
-      const { error } = await signInWithGoogle();
-      if (error) throw error;
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -151,7 +197,7 @@ function LoginScreen() {
           onChangeText={setName}
           placeholder="Full Name"
           placeholderTextColor={theme.mutedForeground}
-          style={{ backgroundColor: theme.card, color: theme.foreground, padding: 16, borderRadius: 12, marginBottom: 12, fontFamily: 'Inter_400Regular', fontSize: 16 }}
+          style={{ backgroundColor: theme.card, color: theme.foreground, padding: 16, borderRadius: 12, marginBottom: 12 }}
         />
       )}
 
@@ -162,7 +208,7 @@ function LoginScreen() {
         placeholderTextColor={theme.mutedForeground}
         keyboardType="email-address"
         autoCapitalize="none"
-        style={{ backgroundColor: theme.card, color: theme.foreground, padding: 16, borderRadius: 12, marginBottom: 12, fontFamily: 'Inter_400Regular', fontSize: 16 }}
+        style={{ backgroundColor: theme.card, color: theme.foreground, padding: 16, borderRadius: 12, marginBottom: 12 }}
       />
 
       <TextInput
@@ -171,11 +217,11 @@ function LoginScreen() {
         placeholder="Password"
         placeholderTextColor={theme.mutedForeground}
         secureTextEntry
-        style={{ backgroundColor: theme.card, color: theme.foreground, padding: 16, borderRadius: 12, marginBottom: 16, fontFamily: 'Inter_400Regular', fontSize: 16 }}
+        style={{ backgroundColor: theme.card, color: theme.foreground, padding: 16, borderRadius: 12, marginBottom: 16 }}
       />
 
       {error ? (
-        <Text style={{ color: theme.destructive, fontFamily: 'Inter_400Regular', fontSize: 14, marginBottom: 12, textAlign: 'center' }}>
+        <Text style={{ color: theme.destructive, fontSize: 14, marginBottom: 12, textAlign: 'center' }}>
           {error}
         </Text>
       ) : null}
@@ -191,23 +237,48 @@ function LoginScreen() {
       </Pressable>
 
       <Pressable
-        onPress={handleGoogle}
-        disabled={loading}
-        style={{ backgroundColor: theme.card, padding: 16, borderRadius: 12, marginBottom: 12, borderWidth: 1, borderColor: theme.border }}
-      >
-        <Text style={{ color: theme.foreground, fontFamily: 'Inter_600SemiBold', fontSize: 16, textAlign: 'center' }}>
-          Continue with Google
-        </Text>
-      </Pressable>
-
-      <Pressable
         onPress={() => setIsSignUp(!isSignUp)}
         style={{ padding: 8 }}
       >
-        <Text style={{ color: theme.primary, fontFamily: 'Inter_400Regular', fontSize: 14, textAlign: 'center' }}>
+        <Text style={{ color: theme.primary, fontSize: 14, textAlign: 'center' }}>
           {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
         </Text>
       </Pressable>
     </View>
+  );
+}
+
+export default function App() {
+  const [fontsLoaded, fontError] = useFonts({
+    SpaceGrotesk_700Bold,
+    Inter_400Regular,
+    Inter_600SemiBold,
+  });
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <AuthProvider>
+              <NavigationContainer>
+                <StatusBar style="auto" />
+                <AuthGate />
+              </NavigationContainer>
+            </AuthProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
