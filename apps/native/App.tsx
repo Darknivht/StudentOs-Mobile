@@ -1,4 +1,3 @@
-import './src/global.css';
 import { useState } from 'react';
 import { View, Text, Pressable, ActivityIndicator, TextInput } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
@@ -9,7 +8,6 @@ import { useEffect } from 'react';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 import { AuthProvider, useAuth } from '@/hooks/useAuth';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -266,7 +264,7 @@ export default function App() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider>
@@ -279,6 +277,6 @@ export default function App() {
           </ThemeProvider>
         </QueryClientProvider>
       </SafeAreaProvider>
-    </GestureHandlerRootView>
+    </View>
   );
 }
